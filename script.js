@@ -5,17 +5,8 @@ PREFIX lilyrdf: <https://luciadb.assaultlily.com/rdf/RDFs/detail/>`;
 
 const icsHeader = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//ulong32//ulong32//Lily-BDdownloader//JP
-CALSCALE:GREGORIAN
-BEGIN:VTIMEZONE
-TZID:Japan
-BEGIN:STANDARD
-DTSTART:19390101T000000
-TZOFFSETFROM:+0900
-TZOFFSETTO:+0900
-TZNAME:JST
-END:STANDARD
-END:VTIMEZONE`;
+PRODID:-//ulong32//ulong32//LiliesNote//JP
+CALSCALE:GREGORIAN`;
 
 function padding(number){
     return number.toString().padStart(2,"0");
