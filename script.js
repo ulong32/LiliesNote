@@ -64,23 +64,23 @@ ORDER BY ?name`;
         }
 
         //翌日の日付が月をまたぐ場合
-        if(birthdata[2] = monthend[birthdata[1]]){
+        if(birthdata[2] == monthend[birthdata[1]]){
             //年越し
             if(birthdata[1] == 12){
-                nextdate = [year + 1,1,1]
+                nextdate = [year + 1,1,1];
             } else {
                 nextdate[0] = year;
                 nextdate[1] = birthdata[1] + 1;
-                nextdate[2] = birthdata[2] - monthend[birthdata[1]] + 1;
+                nextdate[2] = 1;
             }
-        }else {
+        } else {
             nextdate[0] = year;
             nextdate[1] = birthdata[1];
             nextdate[2] = birthdata[2] + 1;
         }
         if(lang == "ja") {
             summary = birthdata[0] + "の誕生日";
-        }else {
+        } else {
             summary = birthdata[0] + "'s birthday";
         }
         LemonadeURL = resdata[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
