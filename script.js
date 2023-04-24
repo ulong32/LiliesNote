@@ -17,7 +17,7 @@ function download(lang) {
     const xhr = new XMLHttpRequest();
     xhr.open("POST",server,false);
 
-    query = `
+    let query = `
 SELECT ?name ?birthdate ?lgname ?lily
 WHERE {
 ?lily a lily:Lily;
@@ -44,11 +44,14 @@ ORDER BY ?name`;
     let year = date.getFullYear();
     let hour = date.getHours() + 1;
     let minute = date.getMinutes();
+    
+    let LemonadeURL = "";
 
     let nextdate = [0,0,0]
     //月末データ、視認性向上のため先頭は意味ないデータ
-    let monthend = [0,31,28,31,30,31,30,31,31,30,31,30,31]
+    let monthend = [0,31,28,31,30,31,30,31,31,30,31,30,31];
     let i=0;
+    
     for(i=0;i<resdata.length;i++){
 
         //めんどくさがって直接代入してるのでここでリセット
@@ -61,14 +64,15 @@ ORDER BY ?name`;
         }
 
         //翌日の日付が月をまたぐ場合
-        if(birthdata[2] >= monthend[birthdata[1]]){
+        if(birthdata[2] = monthend[birthdata[1]]){
             //年越し
             if(birthdata[1] == 12){
                 nextdate = [year + 1,1,1]
+            } else {
+                nextdate[0] = year;
+                nextdate[1] = birthdata[1] + 1;
+                nextdate[2] = birthdata[2] - monthend[birthdata[1]] + 1;
             }
-            nextdate[0] = year;
-            nextdate[1] = birthdata[1] + 1;
-            nextdate[2] = birthdata[2] - monthend[birthdata[1]] + 1;
         }else {
             nextdate[0] = year;
             nextdate[1] = birthdata[1];
