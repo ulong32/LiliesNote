@@ -5,8 +5,13 @@ PREFIX lilyrdf: <https://luciadb.assaultlily.com/rdf/RDFs/detail/>`;
 
 const icsHeader = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//ulong32//ulong32//LiliesNote//JP
+PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote//JP
 CALSCALE:GREGORIAN`;
+
+const license = {
+    "ja": "このデータはLuciaDBから取得しています。ライセンスはCC BY-NC-SA 4.0です。",
+    "en": "This data is sourced from LuciaDB, licensed under CC BY-NC-SA 4.0.",
+};
 
 function padding(number){
     return number.toString().padStart(2,"0");
@@ -118,6 +123,7 @@ DTSTAMP:${year}${padding(month)}${padding(day)}T${padding(hour)}${padding(minute
 RRULE:FREQ=YEARLY
 SUMMARY:${summary}
 DESCRIPTION:${description}
+COMMENT:${license[lang]}
 URL;VALUE=URI:${LemonadeURL}
 END:VEVENT`;
     }
