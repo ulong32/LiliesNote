@@ -5,7 +5,7 @@ PREFIX lilyrdf: <https://luciadb.assaultlily.com/rdf/RDFs/detail/>`;
 
 const icsHeader = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote//JP
+PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote//JA
 CALSCALE:GREGORIAN`;
 
 const license = {
