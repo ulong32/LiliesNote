@@ -46,7 +46,10 @@ ORDER BY ?name`;
 
     let response = JSON.parse(xhr.responseText);
     let resdata = response["results"]["bindings"];
-    let birthdata = [];
+    let birthname = "";
+    let birthyear = 0;
+    let birthmonth = 0;
+    let birthday = 0;
     let icsdata = icsHeader;
     let summary = "";
     let description = "";
@@ -55,7 +58,7 @@ ORDER BY ?name`;
     let date = new Date();
     const day = date.getDate();
     const month = date.getMonth() + 1;
-    let year = date.getFullYear();
+    const year = date.getFullYear();
     let hour = date.getHours();
     let minute = date.getMinutes();
     
@@ -68,10 +71,11 @@ ORDER BY ?name`;
     
     for(i=0;i<resdata.length;i++){
 
-        //めんどくさがって直接代入してるのでここでリセット
-        year = date.getFullYear();
+        birthyear = year;
         // 名前、誕生月、誕生日
-        birthdata = [resdata[i]["name"]["value"], Number(resdata[i]["birthdate"]["value"].substring(2,4)), Number(resdata[i]["birthdate"]["value"].substring(5))];
+        birthname = resdata[i]["name"]["value"];
+        birthmonth = Number(resdata[i]["birthdate"]["value"].substring(2,4));
+        birthday = Number(resdata[i]["birthdate"]["value"].substring(5))
         //所属レギオン
         if("lgname" in resdata[i]){
             legion = resdata[i]["lgname"]["value"];
@@ -80,46 +84,46 @@ ORDER BY ?name`;
         }
         
         //もう誕生日を過ぎてる場合は来年から
-        if(birthdata[1] < month || (birthdata[1] == month && birthdata[2] <= day)) {
-            year += 1;
+        if(birthmonth < month || (birthmonth == month && birthday <= day)) {
+            birthyear += 1;
         }
 
         //翌日の日付が月をまたぐ場合
-        if(birthdata[2] == monthend[birthdata[1]]){
+        if(birthday == monthend[birthmonth]){
             //年越し
-            if(birthdata[1] == 12){
-                nextdate = [year + 1,1,1];
+            if(birthmonth == 12){
+                nextdate = [birthyear + 1,1,1];
             } else {
-                nextdate[0] = year;
-                nextdate[1] = birthdata[1] + 1;
+                nextdate[0] = birthyear;
+                nextdate[1] = birthmonth + 1;
                 nextdate[2] = 1;
             }
         } else {
-            nextdate[0] = year;
-            nextdate[1] = birthdata[1];
-            nextdate[2] = birthdata[2] + 1;
+            nextdate[0] = birthyear;
+            nextdate[1] = birthmonth;
+            nextdate[2] = birthday + 1;
         }
         if(lang == "ja") {
-            summary = birthdata[0] + "の誕生日";
+            summary = birthname + "の誕生日";
             if(legion !== "") {
-                description = `LG${legion}所属、${birthdata[0]}の誕生日です。`;
+                description = `LG${legion}所属、${birthname}の誕生日です。`;
             } else {
-                description = `${birthdata[0]}の誕生日です。`;
+                description = `${birthname}の誕生日です。`;
             } 
         } else {
-            summary = birthdata[0] + "'s birthday";
+            summary = birthname + "'s birthday";
             if(legion !== "") {
-                description = `It is the birthday of ${birthdata[0]}, who belongs to LG ${legion}.`;
+                description = `It is the birthday of ${birthname}, who belongs to LG ${legion}.`;
             } else {
-                description = `It is the birthday of ${birthdata[0]}.`;
+                description = `It is the birthday of ${birthname}.`;
             }
         }
         LemonadeURL = resdata[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
         icsdata += `
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:${year.toString()}${padding(birthdata[1])}${padding(birthdata[2])}
+DTSTART;VALUE=DATE:${birthyear.toString()}${padding(birthmonth)}${padding(birthday)}
 DTEND;VALUE=DATE:${nextdate[0].toString()}${padding(nextdate[1])}${padding(nextdate[2])}
-DTSTAMP:${year}${padding(month)}${padding(day)}T${padding(hour)}${padding(minute)}00
+DTSTAMP:${birthyear.toString()}${padding(month)}${padding(day)}T${padding(hour)}${padding(minute)}00
 RRULE:FREQ=YEARLY
 SUMMARY:${summary}
 DESCRIPTION:${description}
@@ -130,7 +134,7 @@ END:VEVENT`;
     document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。`
     
     icsdata += "\nEND:VCALENDAR";
-    let outArea = document.getElementById("a");
+    let outArea = document.getElementById("output");
     outArea.value = icsdata;
 
     //ダウンロード処理
