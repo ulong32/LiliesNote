@@ -125,6 +125,7 @@ DTSTART;VALUE=DATE:${birthyear.toString()}${padding(birthmonth)}${padding(birthd
 DTEND;VALUE=DATE:${nextdate[0].toString()}${padding(nextdate[1])}${padding(nextdate[2])}
 DTSTAMP:${birthyear.toString()}${padding(month)}${padding(day)}T${padding(hour)}${padding(minute)}00
 RRULE:FREQ=YEARLY
+TRANSP:TRANSPARENT
 SUMMARY:${summary}
 DESCRIPTION:${description}
 COMMENT:${license[lang]}
