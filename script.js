@@ -20,10 +20,17 @@ function download(lang) {
     let query = `
 SELECT ?name ?birthdate ?lgname ?lily
 WHERE {
-?lily a lily:Lily;
-schema:name ?name.
-FILTER(lang(?name)='${lang}')
-?lily schema:birthDate ?birthdate;
+{?lily a lily:Lily.}
+UNION
+{?lily a lily:Character.}
+UNION
+{?lily a lily:Madec.}
+?lily schema:name ?name.
+FILTER(lang(?name)="${lang}")
+?lily schema:birthDate ?birthdate.
+OPTIONAL{?lily lily:legion ?legion.
+?legion schema:name ?lgname.
+FILTER(lang(?lgname)="${lang}")}
 }
 ORDER BY ?name`;
 
@@ -37,17 +44,19 @@ ORDER BY ?name`;
     let birthdata = [];
     let icsdata = icsHeader;
     let summary = "";
+    let description = "";
+    let legion = "";
 
     let date = new Date();
     const day = date.getDate();
     const month = date.getMonth() + 1;
     let year = date.getFullYear();
-    let hour = date.getHours() + 1;
+    let hour = date.getHours();
     let minute = date.getMinutes();
     
     let LemonadeURL = "";
 
-    let nextdate = [0,0,0]
+    let nextdate = [0,0,0];
     //月末データ、視認性向上のため先頭は意味ないデータ
     let monthend = [0,31,28,31,30,31,30,31,31,30,31,30,31];
     let i=0;
@@ -58,6 +67,13 @@ ORDER BY ?name`;
         year = date.getFullYear();
         // 名前、誕生月、誕生日
         birthdata = [resdata[i]["name"]["value"], Number(resdata[i]["birthdate"]["value"].substring(2,4)), Number(resdata[i]["birthdate"]["value"].substring(5))];
+        //所属レギオン
+        if("lgname" in resdata[i]){
+            legion = resdata[i]["lgname"]["value"];
+        } else {
+            legion = "";
+        }
+        
         //もう誕生日を過ぎてる場合は来年から
         if(birthdata[1] < month || (birthdata[1] == month && birthdata[2] <= day)) {
             year += 1;
@@ -80,8 +96,18 @@ ORDER BY ?name`;
         }
         if(lang == "ja") {
             summary = birthdata[0] + "の誕生日";
+            if(legion !== "") {
+                description = `LG${legion}所属、${birthdata[0]}の誕生日です。`;
+            } else {
+                description = `${birthdata[0]}の誕生日です。`;
+            } 
         } else {
             summary = birthdata[0] + "'s birthday";
+            if(legion !== "") {
+                description = `It is the birthday of ${birthdata[0]}, who belongs to LG ${legion}.`;
+            } else {
+                description = `It is the birthday of ${birthdata[0]}.`;
+            }
         }
         LemonadeURL = resdata[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
         icsdata += `
@@ -91,6 +117,7 @@ DTEND;VALUE=DATE:${nextdate[0].toString()}${padding(nextdate[1])}${padding(nextd
 DTSTAMP:${year}${padding(month)}${padding(day)}T${padding(hour)}${padding(minute)}00
 RRULE:FREQ=YEARLY
 SUMMARY:${summary}
+DESCRIPTION:${description}
 URL;VALUE=URI:${LemonadeURL}
 END:VEVENT`;
     }
