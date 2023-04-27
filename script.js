@@ -30,17 +30,15 @@ function download(lang) {
     const query = `
 SELECT ?name ?birthdate ?lgname ?lily
 WHERE {
-{?lily a lily:Lily.}
-UNION
-{?lily a lily:Character.}
-UNION
-{?lily a lily:Madec.}
-?lily schema:name ?name.
-FILTER(lang(?name)="${lang}")
-?lily schema:birthDate ?birthdate.
-OPTIONAL{?lily lily:legion ?legion.
-?legion schema:name ?lgname.
-FILTER(lang(?lgname)="${lang}")}
+    VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
+    ?lily a ?class;
+          schema:name ?name;
+          schema:birthDate ?birthdate.
+    FILTER(lang(?name)="${lang}")
+    OPTIONAL{
+        ?lily lily:legion/schema:name ?lgname.
+        FILTER(lang(?lgname)="${lang}")
+    }
 }
 ORDER BY ?name`;
 
