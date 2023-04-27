@@ -62,7 +62,9 @@ ORDER BY ?name`;
                 break;
             case 4:
                 if(xhr.status == 200){
-                    resultarea.value = `問い合わせ完了。(${Date.now() - starttime}ms)`;
+                    let endtime = Date.now();
+                    resultarea.value = `問い合わせ完了。(${endtime - starttime}ms)`;
+                    console.log(`Download: ${endtime - starttime}ms`)
                     build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,starttime);
                 } else {
                     resultarea.value = `問い合わせ失敗。(エラー:${xhr.statusText})`;
@@ -74,7 +76,7 @@ ORDER BY ?name`;
 
 
 function build(resdata,lang,starttime){
-    
+    let buildstart = Date.now();
     let birthname = "";
     let birthyear = 0;
     let birthmonth = 0;
@@ -166,12 +168,12 @@ COMMENT:${license[lang]}
 URL;VALUE=URI:${LemonadeURL}
 END:VEVENT`;
     }
-    document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。(${Date.now()-starttime}ms)`
     
     icsdata += "\nEND:VCALENDAR";
+    console.log(`Build iCal Data: ${Date.now() - buildstart}ms`);
     let outArea = document.getElementById("output");
     outArea.value = icsdata;
-
+    document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。(${Date.now()-starttime}ms)`;
     //ダウンロード処理
     const blob = new Blob([icsdata], {"type" : "text/calendar"});
     const url = URL.createObjectURL(blob);
