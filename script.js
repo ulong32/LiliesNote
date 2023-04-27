@@ -9,8 +9,8 @@ PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote//JA
 CALSCALE:GREGORIAN`;
 
 const license = {
-    "ja": "このデータはLuciaDBから取得しています。ライセンスはCC BY-NC-SA 4.0です。",
-    "en": "This data is sourced from LuciaDB, licensed under CC BY-NC-SA 4.0.",
+    "ja": "このデータはLuciaDBから取得しています。\n ライセンスはCC BY-NC-SA 4.0です。",
+    "en": "This data is sourced from LuciaDB, \n licensed under CC BY-NC-SA 4.0.",
 };
 
 function formatDate(...args){
@@ -25,9 +25,9 @@ function formatDate(...args){
 function download(lang) {
     let server = "https://luciadb.assaultlily.com/sparql/query"
     const xhr = new XMLHttpRequest();
-    xhr.open("POST",server,false);
-
-    let query = `
+    let resultarea = document.getElementById("result");
+    let starttime;
+    const query = `
 SELECT ?name ?birthdate ?lgname ?lily
 WHERE {
 {?lily a lily:Lily.}
@@ -44,13 +44,37 @@ FILTER(lang(?lgname)="${lang}")}
 }
 ORDER BY ?name`;
 
-    xhr.open("POST",server,false);
+    xhr.open("POST",server,true);
     xhr.setRequestHeader("Content-Type", "application/sparql-query");
     xhr.setRequestHeader("Accept", "application/json");
+    starttime = Date.now();
     xhr.send(queryHeader + query);
+    xhr.onreadystatechange = function() {
+        switch(xhr.readyState){
+            case 1:
+                resultarea.value = "クエリ送信中...";
+                break;
+            case 2:
+                resultarea.value = "サーバ応答待機中...";
+                break;
+            case 3:
+                resultarea.value = "データダウンロード中...";
+                break;
+            case 4:
+                if(xhr.status == 200){
+                    resultarea.value = `問い合わせ完了。(${Date.now() - starttime}ms)`;
+                    build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,starttime);
+                } else {
+                    resultarea.value = `問い合わせ失敗。(エラー:${xhr.statusText})`;
+                }
+                break;
+        }
+    }
+}
 
-    let response = JSON.parse(xhr.responseText);
-    let resdata = response["results"]["bindings"];
+
+function build(resdata,lang,starttime){
+    
     let birthname = "";
     let birthyear = 0;
     let birthmonth = 0;
@@ -114,7 +138,10 @@ ORDER BY ?name`;
                 description = `LG${legion}所属、${birthname}の誕生日です。`;
             } else {
                 description = `${birthname}の誕生日です。`;
-            } 
+            }
+
+            if(description.length > 20) description = description.match(/.{1,20}/g).join("\n ");
+
         } else {
             summary = birthname + "'s birthday";
             if(legion !== "") {
@@ -122,6 +149,7 @@ ORDER BY ?name`;
             } else {
                 description = `It is the birthday of ${birthname}.`;
             }
+            if(description.length > 60) description = description.match(/.{1,60}/g).join("\n ");
         }
         LemonadeURL = resdata[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
         icsdata += `
@@ -137,7 +165,7 @@ COMMENT:${license[lang]}
 URL;VALUE=URI:${LemonadeURL}
 END:VEVENT`;
     }
-    document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。`
+    document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。(${Date.now()-starttime}ms)`
     
     icsdata += "\nEND:VCALENDAR";
     let outArea = document.getElementById("output");
