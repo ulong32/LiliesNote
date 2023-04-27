@@ -9,8 +9,8 @@ PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote//JA
 CALSCALE:GREGORIAN`;
 
 const license = {
-    "ja": "このデータはLuciaDBから取得しています。\n ライセンスはCC BY-NC-SA 4.0です。",
-    "en": "This data is sourced from LuciaDB, \n licensed under CC BY-NC-SA 4.0.",
+    "ja": "このデータはLuciaDBから取得しています。ライセンスはCC BY-NC-SA 4.0です。",
+    "en": "This data is sourced from LuciaDB, licensed under CC BY-NC-SA 4.0.",
 };
 
 function formatDate(...args){
@@ -139,8 +139,8 @@ function build(resdata,lang,starttime){
             } else {
                 description = `${birthname}の誕生日です。`;
             }
-
-            if(description.length > 20) description = description.match(/.{1,20}/g).join("\n ");
+            // iCalendar規約を遵守する場合
+            // if(description.length > 20) description = description.match(/.{1,20}/g).join("\n ");
 
         } else {
             summary = birthname + "'s birthday";
@@ -149,7 +149,8 @@ function build(resdata,lang,starttime){
             } else {
                 description = `It is the birthday of ${birthname}.`;
             }
-            if(description.length > 60) description = description.match(/.{1,60}/g).join("\n ");
+            // iCalendar規約を遵守する場合
+            // if(description.length > 60) description = description.match(/.{1,60}/g).join("\n ");
         }
         LemonadeURL = resdata[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
         icsdata += `
