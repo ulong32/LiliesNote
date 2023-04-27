@@ -13,9 +13,14 @@ const license = {
     "en": "This data is sourced from LuciaDB, licensed under CC BY-NC-SA 4.0.",
 };
 
-function padding(number){
-    return number.toString().padStart(2,"0");
+function formatDate(...args){
+    let str = "";
+    for(let i=0;i<args.length;i++){
+        str += args[i].toString().padStart(2,"0");
+    }
+    return str;
 }
+
 
 function download(lang) {
     let server = "https://luciadb.assaultlily.com/sparql/query"
@@ -121,9 +126,9 @@ ORDER BY ?name`;
         LemonadeURL = resdata[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
         icsdata += `
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:${birthyear.toString()}${padding(birthmonth)}${padding(birthday)}
-DTEND;VALUE=DATE:${nextdate[0].toString()}${padding(nextdate[1])}${padding(nextdate[2])}
-DTSTAMP:${birthyear.toString()}${padding(month)}${padding(day)}T${padding(hour)}${padding(minute)}00
+DTSTART;VALUE=DATE:${birthyear.toString()}${formatDate(birthmonth,birthday)}
+DTEND;VALUE=DATE:${nextdate[0].toString()}${formatDate(nextdate[1],nextdate[2])}
+DTSTAMP:${birthyear.toString()}${formatDate(month,day)}T${formatDate(hour,minute)}00
 RRULE:FREQ=YEARLY
 TRANSP:TRANSPARENT
 SUMMARY:${summary}
