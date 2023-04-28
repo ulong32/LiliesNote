@@ -1,7 +1,6 @@
 const queryHeader = `PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>
-PREFIX lilyrdf: <https://luciadb.assaultlily.com/rdf/RDFs/detail/>`;
+PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>`;
 
 const icsHeader = `BEGIN:VCALENDAR
 VERSION:2.0
@@ -28,10 +27,12 @@ function download(lang) {
     let resultarea = document.getElementById("result");
     let starttime;
     const query = `
-SELECT ?name ?birthdate ?lgname ?lily
+SELECT ?name ?birthdate ?lgname ?lily ?type ?garden
 WHERE {
     VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
     ?lily a ?class;
+          rdf:type ?type;
+          lily:garden ?garden;
           schema:name ?name;
           schema:birthDate ?birthdate.
     FILTER(lang(?name)="${lang}")
@@ -83,6 +84,7 @@ function build(resdata,lang,starttime){
     let summary = "";
     let description = "";
     let legion = "";
+    let charatype = "";
 
     let date = new Date();
     const day = date.getDate();
@@ -104,7 +106,9 @@ function build(resdata,lang,starttime){
         // 名前、誕生月、誕生日
         birthname = resdata[i]["name"]["value"];
         birthmonth = Number(resdata[i]["birthdate"]["value"].substring(2,4));
-        birthday = Number(resdata[i]["birthdate"]["value"].substring(5))
+        birthday = Number(resdata[i]["birthdate"]["value"].substring(5));
+        charatype = resdata[i]["type"]["value"].replace("https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#","");
+        garden = resdata[i]["garden"]["value"];
         //所属レギオン
         if("lgname" in resdata[i]){
             legion = resdata[i]["lgname"]["value"];
@@ -134,7 +138,9 @@ function build(resdata,lang,starttime){
         }
         if(lang == "ja") {
             summary = birthname + "の誕生日";
-            if(legion !== "") {
+            if(charatype == "Teacher") {
+                description = `${garden}の教導官、${birthname}の誕生日です。`;
+            } else if(legion !== "") {
                 description = `LG${legion}所属、${birthname}の誕生日です。`;
             } else {
                 description = `${birthname}の誕生日です。`;
@@ -144,7 +150,9 @@ function build(resdata,lang,starttime){
 
         } else {
             summary = birthname + "'s birthday";
-            if(legion !== "") {
+            if(charatype == "Teacher") {
+                description = `It is the birthday of ${birthname}, a teacher at ${garden}`;
+            } else if(legion !== "") {
                 description = `It is the birthday of ${birthname}, who belongs to LG ${legion}.`;
             } else {
                 description = `It is the birthday of ${birthname}.`;
@@ -152,6 +160,7 @@ function build(resdata,lang,starttime){
             // iCalendar規約を遵守する場合
             // if(description.length > 60) description = description.match(/.{1,60}/g).join("\n ");
         }
+
         LemonadeURL = resdata[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
         icsdata += `
 BEGIN:VEVENT
