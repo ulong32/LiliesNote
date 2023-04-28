@@ -50,22 +50,22 @@ ORDER BY ?name`;
     xhr.onreadystatechange = function() {
         switch(xhr.readyState){
             case 1:
-                resultarea.value = "クエリ送信中...";
+                resultarea.innerText = "クエリ送信中...";
                 break;
             case 2:
-                resultarea.value = "サーバ応答待機中...";
+                resultarea.innerText = "サーバ応答待機中...";
                 break;
             case 3:
-                resultarea.value = "データダウンロード中...";
+                resultarea.innerText = "データダウンロード中...";
                 break;
             case 4:
                 if(xhr.status == 200){
                     let endtime = Date.now();
-                    resultarea.value = `問い合わせ完了。(${endtime - starttime}ms)`;
+                    resultarea.innerText = `問い合わせ完了。(${endtime - starttime}ms)`;
                     console.log(`Download: ${endtime - starttime}ms`)
                     build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,starttime);
                 } else {
-                    resultarea.value = `問い合わせ失敗。(エラー:${xhr.statusText})`;
+                    resultarea.innerText = `問い合わせ失敗。(エラー:${xhr.statusText})`;
                 }
                 break;
         }
