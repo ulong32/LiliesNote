@@ -151,11 +151,11 @@ function build(resData,lang,startTime){
         } else {
             summary = birthName + "'s birthDay";
             if(charaType == "Teacher") {
-                description = `It is the birthDay of ${birthName}, a teacher at ${garden}`;
+                description = `It is the birthday of ${birthName}, a teacher at ${garden}`;
             } else if(legion !== "") {
-                description = `It is the birthDay of ${birthName}, who belongs to LG ${legion}.`;
+                description = `It is the birthday of ${birthName}, who belongs to LG ${legion}.`;
             } else {
-                description = `It is the birthDay of ${birthName}.`;
+                description = `It is the birthday of ${birthName}.`;
             }
             // iCalendar規約を遵守する場合
             // if(description.length > 60) description = description.match(/.{1,60}/g).join("\n ");
