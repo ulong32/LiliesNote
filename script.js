@@ -79,7 +79,7 @@ function build(resdata,lang,starttime){
     let birthyear = 0;
     let birthmonth = 0;
     let birthday = 0;
-    let icsdata = icsHeader;
+    let icsdata = icsHeader + `\nX-LICENSE-COMMENT:${license[lang]}`;
     let summary = "";
     let description = "";
     let legion = "";
@@ -162,7 +162,6 @@ RRULE:FREQ=YEARLY
 TRANSP:TRANSPARENT
 SUMMARY:${summary}
 DESCRIPTION:${description}
-COMMENT:${license[lang]}
 URL;VALUE=URI:${LemonadeURL}
 END:VEVENT`;
     }
