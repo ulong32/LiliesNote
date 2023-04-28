@@ -24,8 +24,8 @@ function formatDate(...args){
 function download(lang) {
     let server = "https://luciadb.assaultlily.com/sparql/query"
     const xhr = new XMLHttpRequest();
-    let resultarea = document.getElementById("result");
-    let starttime;
+    let resultArea = document.getElementById("result");
+    let startTime;
     const query = `
 SELECT ?name ?birthdate ?lgname ?lily ?type ?garden
 WHERE {
@@ -46,27 +46,27 @@ ORDER BY ?name`;
     xhr.open("POST",server,true);
     xhr.setRequestHeader("Content-Type", "application/sparql-query");
     xhr.setRequestHeader("Accept", "application/json");
-    starttime = Date.now();
+    startTime = Date.now();
     xhr.send(queryHeader + query);
     xhr.onreadystatechange = function() {
         switch(xhr.readyState){
             case 1:
-                resultarea.innerText = "クエリ送信中...";
+                resultArea.innerText = "クエリ送信中...";
                 break;
             case 2:
-                resultarea.innerText = "サーバ応答待機中...";
+                resultArea.innerText = "サーバ応答待機中...";
                 break;
             case 3:
-                resultarea.innerText = "データダウンロード中...";
+                resultArea.innerText = "データダウンロード中...";
                 break;
             case 4:
                 if(xhr.status == 200){
-                    let endtime = Date.now();
-                    resultarea.innerText = `問い合わせ完了。(${endtime - starttime}ms)`;
-                    console.log(`Download: ${endtime - starttime}ms`)
-                    build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,starttime);
+                    let endTime = Date.now();
+                    resultArea.innerText = `問い合わせ完了。(${endTime - startTime}ms)`;
+                    console.log(`Download: ${endTime - startTime}ms`)
+                    build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,startTime);
                 } else {
-                    resultarea.innerText = `問い合わせ失敗。(エラー:${xhr.statusText})`;
+                    resultArea.innerText = `問い合わせ失敗。(エラー:${xhr.statusText})`;
                 }
                 break;
         }
@@ -74,17 +74,17 @@ ORDER BY ?name`;
 }
 
 
-function build(resdata,lang,starttime){
-    let buildstart = Date.now();
-    let birthname = "";
-    let birthyear = 0;
-    let birthmonth = 0;
-    let birthday = 0;
-    let icsdata = icsHeader + `\nX-LICENSE-COMMENT:${license[lang]}`;
+function build(resData,lang,startTime){
+    let buildStart = Date.now();
+    let birthName = "";
+    let birthYear = 0;
+    let birthMonth = 0;
+    let birthDay = 0;
+    let icsData = icsHeader + `\nX-LICENSE-COMMENT:${license[lang]}`;
     let summary = "";
     let description = "";
     let legion = "";
-    let charatype = "";
+    let charaType = "";
 
     let date = new Date();
     const day = date.getDate();
@@ -95,78 +95,78 @@ function build(resdata,lang,starttime){
     
     let LemonadeURL = "";
 
-    let nextdate = [0,0,0];
+    let nextDate = [0,0,0];
     //月末データ、視認性向上のため先頭は意味ないデータ
-    let monthend = [0,31,28,31,30,31,30,31,31,30,31,30,31];
+    let monthEnd = [0,31,28,31,30,31,30,31,31,30,31,30,31];
     let i=0;
     
-    for(i=0;i<resdata.length;i++){
+    for(i=0;i<resData.length;i++){
 
-        birthyear = year;
+        birthYear = year;
         // 名前、誕生月、誕生日
-        birthname = resdata[i]["name"]["value"];
-        birthmonth = Number(resdata[i]["birthdate"]["value"].substring(2,4));
-        birthday = Number(resdata[i]["birthdate"]["value"].substring(5));
-        charatype = resdata[i]["type"]["value"].replace("https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#","");
-        garden = resdata[i]["garden"]["value"];
+        birthName = resData[i]["name"]["value"];
+        birthMonth = Number(resData[i]["birthdate"]["value"].substring(2,4));
+        birthDay = Number(resData[i]["birthdate"]["value"].substring(5));
+        charaType = resData[i]["type"]["value"].replace("https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#","");
+        garden = resData[i]["garden"]["value"];
         //所属レギオン
-        if("lgname" in resdata[i]){
-            legion = resdata[i]["lgname"]["value"];
+        if("lgname" in resData[i]){
+            legion = resData[i]["lgname"]["value"];
         } else {
             legion = "";
         }
         
         //もう誕生日を過ぎてる場合は来年から
-        if(birthmonth < month || (birthmonth == month && birthday <= day)) {
-            birthyear += 1;
+        if(birthMonth < month || (birthMonth == month && birthDay <= day)) {
+            birthYear += 1;
         }
 
         //翌日の日付が月をまたぐ場合
-        if(birthday == monthend[birthmonth]){
+        if(birthDay == monthEnd[birthMonth]){
             //年越し
-            if(birthmonth == 12){
-                nextdate = [birthyear + 1,1,1];
+            if(birthMonth == 12){
+                nextDate = [birthYear + 1,1,1];
             } else {
-                nextdate[0] = birthyear;
-                nextdate[1] = birthmonth + 1;
-                nextdate[2] = 1;
+                nextDate[0] = birthYear;
+                nextDate[1] = birthMonth + 1;
+                nextDate[2] = 1;
             }
         } else {
-            nextdate[0] = birthyear;
-            nextdate[1] = birthmonth;
-            nextdate[2] = birthday + 1;
+            nextDate[0] = birthYear;
+            nextDate[1] = birthMonth;
+            nextDate[2] = birthDay + 1;
         }
         if(lang == "ja") {
-            summary = birthname + "の誕生日";
-            if(charatype == "Teacher") {
-                description = `${garden}の教導官、${birthname}の誕生日です。`;
+            summary = birthName + "の誕生日";
+            if(charaType == "Teacher") {
+                description = `${garden}の教導官、${birthName}の誕生日です。`;
             } else if(legion !== "") {
-                description = `LG${legion}所属、${birthname}の誕生日です。`;
+                description = `LG${legion}所属、${birthName}の誕生日です。`;
             } else {
-                description = `${birthname}の誕生日です。`;
+                description = `${birthName}の誕生日です。`;
             }
             // iCalendar規約を遵守する場合
             // if(description.length > 20) description = description.match(/.{1,20}/g).join("\n ");
 
         } else {
-            summary = birthname + "'s birthday";
-            if(charatype == "Teacher") {
-                description = `It is the birthday of ${birthname}, a teacher at ${garden}`;
+            summary = birthName + "'s birthDay";
+            if(charaType == "Teacher") {
+                description = `It is the birthDay of ${birthName}, a teacher at ${garden}`;
             } else if(legion !== "") {
-                description = `It is the birthday of ${birthname}, who belongs to LG ${legion}.`;
+                description = `It is the birthDay of ${birthName}, who belongs to LG ${legion}.`;
             } else {
-                description = `It is the birthday of ${birthname}.`;
+                description = `It is the birthDay of ${birthName}.`;
             }
             // iCalendar規約を遵守する場合
             // if(description.length > 60) description = description.match(/.{1,60}/g).join("\n ");
         }
 
-        LemonadeURL = resdata[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
-        icsdata += `
+        LemonadeURL = resData[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
+        icsData += `
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:${birthyear.toString()}${formatDate(birthmonth,birthday)}
-DTEND;VALUE=DATE:${nextdate[0].toString()}${formatDate(nextdate[1],nextdate[2])}
-DTSTAMP:${birthyear.toString()}${formatDate(month,day)}T${formatDate(hour,minute)}00
+DTSTART;VALUE=DATE:${birthYear.toString()}${formatDate(birthMonth,birthDay)}
+DTEND;VALUE=DATE:${nextDate[0].toString()}${formatDate(nextDate[1],nextDate[2])}
+DTSTAMP:${birthYear.toString()}${formatDate(month,day)}T${formatDate(hour,minute)}00
 RRULE:FREQ=YEARLY
 TRANSP:TRANSPARENT
 SUMMARY:${summary}
@@ -175,18 +175,18 @@ URL;VALUE=URI:${LemonadeURL}
 END:VEVENT`;
     }
     
-    icsdata += "\nEND:VCALENDAR";
-    console.log(`Build iCal Data: ${Date.now() - buildstart}ms`);
+    icsData += "\nEND:VCALENDAR";
+    console.log(`Build iCal Data: ${Date.now() - buildStart}ms`);
     let outArea = document.getElementById("output");
-    outArea.value = icsdata;
-    document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。(${Date.now()-starttime}ms)`;
+    outArea.value = icsData;
+    document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。(${Date.now()-startTime}ms)`;
     //ダウンロード処理
-    const blob = new Blob([icsdata], {"type" : "text/calendar"});
+    const blob = new Blob([icsData], {"type" : "text/calendar"});
     const url = URL.createObjectURL(blob);
 
     const anchor = document.createElement("a");
     anchor.setAttribute("href",url);
-    anchor.setAttribute("download",'liliesbirthday.ics')
+    anchor.setAttribute("download",'liliesbirthDay.ics')
     const mouseEvent = new MouseEvent("click", {
         bubbles: true,
         cancelable: true,
