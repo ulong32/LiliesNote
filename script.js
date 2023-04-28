@@ -186,7 +186,7 @@ END:VEVENT`;
 
     const anchor = document.createElement("a");
     anchor.setAttribute("href",url);
-    anchor.setAttribute("download",'liliesbirthDay.ics')
+    anchor.setAttribute("download",'LiliesBirthday.ics')
     const mouseEvent = new MouseEvent("click", {
         bubbles: true,
         cancelable: true,
