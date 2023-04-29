@@ -85,6 +85,7 @@ function build(resData,lang,startTime){
     let description = "";
     let legion = "";
     let charaType = "";
+    let wordLimit = 0;
 
     let date = new Date();
     const day = date.getDate();
@@ -145,8 +146,6 @@ function build(resData,lang,startTime){
             } else {
                 description = `${birthName}の誕生日です。`;
             }
-            // iCalendar規約を遵守する場合
-            // if(description.length > 20) description = description.match(/.{1,20}/g).join("\n ");
 
         } else {
             summary = birthName + "'s birthDay";
@@ -157,8 +156,6 @@ function build(resData,lang,startTime){
             } else {
                 description = `It is the birthday of ${birthName}.`;
             }
-            // iCalendar規約を遵守する場合
-            // if(description.length > 60) description = description.match(/.{1,60}/g).join("\n ");
         }
 
         LemonadeURL = resData[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","https://lemonade.assaultlily.com/lily/");
@@ -171,11 +168,46 @@ RRULE:FREQ=YEARLY
 TRANSP:TRANSPARENT
 SUMMARY:${summary}
 DESCRIPTION:${description}
-URL;VALUE=URI:${LemonadeURL}
-END:VEVENT`;
+URL;VALUE=URI:${LemonadeURL}`;
+        if(document.getElementById("chkExact").checked){
+            icsData += `\nUID:${resData[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/","")}@LiliesNote.ulong32.github.io`;
+        }
+        icsData += "\nEND:VEVENT";
     }
     
     icsData += "\nEND:VCALENDAR";
+
+    //厳格モード
+    if(document.getElementById("chkExact").checked){
+        icsRow = icsData.split("\n");
+        switch (lang) {
+            case "ja":
+                wordLimit = 24;
+                break;
+            case "en":
+                wordLimit = 74;
+                break;
+            default:
+                wordLimit = 24;
+                break;
+        }
+        let regEx = new RegExp(`.{1,${wordLimit}}`,"g");
+        for(let j=0;j<icsRow.length;j++){
+            // URLの規約遵守処理
+            if((icsRow[j].startsWith("URL") || icsRow[j].startsWith("UID"))&& icsRow[j].length > 74){
+                icsRow[j] = icsRow[j].match(/.{1,73}/g).join("\n ");
+            }
+
+
+            // 概要、説明、ライセンスコメントの規約遵守処理
+            if((icsRow[j].startsWith("SUMMARY") || icsRow[j].startsWith("DESCRIPTION") || icsRow[j].startsWith("X-LICENSE-COMMENT")) && icsRow[j].length > wordLimit){
+                console.log(icsRow[j]);
+                icsRow[j] = icsRow[j].match(regEx).join("\n ");
+            }
+        }
+        icsData = icsRow.join("\n");
+    }
+
     console.log(`Build iCal Data: ${Date.now() - buildStart}ms`);
     let outArea = document.getElementById("output");
     outArea.value = icsData;
