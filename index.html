@@ -5,12 +5,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LiliesNote</title>
+    <style>
+        html {
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+        }
+    </style>
 </head>
 <body>
     <h1>LiliesNote</h1>
     <input type="button" value="ダウンロード" style="font-size: 20px; width: 150px; height: 40px;" onclick="download('ja');">
     <input type="button" value="Download" style="font-size: 20px; width: 150px; height: 40px;" onclick="download('en');">
     <br>
+    <input type="checkbox" name="chkPreview" id="chkPreview">
+    <label for="chkPreview">プレビューモード（ダウンロードは行いません）</label>
     <p id="result"></p>
     <p>出力内容↓</p>
     <textarea name="output" id="output" cols="30" rows="10" readonly></textarea>

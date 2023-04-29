@@ -181,16 +181,19 @@ END:VEVENT`;
     outArea.value = icsData;
     document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。(${Date.now()-startTime}ms)`;
     //ダウンロード処理
-    const blob = new Blob([icsData], {"type" : "text/calendar"});
-    const url = URL.createObjectURL(blob);
+    if(document.getElementById("chkPreview").checked === false){
+        const blob = new Blob([icsData], {"type" : "text/calendar"});
+        const url = URL.createObjectURL(blob);
 
-    const anchor = document.createElement("a");
-    anchor.setAttribute("href",url);
-    anchor.setAttribute("download",'LiliesBirthday.ics')
-    const mouseEvent = new MouseEvent("click", {
-        bubbles: true,
-        cancelable: true,
-        view: window
-    });
-    anchor.dispatchEvent(mouseEvent);
+        const anchor = document.createElement("a");
+        anchor.setAttribute("href",url);
+        anchor.setAttribute("download",'LiliesBirthday.ics')
+        const mouseEvent = new MouseEvent("click", {
+            bubbles: true,
+            cancelable: true,
+            view: window
+        });
+        anchor.dispatchEvent(mouseEvent);
+    }
+
 }
