@@ -148,9 +148,9 @@ function build(resData,lang,startTime){
             }
 
         } else {
-            summary = birthName + "'s birthDay";
+            summary = birthName + "'s birthday";
             if(charaType == "Teacher") {
-                description = `It is the birthday of ${birthName}, a teacher at ${garden}`;
+                description = `It is the birthday of ${birthName}, a teacher at ${garden}.`;
             } else if(legion !== "") {
                 description = `It is the birthday of ${birthName}, who belongs to LG ${legion}.`;
             } else {
