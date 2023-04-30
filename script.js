@@ -32,12 +32,12 @@ WHERE {
     VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
     ?lily a ?class;
           rdf:type ?type;
-          lily:garden ?garden;
           schema:name ?name;
           schema:birthDate ?birthdate.
     FILTER(lang(?name)="${lang}")
     OPTIONAL{
-        ?lily lily:legion/schema:name ?lgname.
+        ?lily lily:legion/schema:name ?lgname;
+              lily:garden ?garden.
         FILTER(lang(?lgname)="${lang}")
     }
 }
