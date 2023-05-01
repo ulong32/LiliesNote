@@ -113,7 +113,12 @@ function build(resData,lang,startTime){
         birthMonth = Number(resData[i]["birthdate"]["value"].substring(2,4));
         birthDay = Number(resData[i]["birthdate"]["value"].substring(5));
         charaType = resData[i]["type"]["value"].replace("https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#","");
-        garden = resData[i]["garden"]["value"];
+        //ガーデン名
+        if("garden" in resData[i]){
+            garden = resData[i]["lgname"]["value"];
+        } else {
+            garden = "";
+        }
         //所属レギオン
         if("lgname" in resData[i]){
             legion = resData[i]["lgname"]["value"];
