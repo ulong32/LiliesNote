@@ -78,6 +78,7 @@ ORDER BY ?name`;
 
 
 function build(resData,lang,startTime){
+    console.log("Build start");
     let buildStart = Date.now();
     let birthName = "";
     let birthYear = 0;
