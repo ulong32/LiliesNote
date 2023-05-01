@@ -63,7 +63,10 @@ ORDER BY ?name`;
                 if(xhr.status == 200){
                     let endTime = Date.now();
                     resultArea.innerText = `問い合わせ完了。(${endTime - startTime}ms)`;
-                    console.log(`Download: ${endTime - startTime}ms`)
+                    console.log(`Download: ${endTime - startTime}ms`);
+                    if(!JSON.parse(xhr.responseText)["results"]["bindings"]) {
+                        resultArea.innerText = "エラー:応答が空です。";
+                    }
                     build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,startTime);
                 } else {
                     resultArea.innerText = `問い合わせ失敗。(エラー:${xhr.statusText})`;
