@@ -158,7 +158,7 @@ function build(resData,lang,startTime){
 
         } else {
             summary = birthName + "'s birthday";
-            if(charaType == "Teacher") {
+            if(charaType == "Teacher" && garden) {
                 description = `It is the birthday of ${birthName}, a teacher at ${garden}.`;
             } else if(legion !== "") {
                 description = `It is the birthday of ${birthName}, who belongs to LG ${legion}.`;
