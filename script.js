@@ -148,7 +148,7 @@ function build(resData,lang,startTime){
         }
         if(lang == "ja") {
             summary = birthName + "の誕生日";
-            if(charaType == "Teacher") {
+            if(charaType == "Teacher" && garden) {
                 description = `${garden}の教導官、${birthName}の誕生日です。`;
             } else if(legion !== "") {
                 description = `LG${legion}所属、${birthName}の誕生日です。`;
