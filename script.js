@@ -20,6 +20,37 @@ function formatDate(...args){
     return str;
 }
 
+function showPreview(){
+    if(document.getElementById("chkShow").checked){
+        document.getElementById("divTable").style.display = "none";
+    } else {
+        document.getElementById("divTable").style.display = "block";
+    }
+}
+
+//カレンダー風プレビューの生成
+window.addEventListener("DOMContentLoaded", () => {
+    let tableRow, tableCell,tableRowHeader;
+    outTable = document.getElementById("outTable");
+    for(let i=1;i<32;i++){
+        tableRow = document.createElement("tr");
+        if(i % 2 == 0){
+            tableRow.setAttribute("bgcolor", "#e6e6e6")
+        }
+        for(let j=1;j<13;j++){
+            //行のヘッダ
+            if(j==1){
+                tableRowHeader = document.createElement("th");
+                tableRowHeader.innerText = `${i}日`;
+                tableRow.appendChild(tableRowHeader);
+            }
+            tableCell = document.createElement("td");
+            tableCell.setAttribute("id",`--${formatDate(j)}-${formatDate(i)}`);
+            tableRow.appendChild(tableCell);
+        }
+        outTable.appendChild(tableRow);
+    }
+})
 
 function download(lang) {
     let server = "https://luciadb.assaultlily.com/sparql/query"
@@ -104,7 +135,14 @@ function build(resData,lang,startTime){
     //月末データ、視認性向上のため先頭は意味ないデータ
     let monthEnd = [0,31,28,31,30,31,30,31,31,30,31,30,31];
     let i=0;
-    
+    let tableCell;
+
+    //プレビューの中身をリセット
+    for(let calDay=1;calDay<32;calDay++){
+        for(let calMonth=1;calMonth<13;calMonth++){
+            document.getElementById(`--${formatDate(calMonth)}-${formatDate(calDay)}`).innerText = "";
+        }
+    }
     for(i=0;i<resData.length;i++){
 
         birthYear = year;
@@ -124,6 +162,14 @@ function build(resData,lang,startTime){
             legion = resData[i]["lgname"]["value"];
         } else {
             legion = "";
+        }
+        
+        //プレビューの中身を入れる
+        tableCell = document.getElementById(resData[i]["birthdate"]["value"]);
+        if(tableCell.innerText === ""){
+            tableCell.innerText = birthName;
+        } else {
+            tableCell.innerText += "\n" + birthName;
         }
         
         //もう誕生日を過ぎてる場合は来年から

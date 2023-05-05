@@ -11,6 +11,16 @@
             -moz-user-select: none;
             -webkit-user-select: none;
         }
+        table {
+            border-collapse: collapse;
+        }
+        th,td {
+            padding: 5px 15px;
+            border: solid 1px #333;
+        }
+        th{
+            background-color: rgb(183, 208, 255);
+        }
     </style>
 </head>
 <body>
@@ -25,6 +35,33 @@
     <label for="chkExact">厳格モード（iCalendar規約に厳格に準拠します）</label>
     <p id="result"></p>
     <p>出力内容↓</p>
+    <input type="checkbox" id="chkShow" name="chkShow" oninput="showPreview();">
+    <label for="chkShow">カレンダープレビューを隠す</label>
+    <br>
+    <br>
+    <div id="divTable" style="overflow-x: scroll; text-align: center;">
+        <table style="white-space: nowrap;">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>一月</th>
+                    <th>二月</th>
+                    <th>三月</th>
+                    <th>四月</th>
+                    <th>五月</th>
+                    <th>六月</th>
+                    <th>七月</th>
+                    <th>八月</th>
+                    <th>九月</th>
+                    <th>十月</th>
+                    <th>十一月</th>
+                    <th>十二月</th>
+                </tr>
+            </thead>
+            <tbody id="outTable"></tbody>
+        </table>
+    </div>
+    <br>
     <textarea name="output" id="output" cols="40" rows="10" readonly></textarea>
     <script src="./script.js"></script>
 </body>
