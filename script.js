@@ -35,7 +35,7 @@ window.addEventListener("DOMContentLoaded", () => {
     for(let i=1;i<32;i++){
         tableRow = document.createElement("tr");
         if(i % 2 == 0){
-            tableRow.setAttribute("bgcolor", "#e6e6e6")
+            tableRow.setAttribute("bgcolor", "#eee")
         }
         for(let j=1;j<13;j++){
             //行のヘッダ
