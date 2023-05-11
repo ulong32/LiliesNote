@@ -6,6 +6,10 @@ A tool for celebrate Lily's birthday
 
 アサルトリリィRDFデータベース、[LuciaDB](https://github.com/Assault-Lily/LuciaDB)をデータソースとし、リリィの誕生日をiCal(.ics)形式でダウンロードできるツールです。
 
+## What is iCalendar
+
+iCalendarの仕様に関しては[iCalendarの仕様（抜粋）](https://gist.github.com/ulong32/6d210fa82f0ee3feea70b643766b9ad3)にまとめました。
+
 ## License
 
 LiliesNoteは[MIT ライセンス](https://opensource.org/licenses/MIT)です。
