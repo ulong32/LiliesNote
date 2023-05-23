@@ -8,7 +8,7 @@ A tool for celebrate Lily's birthday
 
 ## What is iCalendar
 
-iCalendarの仕様に関しては[iCalendarの仕様（抜粋）](https://gist.github.com/ulong32/6d210fa82f0ee3feea70b643766b9ad3)にまとめました。
+[iCalendarの仕様（抜粋）](https://gist.github.com/ulong32/6d210fa82f0ee3feea70b643766b9ad3) を参照してください。
 
 ## License
 
