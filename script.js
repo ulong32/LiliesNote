@@ -74,11 +74,9 @@ WHERE {
 }
 ORDER BY ?name`;
 
-    xhr.open("POST",server,false);
+    xhr.open("POST",server,true);
     xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
     xhr.setRequestHeader("Accept", "application/json");
-    startTime = Date.now();
-    xhr.send(queryHeader + query);
     xhr.onload = function() {
         if(xhr.readyState === 4){
             if(xhr.status === 200){
@@ -94,6 +92,9 @@ ORDER BY ?name`;
             }
         }
     }
+    
+    startTime = Date.now();
+    xhr.send(queryHeader + query);
 }
 
 
