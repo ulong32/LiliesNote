@@ -74,35 +74,24 @@ WHERE {
 }
 ORDER BY ?name`;
 
-    xhr.open("POST",server,true);
-    xhr.setRequestHeader("Content-Type", "application/sparql-query");
+    xhr.open("POST",server,false);
+    xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
     xhr.setRequestHeader("Accept", "application/json");
     startTime = Date.now();
     xhr.send(queryHeader + query);
-    xhr.onreadystatechange = function() {
-        switch(xhr.readyState){
-            case 1:
-                resultArea.innerText = "クエリ送信中...";
-                break;
-            case 2:
-                resultArea.innerText = "サーバ応答待機中...";
-                break;
-            case 3:
-                resultArea.innerText = "データダウンロード中...";
-                break;
-            case 4:
-                if(xhr.status == 200){
-                    let endTime = Date.now();
-                    resultArea.innerText = `問い合わせ完了。(${endTime - startTime}ms)`;
-                    console.log(`Download: ${endTime - startTime}ms`);
-                    if(!JSON.parse(xhr.responseText)["results"]["bindings"]) {
-                        resultArea.innerText = "エラー:応答が空です。";
-                    }
-                    build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,startTime);
-                } else {
-                    resultArea.innerText = `問い合わせ失敗。(エラー:${xhr.statusText})`;
+    xhr.onload = function() {
+        if(xhr.readyState === 4){
+            if(xhr.status === 200){
+                let endTime = Date.now();
+                resultArea.innerText = `問い合わせ完了。(${endTime - startTime}ms)`;
+                console.log(`Download: ${endTime - startTime}ms`);
+                if(!JSON.parse(xhr.responseText)["results"]["bindings"]) {
+                    resultArea.innerText = "エラー:応答が空です。";
                 }
-                break;
+                build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,startTime);
+            } else {
+                resultArea.innerText = `問い合わせ失敗。(エラー:${xhr.statusText})`;
+            }
         }
     }
 }
