@@ -1,3 +1,5 @@
+const version = "v1.1.0 Nakaba"
+
 const queryHeader = `PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>`;
@@ -6,7 +8,7 @@ const sparqlEndpoint = "https://luciadb.assaultlily.com/sparql/query";
 
 const icsHeader = `BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote//JA
+PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote ${version}//JA
 CALSCALE:GREGORIAN`;
 
 const license = {
@@ -32,6 +34,8 @@ function showPreview(){
 
 
 window.addEventListener("DOMContentLoaded", () => {
+    //バージョンの代入
+    document.getElementById("version").innerText = `LiliesNote ${version}`;
     //カレンダー風プレビューの生成
     let tableRow, tableCell,tableRowHeader;
     outTable = document.getElementById("outTable");
