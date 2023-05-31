@@ -2,6 +2,8 @@ const queryHeader = `PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>`;
 
+const sparqlEndpoint = "https://luciadb.assaultlily.com/sparql/query";
+
 const icsHeader = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote//JA
@@ -28,8 +30,9 @@ function showPreview(){
     }
 }
 
-//カレンダー風プレビューの生成
+
 window.addEventListener("DOMContentLoaded", () => {
+    //カレンダー風プレビューの生成
     let tableRow, tableCell,tableRowHeader;
     outTable = document.getElementById("outTable");
     for(let i=1;i<32;i++){
@@ -50,10 +53,76 @@ window.addEventListener("DOMContentLoaded", () => {
         }
         outTable.appendChild(tableRow);
     }
+    //ガーデンフィルタの生成
+    let gardenList = [];
+    let option,label;
+    let chkNoGarden,labelNoGarden;
+    const divGardenFilter = document.getElementById("divGardenFilter");
+    const xhr = new XMLHttpRequest();
+    const query = `
+SELECT DISTINCT ?garden
+WHERE{
+    VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
+    ?lily a ?class;
+          schema:birthDate ?birthdate;
+          lily:garden ?garden.
+}
+ORDER BY ?garden`;
+    xhr.open("POST",sparqlEndpoint,true);
+    xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.onload = function() {
+        console.log("loaded");
+        if(xhr.readyState === 4){
+            if(xhr.status === 200){
+                gardenList = JSON.parse(xhr.responseText)["results"]["bindings"];
+                gardenList.forEach(garden => {
+                    option = document.createElement("input");
+                    option.setAttribute("type","checkbox");
+                    option.setAttribute("id",garden["garden"]["value"]);
+                    option.setAttribute("name",garden["garden"]["value"]);
+                    option.setAttribute("class","chkGarden")
+                    option.innerText = garden["garden"]["value"];
+                    label = document.createElement("label");
+                    label.setAttribute("for",garden["garden"]["value"]);
+                    label.innerText = garden["garden"]["value"];
+                    divGardenFilter.appendChild(option);
+                    divGardenFilter.appendChild(label);
+                    divGardenFilter.appendChild(document.createElement("br"));
+                });
+                chkNoGarden = document.createElement("input");
+                chkNoGarden.setAttribute("type","checkbox");
+                chkNoGarden.setAttribute("name","noGarden");
+                chkNoGarden.setAttribute("id","noGarden");
+                chkNoGarden.setAttribute("class","noGarden");
+                labelNoGarden = document.createElement("label");
+                labelNoGarden.setAttribute("for","noGarden");
+                labelNoGarden.innerText = "所属ガーデンなし";
+                divGardenFilter.appendChild(chkNoGarden);
+                divGardenFilter.appendChild(labelNoGarden);
+                divGardenFilter.appendChild(document.createElement("br"));
+            }
+        }
+    }
+    xhr.send(queryHeader + query);
+    const chkGardenFilter = document.getElementById("chkGardenFilter");
+    if(chkGardenFilter.checked){
+        divGardenFilter.style.display = "block";
+    } else {
+        divGardenFilter.style.display = "none";
+    }
+    chkGardenFilter.addEventListener("change",function() {
+        
+        if(this.checked){
+            divGardenFilter.style.display = "block";
+        } else {
+            divGardenFilter.style.display = "none";
+        }
+    })
+
 })
 
 function download(lang) {
-    let server = "https://luciadb.assaultlily.com/sparql/query"
     const xhr = new XMLHttpRequest();
     let resultArea = document.getElementById("result");
     let startTime;
@@ -67,14 +136,14 @@ WHERE {
           schema:birthDate ?birthdate.
     FILTER(lang(?name)="${lang}")
     OPTIONAL{
-        ?lily lily:legion/schema:name ?lgname;
-              lily:garden ?garden.
+        ?lily lily:legion/schema:name ?lgname.
         FILTER(lang(?lgname)="${lang}")
     }
+    OPTIONAL{?lily lily:garden ?garden.}
 }
 ORDER BY ?name`;
 
-    xhr.open("POST",server,true);
+    xhr.open("POST",sparqlEndpoint,true);
     xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
     xhr.setRequestHeader("Accept", "application/json");
     xhr.onload = function() {
@@ -92,7 +161,6 @@ ORDER BY ?name`;
             }
         }
     }
-    
     startTime = Date.now();
     xhr.send(queryHeader + query);
 }
@@ -133,6 +201,29 @@ function build(resData,lang,startTime){
             document.getElementById(`--${formatDate(calMonth)}-${formatDate(calDay)}`).innerText = "";
         }
     }
+
+    //ガーデンフィルタを適用
+    if(document.getElementById("chkGardenFilter").checked){
+        let excludedGardens = [];
+        const includeNoGarden = document.getElementById("noGarden").checked;
+        const gardenFilter = Array.from(document.getElementsByClassName("chkGarden"));
+        gardenFilter.forEach(garden => {
+            if(!garden.checked){
+                excludedGardens.push(garden.name);
+            }
+        });
+        for(let i=0;i<resData.length;i++){
+            if("garden" in resData[i]){
+                if(excludedGardens.includes(resData[i]["garden"]["value"])){
+                    resData.splice(i,1);
+                    i--;
+                }
+            } else if(!includeNoGarden){
+                resData.splice(i,1);
+                i--;
+            }
+        }
+    }
     for(i=0;i<resData.length;i++){
 
         birthYear = year;
@@ -143,7 +234,7 @@ function build(resData,lang,startTime){
         charaType = resData[i]["type"]["value"].replace("https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#","");
         //ガーデン名
         if("garden" in resData[i]){
-            garden = resData[i]["lgname"]["value"];
+            garden = resData[i]["garden"]["value"];
         } else {
             garden = "";
         }
@@ -153,6 +244,8 @@ function build(resData,lang,startTime){
         } else {
             legion = "";
         }
+
+
         
         //プレビューの中身を入れる
         tableCell = document.getElementById(resData[i]["birthdate"]["value"]);
