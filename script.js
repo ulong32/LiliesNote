@@ -1,4 +1,4 @@
-const version = "v2.0.0 Amane"
+const version = "v2.0.0 Amane";
 
 const queryHeader = `PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -42,7 +42,7 @@ window.addEventListener("DOMContentLoaded", () => {
     for(let i=1;i<32;i++){
         tableRow = document.createElement("tr");
         if(i % 2 == 0){
-            tableRow.setAttribute("bgcolor", "#eee")
+            tableRow.setAttribute("bgcolor", "#eee");
         }
         for(let j=1;j<13;j++){
             //行のヘッダ
@@ -85,7 +85,7 @@ ORDER BY ?garden`;
                     option.setAttribute("type","checkbox");
                     option.setAttribute("id",garden["garden"]["value"]);
                     option.setAttribute("name",garden["garden"]["value"]);
-                    option.setAttribute("class","chkGarden")
+                    option.setAttribute("class","chkGarden");
                     option.innerText = garden["garden"]["value"];
                     label = document.createElement("label");
                     label.setAttribute("for",garden["garden"]["value"]);
