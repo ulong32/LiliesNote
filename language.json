@@ -86,5 +86,9 @@
     "copyrightLiliesNote": {
         "ja": "LiliesNoteのスクリプト部分は<a href='https://opensource.org/licenses/MIT' target='_blank'>MIT ライセンス</a>で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。",
         "en": "Script part of LiliesNote is available under the <a href='https://opensource.org/licenses/MIT' target='_blank'>MIT License</a>, but data generated in this site using LuciaDB is subject to the LuciaDB's license above."
+    },
+    "pAnotherVersion": {
+        "ja": "<b>English version of this page is available at <a href='./index.html?lang=en'>here</a></b>",
+        "en": "<b>このページには<a href='./index.html?lang=ja'>日本語版</a>があります。</b>"
     }
 }
