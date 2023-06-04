@@ -42,9 +42,9 @@ function formatDate(...args){
 
 function showPreview(){
     if(document.getElementById("chkShow").checked){
-        document.getElementById("divTable").style.display = "none";
-    } else {
         document.getElementById("divTable").style.display = "block";
+    } else {
+        document.getElementById("divTable").style.display = "none";
     }
 }
 
