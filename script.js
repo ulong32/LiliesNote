@@ -16,6 +16,22 @@ const license = {
     "en": "This data is sourced from LuciaDB, licensed under CC BY-NC-SA 4.0.",
 };
 
+const messageQueryLoaded =  {
+    "ja": "問い合わせ完了。",
+    "en": "Query loaded."
+};
+
+const messageQueryEmpty = {
+    "ja": "エラー:応答が空です。",
+    "en": "Error: Result is empty."
+};
+
+const messageQueryError = {
+    "ja": "問い合わせ失敗。(エラー:",
+    "en": "Query failed. (Error:"
+};
+
+
 function formatDate(...args){
     let str = "";
     for(let i=0;i<args.length;i++){
@@ -32,10 +48,34 @@ function showPreview(){
     }
 }
 
+function applyTranslates(lang){
+    const xhr = new XMLHttpRequest();
+    xhr.open("GET","./language.json",true);
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            const json = JSON.parse(xhr.responseText);
+            const keys = Object.keys(json);
+            keys.forEach(key => {
+                document.getElementById(key).innerHTML = json[key][lang];
+            })
+        }
+    
+    };
+    xhr.send();
+}
+
 
 window.addEventListener("DOMContentLoaded", () => {
     //バージョンの代入
     document.getElementById("version").innerText = `LiliesNote ${version}`;
+    //言語設定を取得
+    const searchParams = new URLSearchParams(window.location.search);
+    let lang = "ja";
+    if(searchParams.has("lang")){
+        lang = searchParams.get("lang");
+    }
+    //多言語対応
+    applyTranslates(lang);
     //カレンダー風プレビューの生成
     let tableRow, tableCell,tableRowHeader;
     outTable = document.getElementById("outTable");
@@ -48,7 +88,23 @@ window.addEventListener("DOMContentLoaded", () => {
             //行のヘッダ
             if(j==1){
                 tableRowHeader = document.createElement("th");
-                tableRowHeader.innerText = `${i}日`;
+                if(lang == "ja"){
+                    tableRowHeader.innerText = `${i}日`;
+                }else if(lang == "en"){
+                    switch(i % 10){
+                        case 1:
+                            tableRowHeader.innerText = `${i}st`;
+                            break;
+                        case 2:
+                            tableRowHeader.innerText = `${i}nd`;
+                            break;
+                        case 3:
+                            tableRowHeader.innerText = `${i}rd`;
+                            break;
+                        default:
+                            tableRowHeader.innerText = `${i}th`;
+                    }
+                }
                 tableRow.appendChild(tableRowHeader);
             }
             tableCell = document.createElement("td");
@@ -154,14 +210,14 @@ ORDER BY ?name`;
         if(xhr.readyState === 4){
             if(xhr.status === 200){
                 let endTime = Date.now();
-                resultArea.innerText = `問い合わせ完了。(${endTime - startTime}ms)`;
+                resultArea.innerText = `${messageQueryLoaded[lang]}(${endTime - startTime}ms)`;
                 console.log(`Download: ${endTime - startTime}ms`);
                 if(!JSON.parse(xhr.responseText)["results"]["bindings"]) {
-                    resultArea.innerText = "エラー:応答が空です。";
+                    resultArea.innerText = messageQueryEmpty[lang];
                 }
                 build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,startTime);
             } else {
-                resultArea.innerText = `問い合わせ失敗。(エラー:${xhr.statusText})`;
+                resultArea.innerText = `${messageQueryError[lang]}${xhr.statusText})`;
             }
         }
     }

@@ -1,0 +1,90 @@
+{
+    "h3Filter": {
+        "ja": "フィルタ",
+        "en": "Filter"
+    },
+    "labelGardenFilter": {
+        "ja": "所属ガーデンでフィルタ",
+        "en": "Filter by affiliated garden"
+    },
+    "labelPreview": {
+        "ja": "プレビューモード（ダウンロードを行いません）",
+        "en": "Preview Mode (Don't perform download)"
+    },
+    "labelExact": {
+        "ja": "厳格モード（iCalendar規約に厳格に準拠します）",
+        "en": "Strict mode (Strictly follow iCalendar rules)"
+    },
+    "pResult": {
+        "ja": "出力内容↓",
+        "en": "Output↓"
+    },
+    "labelShow": {
+        "ja": "カレンダープレビューを表示",
+        "en": "Show calendar preview"
+    },
+    "thBirthday": {
+        "ja": "誕生日",
+        "en": "Birthday"
+    },
+    "thJanuary": {
+        "ja": "1月",
+        "en": "January"
+    },
+    "thFebruary": {
+        "ja": "2月",
+        "en": "February"
+    },
+    "thMarch": {
+        "ja": "3月",
+        "en": "March"
+    },
+    "thApril": {
+        "ja": "4月",
+        "en": "April"
+    },
+    "thMay": {
+        "ja": "5月",
+        "en": "May"
+    },
+    "thJune": {
+        "ja": "6月",
+        "en": "June"
+    },
+    "thJuly": {
+        "ja": "7月",
+        "en": "July"
+    },
+    "thAugust": {
+        "ja": "8月",
+        "en": "August"
+    },
+    "thSeptember": {
+        "ja": "9月",
+        "en": "Septembar"
+    },
+    "thOctober": {
+        "ja": "10月",
+        "en": "October"
+    },
+    "thNovember": {
+        "ja": "11月",
+        "en": "November"
+    },
+    "thDecember": {
+        "ja": "12月",
+        "en": "December"
+    },
+    "repo": {
+        "ja": "GitHubリポジトリ",
+        "en": "GitHub repository"
+    },
+    "copyrightLuciaDB": {
+        "ja": "本サイトで利用しているデータは<a href='https://github.com/Assault-Lily/LuciaDB' target='_blank'>LuciaDB</a>によって<a href='https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja' target='_blank'>クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>で提供されています。",
+        "en": "the data used in this website is from <a href='https://github.com/Assault-Lily/LuciaDB' target='_blank'>LuciaDB</a>, licensed under <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en' target='_blank'>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International<a>."
+    },
+    "copyrightLiliesNote": {
+        "ja": "LiliesNoteのスクリプト部分は<a href='https://opensource.org/licenses/MIT' target='_blank'>MIT ライセンス</a>で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。",
+        "en": "Script part of LiliesNote is available under the <a href='https://opensource.org/licenses/MIT' target='_blank'>MIT License</a>, but data generated in this site using LuciaDB is subject to the LuciaDB's license above."
+    }
+}
