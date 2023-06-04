@@ -78,45 +78,52 @@
         .noGarden{
             margin-left: 20px;
         }
+        .download{
+            font-size: 20px;
+            width: 150px;
+            height: 40px;
+        }
     </style>
 </head>
 <body>
     <h1>LiliesNote</h1>
-    <input type="button" value="ダウンロード" style="font-size: 20px; width: 150px; height: 40px;" onclick="download('ja');">
-    <input type="button" value="Download" style="font-size: 20px; width: 150px; height: 40px;" onclick="download('en');">
+    <h3 id="h3Filter">フィルタ</h3>
+    <input type="checkbox" name="chkGardenFilter" id="chkGardenFilter">
+    <label for="chkGardenFilter" id="labelGardenFilter">ガーデンでフィルタ</label>
+    <div id="divGardenFilter"></div>
     <br>
+    <h3 id="h3DownloadPref">ダウンロード設定</h3>
     <input type="checkbox" name="chkPreview" id="chkPreview">
-    <label for="chkPreview">プレビューモード（ダウンロードは行いません）</label>
+    <label for="chkPreview" id="labelPreview">プレビューモード（ダウンロードは行いません）</label>
     <br>
     <input type="checkbox" name="chkExact" id="chkExact">
-    <label for="chkExact">厳格モード（iCalendar規約に厳格に準拠します）</label>
-    <h3>フィルタ</h3>
-    <input type="checkbox" name="chkGardenFilter" id="chkGardenFilter">
-    <label for="chkGardenFilter">ガーデンでフィルタ</label>
-    <div id="divGardenFilter"></div>
+    <label for="chkExact" id="labelExact">厳格モード（iCalendar規約に厳格に準拠します）</label>
+    <br>
+    <input type="button" value="ダウンロード" class="download" onclick="download('ja');">
+    <input type="button" value="Download" class="download" onclick="download('en');">
     <p id="result"></p>
-    <p>出力内容↓</p>
+    <p id="pResult">出力内容↓</p>
     <input type="checkbox" id="chkShow" name="chkShow" oninput="showPreview();">
-    <label for="chkShow">カレンダープレビューを隠す</label>
+    <label for="chkShow" id="labelShow">カレンダープレビューを隠す</label>
     <br>
     <br>
     <div id="divTable" class="divTable">
         <table>
             <thead>
                 <tr>
-                    <th>誕生日</th>
-                    <th>1月</th>
-                    <th>2月</th>
-                    <th>3月</th>
-                    <th>4月</th>
-                    <th>5月</th>
-                    <th>6月</th>
-                    <th>7月</th>
-                    <th>8月</th>
-                    <th>9月</th>
-                    <th>10月</th>
-                    <th>11月</th>
-                    <th>12月</th>
+                    <th id="thBirthday">誕生日</th>
+                    <th id="thJanuary">1月</th>
+                    <th id="thFebruary">2月</th>
+                    <th id="thMarch">3月</th>
+                    <th id="thApril">4月</th>
+                    <th id="thMay">5月</th>
+                    <th id="thJune">6月</th>
+                    <th id="thJuly">7月</th>
+                    <th id="thAugust">8月</th>
+                    <th id="thSeptember">9月</th>
+                    <th id="thOctober">10月</th>
+                    <th id="thNovember">11月</th>
+                    <th id="thDecember">12月</th>
                 </tr>
             </thead>
             <tbody id="outTable"></tbody>
@@ -129,11 +136,11 @@
 <footer>
     <p class="version" id="version"></p>
     <p class="copyright">2023 ©Ulong32</p>
-    <p class="repo"><a href="https://github.com/ulong32/LiliesNote/">GitHubリポジトリ</a></p>
+    <p class="repo"><a href="https://github.com/ulong32/LiliesNote/" id="repo">GitHubリポジトリ</a></p>
     <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" class="cc-img">
         <img alt="CC BY-NC-SA" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png">
     </a>
-    <p class="cc-txt">本サイトで利用しているデータは<a href="https://github.com/Assault-Lily/LuciaDB" target="_blank">LuciaDB</a>によって<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>で提供されています。</p>
-    <p class="cc-txt">LiliesNoteのスクリプト部分は<a href="https://opensource.org/licenses/MIT" target="_blank" >MIT ライセンス</a>で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。</p>
+    <p class="cc-txt" id="copyrightLuciaDB">本サイトで利用しているデータは<a href="https://github.com/Assault-Lily/LuciaDB" target="_blank">LuciaDB</a>によって<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>で提供されています。</p>
+    <p class="cc-txt" id="copyrightLiliesNote">LiliesNoteのスクリプト部分は<a href="https://opensource.org/licenses/MIT" target="_blank" >MIT ライセンス</a>で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。</p>
 </footer>
 </html>
