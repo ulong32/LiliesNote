@@ -11,6 +11,8 @@ VERSION:2.0
 PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote ${version}//JA
 CALSCALE:GREGORIAN`;
 
+let languageGlobal = "ja";
+
 const license = {
     "ja": "このデータはLuciaDBから取得しています。ライセンスはCC BY-NC-SA 4.0です。",
     "en": "This data is sourced from LuciaDB, licensed under CC BY-NC-SA 4.0.",
@@ -70,12 +72,12 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("version").innerText = `LiliesNote ${version}`;
     //言語設定を取得
     const searchParams = new URLSearchParams(window.location.search);
-    let lang = "ja";
+    languageGlobal = "ja";
     if(searchParams.has("lang")){
-        lang = searchParams.get("lang");
+        languageGlobal = searchParams.get("lang");
     }
     //多言語対応
-    applyTranslates(lang);
+    applyTranslates(languageGlobal);
     //カレンダー風プレビューの生成
     let tableRow, tableCell,tableRowHeader;
     outTable = document.getElementById("outTable");
@@ -88,18 +90,30 @@ window.addEventListener("DOMContentLoaded", () => {
             //行のヘッダ
             if(j==1){
                 tableRowHeader = document.createElement("th");
-                if(lang == "ja"){
+                if(languageGlobal == "ja"){
                     tableRowHeader.innerText = `${i}日`;
-                }else if(lang == "en"){
+                }else if(languageGlobal == "en"){
                     switch(i % 10){
                         case 1:
-                            tableRowHeader.innerText = `${i}st`;
+                            if(i == 11){
+                                tableRowHeader.innerText = `${i}th`;
+                            }else{
+                                tableRowHeader.innerText = `${i}st`;
+                            }
                             break;
                         case 2:
-                            tableRowHeader.innerText = `${i}nd`;
+                            if(i == 12){
+                                tableRowHeader.innerText = `${i}th`;
+                            }else {
+                                tableRowHeader.innerText = `${i}nd`;
+                            }
                             break;
                         case 3:
-                            tableRowHeader.innerText = `${i}rd`;
+                            if(i == 13){
+                                tableRowHeader.innerText = `${i}th`;
+                            }else {
+                                tableRowHeader.innerText = `${i}rd`;
+                            }
                             break;
                         default:
                             tableRowHeader.innerText = `${i}th`;
@@ -210,14 +224,14 @@ ORDER BY ?name`;
         if(xhr.readyState === 4){
             if(xhr.status === 200){
                 let endTime = Date.now();
-                resultArea.innerText = `${messageQueryLoaded[lang]}(${endTime - startTime}ms)`;
+                resultArea.innerText = `${messageQueryLoaded[languageGlobal]}(${endTime - startTime}ms)`;
                 console.log(`Download: ${endTime - startTime}ms`);
                 if(!JSON.parse(xhr.responseText)["results"]["bindings"]) {
-                    resultArea.innerText = messageQueryEmpty[lang];
+                    resultArea.innerText = messageQueryEmpty[languageGlobal];
                 }
                 build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,startTime);
             } else {
-                resultArea.innerText = `${messageQueryError[lang]}${xhr.statusText})`;
+                resultArea.innerText = `${messageQueryError[languageGlobal]}${xhr.statusText})`;
             }
         }
     }
@@ -409,7 +423,11 @@ URL;VALUE=URI:${LemonadeURL}`;
     console.log(`Build iCal Data: ${Date.now() - buildStart}ms`);
     let outArea = document.getElementById("output");
     outArea.value = icsData;
-    document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。(${Date.now()-startTime}ms)`;
+    if(languageGlobal == "ja"){
+        document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。(${Date.now()-startTime}ms)`;
+    }else {
+        document.getElementById("result").innerText = `Exported ${i} Lily's Birthday. (${Date.now()-startTime}ms)`;
+    }
     //ダウンロード処理
     if(document.getElementById("chkPreview").checked === false){
         const blob = new Blob([icsData], {"type" : "text/calendar"});
