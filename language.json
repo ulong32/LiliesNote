@@ -3,17 +3,21 @@
         "ja": "フィルタ",
         "en": "Filter"
     },
+    "h3DownloadPref": {
+        "ja": "ダウンロード設定",
+        "en": "Download Preferences"
+    },
     "labelGardenFilter": {
         "ja": "所属ガーデンでフィルタ",
         "en": "Filter by affiliated garden"
     },
     "labelPreview": {
         "ja": "プレビューモード（ダウンロードを行いません）",
-        "en": "Preview Mode (Don't perform download)"
+        "en": "Preview mode (Don't perform download)"
     },
     "labelExact": {
         "ja": "厳格モード（iCalendar規約に厳格に準拠します）",
-        "en": "Strict mode (Strictly follow iCalendar rules)"
+        "en": "Strict mode (Strictly follows the iCalendar's rules)"
     },
     "pResult": {
         "ja": "出力内容↓",
@@ -61,7 +65,7 @@
     },
     "thSeptember": {
         "ja": "9月",
-        "en": "Septembar"
+        "en": "September"
     },
     "thOctober": {
         "ja": "10月",
@@ -81,11 +85,11 @@
     },
     "copyrightLuciaDB": {
         "ja": "本サイトで利用しているデータは<a href='https://github.com/Assault-Lily/LuciaDB' target='_blank'>LuciaDB</a>によって<a href='https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja' target='_blank'>クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>で提供されています。",
-        "en": "the data used in this website is from <a href='https://github.com/Assault-Lily/LuciaDB' target='_blank'>LuciaDB</a>, licensed under <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en' target='_blank'>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International<a>."
+        "en": "the data used in this website is from <a href='https://github.com/Assault-Lily/LuciaDB' target='_blank'>LuciaDB</a>, licensed under <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en' target='_blank'>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International<a> license."
     },
     "copyrightLiliesNote": {
         "ja": "LiliesNoteのスクリプト部分は<a href='https://opensource.org/licenses/MIT' target='_blank'>MIT ライセンス</a>で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。",
-        "en": "Script part of LiliesNote is available under the <a href='https://opensource.org/licenses/MIT' target='_blank'>MIT License</a>, but data generated in this site using LuciaDB is subject to the LuciaDB's license above."
+        "en": "Script part of LiliesNote is available under the <a href='https://opensource.org/licenses/MIT' target='_blank'>MIT License</a> But data generated in this site using LuciaDB is subject to the LuciaDB's license above."
     },
     "pAnotherVersion": {
         "ja": "<b>English version of this page is available at <a href='./index.html?lang=en'>here</a></b>",
