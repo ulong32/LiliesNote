@@ -13,6 +13,8 @@ CALSCALE:GREGORIAN`;
 
 let isFirstOpenGardenFilter = true;
 
+let numGardens = {};
+
 let languageGlobal = "ja";
 
 const license = {
@@ -76,7 +78,7 @@ function buildGardenFilter(){
     const divGardenFilter = document.getElementById("divGardenFilter");
     const xhr = new XMLHttpRequest();
     const query = `
-SELECT DISTINCT ?garden
+SELECT ?garden
 WHERE{
     VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
     ?lily a ?class;
@@ -93,27 +95,42 @@ ORDER BY ?garden`;
             if(xhr.status === 200){
                 gardenList = JSON.parse(xhr.responseText)["results"]["bindings"];
                 gardenList.forEach(garden => {
-                    option = document.createElement("input");
-                    option.setAttribute("type","checkbox");
-                    option.setAttribute("id",garden["garden"]["value"]);
-                    option.setAttribute("name",garden["garden"]["value"]);
-                    option.setAttribute("class","chkGarden");
-                    option.innerText = garden["garden"]["value"];
-                    label = document.createElement("label");
-                    label.setAttribute("for",garden["garden"]["value"]);
-                    label.innerText = garden["garden"]["value"];
-                    divGardenFilter.appendChild(option);
-                    divGardenFilter.appendChild(label);
-                    divGardenFilter.appendChild(document.createElement("br"));
+                    if(garden["garden"]["value"] in numGardens === false){
+                        option = document.createElement("input");
+
+                        option.setAttribute("type","checkbox");
+                        option.setAttribute("name",garden["garden"]["value"]);
+                        option.setAttribute("class","chkGarden");
+
+                        label = document.createElement("label");
+                        label.setAttribute("for",garden["garden"]["value"]);
+                        label.setAttribute("id",garden["garden"]["value"]);
+
+                        divGardenFilter.appendChild(option);
+                        divGardenFilter.appendChild(label);
+                        divGardenFilter.appendChild(document.createElement("br"));
+
+                        numGardens[garden["garden"]["value"]] = 1;
+                    } else {
+                        numGardens[garden["garden"]["value"]] += 1;
+                    }
                 });
+                let keysExistingGardens = Object.keys(numGardens);
+                keysExistingGardens.forEach(garden => {
+                    document.getElementById(garden).innerText = garden + "(" + numGardens[garden].toString() + ")";
+                })
+                console.table(numGardens);
                 chkNoGarden = document.createElement("input");
+
                 chkNoGarden.setAttribute("type","checkbox");
                 chkNoGarden.setAttribute("name","noGarden");
                 chkNoGarden.setAttribute("id","noGarden");
                 chkNoGarden.setAttribute("class","noGarden");
+
                 labelNoGarden = document.createElement("label");
                 labelNoGarden.setAttribute("for","noGarden");
                 labelNoGarden.innerText = "所属ガーデンなし";
+
                 divGardenFilter.appendChild(chkNoGarden);
                 divGardenFilter.appendChild(labelNoGarden);
                 divGardenFilter.appendChild(document.createElement("br"));
