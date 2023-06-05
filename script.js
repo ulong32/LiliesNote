@@ -11,6 +11,8 @@ VERSION:2.0
 PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote ${version}//JA
 CALSCALE:GREGORIAN`;
 
+let isFirstOpenGardenFilter = true;
+
 let languageGlobal = "ja";
 
 const license = {
@@ -66,6 +68,60 @@ function applyTranslates(lang){
     xhr.send();
 }
 
+function buildGardenFilter(){
+    //ガーデンフィルタの生成
+    let gardenList = [];
+    let option,label;
+    let chkNoGarden,labelNoGarden;
+    const divGardenFilter = document.getElementById("divGardenFilter");
+    const xhr = new XMLHttpRequest();
+    const query = `
+SELECT DISTINCT ?garden
+WHERE{
+    VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
+    ?lily a ?class;
+          schema:birthDate ?birthdate;
+          lily:garden ?garden.
+}
+ORDER BY ?garden`;
+    xhr.open("POST",sparqlEndpoint,true);
+    xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
+    xhr.setRequestHeader("Accept", "application/json");
+    xhr.onload = function() {
+        console.log("loaded");
+        if(xhr.readyState === 4){
+            if(xhr.status === 200){
+                gardenList = JSON.parse(xhr.responseText)["results"]["bindings"];
+                gardenList.forEach(garden => {
+                    option = document.createElement("input");
+                    option.setAttribute("type","checkbox");
+                    option.setAttribute("id",garden["garden"]["value"]);
+                    option.setAttribute("name",garden["garden"]["value"]);
+                    option.setAttribute("class","chkGarden");
+                    option.innerText = garden["garden"]["value"];
+                    label = document.createElement("label");
+                    label.setAttribute("for",garden["garden"]["value"]);
+                    label.innerText = garden["garden"]["value"];
+                    divGardenFilter.appendChild(option);
+                    divGardenFilter.appendChild(label);
+                    divGardenFilter.appendChild(document.createElement("br"));
+                });
+                chkNoGarden = document.createElement("input");
+                chkNoGarden.setAttribute("type","checkbox");
+                chkNoGarden.setAttribute("name","noGarden");
+                chkNoGarden.setAttribute("id","noGarden");
+                chkNoGarden.setAttribute("class","noGarden");
+                labelNoGarden = document.createElement("label");
+                labelNoGarden.setAttribute("for","noGarden");
+                labelNoGarden.innerText = "所属ガーデンなし";
+                divGardenFilter.appendChild(chkNoGarden);
+                divGardenFilter.appendChild(labelNoGarden);
+                divGardenFilter.appendChild(document.createElement("br"));
+            }
+        }
+    }
+    xhr.send(queryHeader + query);
+}
 
 window.addEventListener("DOMContentLoaded", () => {
     //バージョンの代入
@@ -127,59 +183,9 @@ window.addEventListener("DOMContentLoaded", () => {
         }
         outTable.appendChild(tableRow);
     }
-    //ガーデンフィルタの生成
-    let gardenList = [];
-    let option,label;
-    let chkNoGarden,labelNoGarden;
-    const divGardenFilter = document.getElementById("divGardenFilter");
-    const xhr = new XMLHttpRequest();
-    const query = `
-SELECT DISTINCT ?garden
-WHERE{
-    VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
-    ?lily a ?class;
-          schema:birthDate ?birthdate;
-          lily:garden ?garden.
-}
-ORDER BY ?garden`;
-    xhr.open("POST",sparqlEndpoint,true);
-    xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.onload = function() {
-        console.log("loaded");
-        if(xhr.readyState === 4){
-            if(xhr.status === 200){
-                gardenList = JSON.parse(xhr.responseText)["results"]["bindings"];
-                gardenList.forEach(garden => {
-                    option = document.createElement("input");
-                    option.setAttribute("type","checkbox");
-                    option.setAttribute("id",garden["garden"]["value"]);
-                    option.setAttribute("name",garden["garden"]["value"]);
-                    option.setAttribute("class","chkGarden");
-                    option.innerText = garden["garden"]["value"];
-                    label = document.createElement("label");
-                    label.setAttribute("for",garden["garden"]["value"]);
-                    label.innerText = garden["garden"]["value"];
-                    divGardenFilter.appendChild(option);
-                    divGardenFilter.appendChild(label);
-                    divGardenFilter.appendChild(document.createElement("br"));
-                });
-                chkNoGarden = document.createElement("input");
-                chkNoGarden.setAttribute("type","checkbox");
-                chkNoGarden.setAttribute("name","noGarden");
-                chkNoGarden.setAttribute("id","noGarden");
-                chkNoGarden.setAttribute("class","noGarden");
-                labelNoGarden = document.createElement("label");
-                labelNoGarden.setAttribute("for","noGarden");
-                labelNoGarden.innerText = "所属ガーデンなし";
-                divGardenFilter.appendChild(chkNoGarden);
-                divGardenFilter.appendChild(labelNoGarden);
-                divGardenFilter.appendChild(document.createElement("br"));
-            }
-        }
-    }
-    xhr.send(queryHeader + query);
+    
     const chkGardenFilter = document.getElementById("chkGardenFilter");
+    const divGardenFilter = document.getElementById("divGardenFilter");
     if(chkGardenFilter.checked){
         divGardenFilter.style.display = "block";
     } else {
@@ -188,6 +194,10 @@ ORDER BY ?garden`;
     chkGardenFilter.addEventListener("change",function() {
         
         if(this.checked){
+            if(isFirstOpenGardenFilter === true){
+                buildGardenFilter();
+                isFirstOpenGardenFilter = false;
+            }
             divGardenFilter.style.display = "block";
         } else {
             divGardenFilter.style.display = "none";
