@@ -27,55 +27,51 @@
         "ja": "カレンダープレビューを表示",
         "en": "Show calendar preview"
     },
-    "thBirthday": {
-        "ja": "誕生日",
-        "en": "Birthday"
-    },
-    "thJanuary": {
+    "th01": {
         "ja": "1月",
         "en": "January"
     },
-    "thFebruary": {
+    "th02": {
         "ja": "2月",
         "en": "February"
     },
-    "thMarch": {
+    "th03": {
         "ja": "3月",
         "en": "March"
     },
-    "thApril": {
+    "th04": {
         "ja": "4月",
         "en": "April"
     },
-    "thMay": {
+    "th05": {
         "ja": "5月",
         "en": "May"
     },
-    "thJune": {
+    "th06": {
         "ja": "6月",
         "en": "June"
     },
-    "thJuly": {
+    "th07": {
         "ja": "7月",
         "en": "July"
     },
-    "thAugust": {
+    "th08": {
         "ja": "8月",
         "en": "August"
     },
-    "thSeptember": {
+    "th09": {
         "ja": "9月",
         "en": "September"
     },
-    "thOctober": {
+    "th10": {
         "ja": "10月",
         "en": "October"
     },
-    "thNovember": {
+    "th11": {
         "ja": "11月",
         "en": "November"
     },
-    "thDecember": {
+    "th12": {
         "ja": "12月",
         "en": "December"
     },

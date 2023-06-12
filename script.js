@@ -46,9 +46,36 @@ function formatDate(...args){
     return str;
 }
 
+function convert2Ordinal(number){
+    switch(number % 10){
+        case 1:
+            if(number === 11){
+                return number.toString() + "th";
+            } else {
+                return number.toString() + "st";
+            }
+            break;
+        case 2:
+            if(number === 12){
+                return number.toString() + "th";
+            } else {
+                return number.toString() + "nd";
+            }
+            break;
+        case 3:
+            if(number === 13){
+                return number.toString() + "th";
+            } else {
+                return number.toString() + "rd";
+            }
+        default:
+            return number.toString() + "th";
+    }
+}
+
 function showPreview(){
     if(document.getElementById("chkShow").checked){
-        document.getElementById("divTable").style.display = "block";
+        document.getElementById("divTable").style.display = "grid";
     } else {
         document.getElementById("divTable").style.display = "none";
     }
@@ -151,55 +178,6 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     //多言語対応
     applyTranslates(languageGlobal);
-    //カレンダー風プレビューの生成
-    let tableRow, tableCell,tableRowHeader;
-    outTable = document.getElementById("outTable");
-    for(let i=1;i<32;i++){
-        tableRow = document.createElement("tr");
-        if(i % 2 == 0){
-            tableRow.setAttribute("bgcolor", "#eee");
-        }
-        for(let j=1;j<13;j++){
-            //行のヘッダ
-            if(j==1){
-                tableRowHeader = document.createElement("th");
-                if(languageGlobal == "ja"){
-                    tableRowHeader.innerText = `${i}日`;
-                }else if(languageGlobal == "en"){
-                    switch(i % 10){
-                        case 1:
-                            if(i == 11){
-                                tableRowHeader.innerText = `${i}th`;
-                            }else{
-                                tableRowHeader.innerText = `${i}st`;
-                            }
-                            break;
-                        case 2:
-                            if(i == 12){
-                                tableRowHeader.innerText = `${i}th`;
-                            }else {
-                                tableRowHeader.innerText = `${i}nd`;
-                            }
-                            break;
-                        case 3:
-                            if(i == 13){
-                                tableRowHeader.innerText = `${i}th`;
-                            }else {
-                                tableRowHeader.innerText = `${i}rd`;
-                            }
-                            break;
-                        default:
-                            tableRowHeader.innerText = `${i}th`;
-                    }
-                }
-                tableRow.appendChild(tableRowHeader);
-            }
-            tableCell = document.createElement("td");
-            tableCell.setAttribute("id",`--${formatDate(j)}-${formatDate(i)}`);
-            tableRow.appendChild(tableCell);
-        }
-        outTable.appendChild(tableRow);
-    }
     
     const chkGardenFilter = document.getElementById("chkGardenFilter");
     const divGardenFilter = document.getElementById("divGardenFilter");
@@ -242,7 +220,7 @@ WHERE {
     }
     OPTIONAL{?lily lily:garden ?garden.}
 }
-ORDER BY ?name`;
+ORDER BY ?birthdate`;
 
     xhr.open("POST",sparqlEndpoint,true);
     xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
@@ -297,10 +275,10 @@ function build(resData,lang,startTime){
     let tableCell;
 
     //プレビューの中身をリセット
-    for(let calDay=1;calDay<32;calDay++){
-        for(let calMonth=1;calMonth<13;calMonth++){
-            document.getElementById(`--${formatDate(calMonth)}-${formatDate(calDay)}`).innerText = "";
-        }
+    for(let i=1;i<13;i++){
+        console.log(`tb${i.toString().padStart(2)}`);
+        let elem = document.getElementById(`tb${i.toString().padStart(2,"0")}`);
+        elem.parentNode.replaceChild(elem.cloneNode(),elem);
     }
 
     //ガーデンフィルタを適用
@@ -349,12 +327,20 @@ function build(resData,lang,startTime){
 
         
         //プレビューの中身を入れる
-        tableCell = document.getElementById(resData[i]["birthdate"]["value"]);
-        if(tableCell.innerText === ""){
-            tableCell.innerText = birthName;
-        } else {
-            tableCell.innerText += "\n" + birthName;
+        let tableRow = document.getElementById("tb" + resData[i]["birthdate"]["value"].substring(2,4));
+        tableCell = document.createElement("tr");
+        let tdDay = document.createElement("td");
+        if(languageGlobal === "ja"){
+            tdDay.innerText = `${Number(resData[i]["birthdate"]["value"].substring(5,7)).toString()}日`;
+        } else if(languageGlobal === "en"){
+            tdDay.innerText = `${convert2Ordinal(Number(resData[i]["birthdate"]["value"].substring(5,7)))}`;
         }
+        
+        let tdName = document.createElement("td");
+        tdName.innerText = resData[i]["name"]["value"];
+        tableCell.appendChild(tdDay);
+        tableCell.appendChild(tdName);
+        tableRow.appendChild(tableCell);
         
         //もう誕生日を過ぎてる場合は来年から
         if(birthMonth < month || (birthMonth == month && birthDay <= day)) {
