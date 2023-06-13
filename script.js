@@ -1,4 +1,4 @@
-const version = "v3.1.0 Louloudis";
+const version = "v4.0.0 Suzume";
 
 const queryHeader = `PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
