@@ -10,6 +10,7 @@
                     "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo,
                     sans-serif;
                 color: #333333;
+                word-break: keep-all;
             }
             #body-container {
                 display: flex;
@@ -34,7 +35,7 @@
                 text-align: center;
                 display: grid;
                 font-size: 16px;
-                grid-template-columns: repeat(auto-fill, 200px);
+                grid-template-columns: repeat(auto-fit, minmax(256px,1fr));
                 gap: 8px;
                 justify-content: center;
                 align-items: baseline;
@@ -51,7 +52,7 @@
                 background-color: white;
             }
             td:nth-of-type(odd) {
-                width: 30px;
+                width: 40px;
             }
             th {
                 background-color: rgb(155, 255, 255);
@@ -60,6 +61,8 @@
                 background-color: rgb(155, 255, 255);
                 text-align: center;
                 font-size: 16px;
+                padding-left: 32px;
+                padding-right: 32px;
             }
             .version {
                 padding-top: 5px;
@@ -96,6 +99,7 @@
                 align-items: center;
                 justify-content: center;
                 box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+                border-radius: 4px;
             }
             #output {
                 width: 100%;
