@@ -1,11 +1,15 @@
 {
-    "h3Filter": {
-        "ja": "フィルタ",
-        "en": "Filter"
+    "h3DataDownload": {
+        "ja": "1. データダウンロード",
+        "en": "1. Download data"
     },
-    "h3DownloadPref": {
-        "ja": "ダウンロード設定",
-        "en": "Download Preferences"
+    "h3Filter": {
+        "ja": "2. フィルタ",
+        "en": "2. Filter"
+    },
+    "h3ExportPref": {
+        "ja": "3. エクスポート設定",
+        "en": "3. Export Preferences"
     },
     "labelGardenFilter": {
         "ja": "所属ガーデンでフィルタ",
@@ -20,12 +24,8 @@
         "en": "Strict mode (Strictly follows the iCalendar's rules)"
     },
     "pResult": {
-        "ja": "出力内容↓",
-        "en": "Output↓"
-    },
-    "labelShow": {
-        "ja": "カレンダープレビューを表示",
-        "en": "Show calendar preview"
+        "ja": "出力内容",
+        "en": "Outputs"
     },
     "th01": {
         "ja": "1月",

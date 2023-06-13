@@ -4,6 +4,8 @@ const queryHeader = `PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>`;
 
+
+
 const sparqlEndpoint = "https://luciadb.assaultlily.com/sparql/query";
 
 const icsHeader = `BEGIN:VCALENDAR
@@ -36,6 +38,11 @@ const messageQueryError = {
     "ja": "問い合わせ失敗。(エラー:",
     "en": "Query failed. (Error:"
 };
+
+const messageDownloadError = {
+    "ja": "先にデータをダウンロードしてください。",
+    "en": "Please download data first."
+}
 
 
 function formatDate(...args){
@@ -73,14 +80,6 @@ function convert2Ordinal(number){
     }
 }
 
-function showPreview(){
-    if(document.getElementById("chkShow").checked){
-        document.getElementById("divTable").style.display = "grid";
-    } else {
-        document.getElementById("divTable").style.display = "none";
-    }
-}
-
 function applyTranslates(lang){
     const xhr = new XMLHttpRequest();
     xhr.open("GET","./language.json",true);
@@ -97,75 +96,124 @@ function applyTranslates(lang){
     xhr.send();
 }
 
+let isFirstGetLilyData = true;
+
+let dataLanguage;
+
+function getLilyData(isForceUpdate = false,lang){
+    dataLanguage = lang;
+    let iconExport = '<span class="material-symbols-rounded">event_upcoming</span>';
+    if(dataLanguage === "ja"){
+        document.getElementById("btnExport").innerHTML = iconExport + "エクスポート";
+    }else {
+        document.getElementById("btnExport").innerHTML = iconExport + "Export";
+    }
+    if(isFirstGetLilyData === true || isForceUpdate === true){
+        const xhr = new XMLHttpRequest();
+        let resultArea = document.getElementById("result");
+        let startTime;
+        const query = `
+SELECT ?name ?birthdate ?lgname ?lily ?type ?garden
+WHERE {
+    VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
+    ?lily a ?class;
+          rdf:type ?type;
+          schema:name ?name;
+          schema:birthDate ?birthdate.
+    FILTER(lang(?name)="${lang}")
+    OPTIONAL{
+        ?lily lily:legion/schema:name ?lgname.
+        FILTER(lang(?lgname)="${lang}")
+    }
+    OPTIONAL{?lily lily:garden ?garden.}
+}
+ORDER BY ?birthdate`;
+        xhr.open("POST",sparqlEndpoint,false);
+        xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
+        xhr.setRequestHeader("Accept", "application/json");
+        startTime = Date.now();
+        xhr.send(queryHeader + query);
+        if(xhr.readyState === 4){
+            if(xhr.status === 200){
+                let endTime = Date.now();
+                resultArea.innerText = `${messageQueryLoaded[languageGlobal]}(${endTime - startTime}ms)`;
+                console.log(`Download: ${endTime - startTime}ms`);
+                if(!JSON.parse(xhr.responseText)) {
+                    resultArea.innerText = messageQueryEmpty[languageGlobal];
+                }
+                lilyData = JSON.parse(xhr.responseText)["results"]["bindings"];
+                isFirstGetLilyData = false;
+                return lilyData;
+            } else {
+                resultArea.innerText = `${messageQueryError[languageGlobal]}${xhr.statusText})`;
+            }
+        }
+        
+    }else {
+        return lilyData;
+    }
+}
+
 function buildGardenFilter(){
     //ガーデンフィルタの生成
+    if(isFirstGetLilyData === true){
+
+        alert(messageDownloadError[languageGlobal]);
+        document.getElementById("chkGardenFilter").checked = false;
+        return -1;
+    }
     let gardenList = [];
     let option,label;
     let chkNoGarden,labelNoGarden;
     const divGardenFilter = document.getElementById("divGardenFilter");
-    const xhr = new XMLHttpRequest();
-    const query = `
-SELECT ?garden
-WHERE{
-    VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
-    ?lily a ?class;
-          schema:birthDate ?birthdate;
-          lily:garden ?garden.
-}
-ORDER BY ?garden`;
-    xhr.open("POST",sparqlEndpoint,true);
-    xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.onload = function() {
-        console.log("loaded");
-        if(xhr.readyState === 4){
-            if(xhr.status === 200){
-                gardenList = JSON.parse(xhr.responseText)["results"]["bindings"];
-                gardenList.forEach(garden => {
-                    if(garden["garden"]["value"] in numGardens === false){
-                        option = document.createElement("input");
+    gardenList = getLilyData(false);
+    let garden;
+    for(let i=0;i<gardenList.length;i++){
+        garden = gardenList[i];
+        if("garden" in garden) {
+            if(garden["garden"]["value"] in numGardens === false){
+                option = document.createElement("input");
 
-                        option.setAttribute("type","checkbox");
-                        option.setAttribute("name",garden["garden"]["value"]);
-                        option.setAttribute("class","chkGarden");
+                option.setAttribute("type","checkbox");
+                option.setAttribute("name",garden["garden"]["value"]);
+                option.setAttribute("class","chkGarden");
 
-                        label = document.createElement("label");
-                        label.setAttribute("for",garden["garden"]["value"]);
-                        label.setAttribute("id",garden["garden"]["value"]);
+                label = document.createElement("label");
+                label.setAttribute("for",garden["garden"]["value"]);
+                label.setAttribute("id",garden["garden"]["value"]);
 
-                        divGardenFilter.appendChild(option);
-                        divGardenFilter.appendChild(label);
-                        divGardenFilter.appendChild(document.createElement("br"));
-
-                        numGardens[garden["garden"]["value"]] = 1;
-                    } else {
-                        numGardens[garden["garden"]["value"]] += 1;
-                    }
-                });
-                let keysExistingGardens = Object.keys(numGardens);
-                keysExistingGardens.forEach(garden => {
-                    document.getElementById(garden).innerText = garden + "(" + numGardens[garden].toString() + ")";
-                })
-                console.table(numGardens);
-                chkNoGarden = document.createElement("input");
-
-                chkNoGarden.setAttribute("type","checkbox");
-                chkNoGarden.setAttribute("name","noGarden");
-                chkNoGarden.setAttribute("id","noGarden");
-                chkNoGarden.setAttribute("class","noGarden");
-
-                labelNoGarden = document.createElement("label");
-                labelNoGarden.setAttribute("for","noGarden");
-                labelNoGarden.innerText = "所属ガーデンなし";
-
-                divGardenFilter.appendChild(chkNoGarden);
-                divGardenFilter.appendChild(labelNoGarden);
+                divGardenFilter.appendChild(option);
+                divGardenFilter.appendChild(label);
                 divGardenFilter.appendChild(document.createElement("br"));
+
+                numGardens[garden["garden"]["value"]] = 1;
+            } else if("garden" in garden){
+                numGardens[garden["garden"]["value"]] += 1;
             }
         }
+        let keysExistingGardens = Object.keys(numGardens);
+        keysExistingGardens.forEach(garden => {
+            document.getElementById(garden).innerText = garden + "(" + numGardens[garden].toString() + ")";
+        })
     }
-    xhr.send(queryHeader + query);
+    chkNoGarden = document.createElement("input");
+
+    chkNoGarden.setAttribute("type","checkbox");
+    chkNoGarden.setAttribute("name","noGarden");
+    chkNoGarden.setAttribute("id","noGarden");
+    chkNoGarden.setAttribute("class","noGarden");
+
+    labelNoGarden = document.createElement("label");
+    labelNoGarden.setAttribute("for","noGarden");
+    labelNoGarden.innerText = "所属ガーデンなし";
+
+    divGardenFilter.appendChild(chkNoGarden);
+    divGardenFilter.appendChild(labelNoGarden);
+    divGardenFilter.appendChild(document.createElement("br"));
 }
+
+
+
 
 window.addEventListener("DOMContentLoaded", () => {
     //バージョンの代入
@@ -189,10 +237,7 @@ window.addEventListener("DOMContentLoaded", () => {
     chkGardenFilter.addEventListener("change",function() {
         
         if(this.checked){
-            if(isFirstOpenGardenFilter === true){
                 buildGardenFilter();
-                isFirstOpenGardenFilter = false;
-            }
             divGardenFilter.style.display = "block";
         } else {
             divGardenFilter.style.display = "none";
@@ -201,51 +246,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
 })
 
-function download(lang) {
-    const xhr = new XMLHttpRequest();
-    let resultArea = document.getElementById("result");
-    let startTime;
-    const query = `
-SELECT ?name ?birthdate ?lgname ?lily ?type ?garden
-WHERE {
-    VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
-    ?lily a ?class;
-          rdf:type ?type;
-          schema:name ?name;
-          schema:birthDate ?birthdate.
-    FILTER(lang(?name)="${lang}")
-    OPTIONAL{
-        ?lily lily:legion/schema:name ?lgname.
-        FILTER(lang(?lgname)="${lang}")
+function download() {
+    if(isFirstGetLilyData === true){
+        alert(messageDownloadError[languageGlobal]);
+        return -1;
     }
-    OPTIONAL{?lily lily:garden ?garden.}
-}
-ORDER BY ?birthdate`;
-
-    xhr.open("POST",sparqlEndpoint,true);
-    xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
-    xhr.setRequestHeader("Accept", "application/json");
-    xhr.onload = function() {
-        if(xhr.readyState === 4){
-            if(xhr.status === 200){
-                let endTime = Date.now();
-                resultArea.innerText = `${messageQueryLoaded[languageGlobal]}(${endTime - startTime}ms)`;
-                console.log(`Download: ${endTime - startTime}ms`);
-                if(!JSON.parse(xhr.responseText)["results"]["bindings"]) {
-                    resultArea.innerText = messageQueryEmpty[languageGlobal];
-                }
-                build(JSON.parse(xhr.responseText)["results"]["bindings"],lang,startTime);
-            } else {
-                resultArea.innerText = `${messageQueryError[languageGlobal]}${xhr.statusText})`;
-            }
-        }
-    }
-    startTime = Date.now();
-    xhr.send(queryHeader + query);
+    build(getLilyData());
 }
 
 
-function build(resData,lang,startTime){
+function build(resData){
+    lang = dataLanguage;
     console.log("Build start");
     let buildStart = Date.now();
     let birthName = "";
@@ -276,7 +287,6 @@ function build(resData,lang,startTime){
 
     //プレビューの中身をリセット
     for(let i=1;i<13;i++){
-        console.log(`tb${i.toString().padStart(2)}`);
         let elem = document.getElementById(`tb${i.toString().padStart(2,"0")}`);
         elem.parentNode.replaceChild(elem.cloneNode(),elem);
     }
@@ -437,9 +447,9 @@ URL;VALUE=URI:${LemonadeURL}`;
     let outArea = document.getElementById("output");
     outArea.value = icsData;
     if(languageGlobal == "ja"){
-        document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。(${Date.now()-startTime}ms)`;
+        document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。`;
     }else {
-        document.getElementById("result").innerText = `Exported ${i} Lily's Birthday. (${Date.now()-startTime}ms)`;
+        document.getElementById("result").innerText = `Exported ${i} Lily's Birthday.`;
     }
     //ダウンロード処理
     if(document.getElementById("chkPreview").checked === false){
