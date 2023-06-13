@@ -1,225 +1,292 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LiliesNote</title>
-    <style>
-        body {
-            font-family: "Helvetica Neue",
-            Arial,
-            "Hiragino Kaku Gothic ProN",
-            "Hiragino Sans",
-            Meiryo,
-            sans-serif;
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>LiliesNote</title>
+        <style>
+            body {
+                font-family: "Helvetica Neue", Arial,
+                    "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo,
+                    sans-serif;
             }
-        .divTable {
-            overflow-x: auto;
-            text-align: center;
-            display: grid;
-            font-size: 14px;
-            grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
-            gap: 8px;
-            justify-content: center;
-            align-items: baseline;
-            background-color: rgb(248, 245, 245);
-            padding: 4px;
-            border-radius: 8px;
-        }
-        table{
-            box-shadow: 0 3px 3px 0 rgba(0, 0, 0, .25);
-        }
-        tr:nth-of-type(even){
-            background-color: whitesmoke;
-        }
-        tr:nth-of-type(odd){
-            background-color: white;
-        }
-        th{
-            background-color: rgb(155, 255, 255);
-        }
-        footer{
-            background-color: rgb(155, 255, 255);
-            text-align: center;
-            font-size: 16px;
-        }
-        .version{
-            padding-top: 5px;
-            margin-bottom: 5px;
-        }
-        .copyright{
-            font-size: 14px;
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
-        .cc-img{
-            margin-bottom: 5px;
-        }
-        .cc-txt{
-            margin-top: 5px;
-            margin-bottom: 0;
-            padding-bottom: 5px;
-        }
-        .repo{
-            margin-top: 0;
-            padding-bottom: 5px;
-            margin-bottom: 8px;
-        }
-        .chkGarden, .noGarden{
-            margin-left: 20px;
-        }
-        .download{
-            font-size: 20px;
-            width: 150px;
-            height: 40px;
-        }
-    </style>
-</head>
-<body>
-    <h1>LiliesNote</h1>
-    <h3 id="h3Filter">フィルタ</h3>
-    <input type="checkbox" name="chkGardenFilter" id="chkGardenFilter">
-    <label for="chkGardenFilter" id="labelGardenFilter">ガーデンでフィルタ</label>
-    <div id="divGardenFilter"></div>
-    <br>
-    <h3 id="h3DownloadPref">ダウンロード設定</h3>
-    <input type="checkbox" name="chkPreview" id="chkPreview">
-    <label for="chkPreview" id="labelPreview">プレビューモード（ダウンロードは行いません）</label>
-    <br>
-    <input type="checkbox" name="chkExact" id="chkExact">
-    <label for="chkExact" id="labelExact">厳格モード（iCalendar規約に厳格に準拠します）</label>
-    <br>
-    <input type="button" value="ダウンロード" class="download" onclick="download('ja');">
-    <input type="button" value="Download" class="download" onclick="download('en');">
-    <p id="result"></p>
-    <p id="pResult">出力内容↓</p>
-    <input type="checkbox" id="chkShow" name="chkShow" oninput="showPreview();">
-    <label for="chkShow" id="labelShow" checked>カレンダープレビューを表示</label>
-    <br>
-    <br>
-    <div id="divTable" class="divTable">
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th01">1月</th>
-                </tr>
-            </thead>
-            <tbody id="tb01">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th02">2月</th>
-                </tr>
-            </thead>
-            <tbody id="tb02">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th03">3月</th>
-                </tr>
-            </thead>
-            <tbody id="tb03">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th04">4月</th>
-                </tr>
-            </thead>
-            <tbody id="tb04">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th05">5月</th>
-                </tr>
-            </thead>
-            <tbody id="tb05">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th06">6月</th>
-                </tr>
-            </thead>
-            <tbody id="tb06">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th07">7月</th>
-                </tr>
-            </thead>
-            <tbody id="tb07">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th08">8月</th>
-                </tr>
-            </thead>
-            <tbody id="tb08">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th09">9月</th>
-                </tr>
-            </thead>
-            <tbody id="tb09">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th10">10月</th>
-                </tr>
-            </thead>
-            <tbody id="tb10">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th11">11月</th>
-                </tr>
-            </thead>
-            <tbody id="tb11">
-            </tbody>
-        </table>
-        <table>
-            <thead>
-                <tr>
-                    <th colspan="2" id="th12">12月</th>
-                </tr>
-            </thead>
-            <tbody id="tb12">
-            </tbody>
-        </table>
-    </div>
-    <br>
-    <textarea name="output" id="output" cols="40" rows="10" readonly></textarea>
-    <p id="pAnotherVersion"><b>English version of this page is available <a href="./index.html?lang=en">here</a></b></p>
-    <script src="./script.js"></script>
-</body>
-<footer>
-    <p class="version" id="version"></p>
-    <p class="copyright">2023 ©Ulong32</p>
-    <p class="repo"><a href="https://github.com/ulong32/LiliesNote/" id="repo">GitHubリポジトリ</a></p>
-    <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" class="cc-img">
-        <img alt="CC BY-NC-SA" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png">
-    </a>
-    <p class="cc-txt" id="copyrightLuciaDB">本サイトで利用しているデータは<a href="https://github.com/Assault-Lily/LuciaDB" target="_blank">LuciaDB</a>によって<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja" target="_blank">クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a>で提供されています。</p>
-    <p class="cc-txt" id="copyrightLiliesNote">LiliesNoteのスクリプト部分は<a href="https://opensource.org/licenses/MIT" target="_blank" >MIT ライセンス</a>で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。</p>
-</footer>
+            #body-container{
+                display: grid;
+                grid-template-columns: 600px calc(100% - 600px);
+            }
+            #pref-container{
+                width: 600px;
+            }
+            .divTable {
+                text-align: center;
+                display: grid;
+                font-size: 14px;
+                grid-template-columns: repeat(auto-fit,200px);
+                gap: 8px;
+                justify-content: center;
+                align-items: baseline;
+                background-color: rgb(248, 245, 245);
+                padding: 4px;
+                border-radius: 8px;
+            }
+            table {
+                box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.25);
+            }
+            tr:nth-of-type(even) {
+                background-color: whitesmoke;
+            }
+            tr:nth-of-type(odd) {
+                background-color: white;
+            }
+            td:nth-of-type(odd){
+                width: 30px;
+            }
+            th {
+                background-color: rgb(155, 255, 255);
+            }
+            footer {
+                background-color: rgb(155, 255, 255);
+                text-align: center;
+                font-size: 16px;
+            }
+            .version {
+                padding-top: 5px;
+                margin-bottom: 5px;
+            }
+            .copyright {
+                font-size: 14px;
+                margin-top: 5px;
+                margin-bottom: 5px;
+            }
+            .cc-img {
+                margin-bottom: 5px;
+            }
+            .cc-txt {
+                margin-top: 5px;
+                margin-bottom: 0;
+                padding-bottom: 5px;
+            }
+            .repo {
+                margin-top: 0;
+                padding-bottom: 5px;
+                margin-bottom: 8px;
+            }
+            .chkGarden,
+            .noGarden {
+                margin-left: 20px;
+            }
+            .download {
+                font-size: 20px;
+                width: 150px;
+                height: 40px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>LiliesNote</h1>
+        <div id="body-container">
+            <div id="pref-container">
+                <h3 id="h3Filter">フィルタ</h3>
+                <input
+                    type="checkbox"
+                    name="chkGardenFilter"
+                    id="chkGardenFilter"
+                />
+                <label for="chkGardenFilter" id="labelGardenFilter"
+                    >ガーデンでフィルタ</label
+                >
+                <div id="divGardenFilter"></div>
+                <br />
+                <h3 id="h3DownloadPref">ダウンロード設定</h3>
+                <input type="checkbox" name="chkPreview" id="chkPreview" />
+                <label for="chkPreview" id="labelPreview"
+                    >プレビューモード（ダウンロードは行いません）</label
+                >
+                <br />
+                <input type="checkbox" name="chkExact" id="chkExact" />
+                <label for="chkExact" id="labelExact"
+                    >厳格モード（iCalendar規約に厳格に準拠します）</label
+                >
+                <br />
+                <input
+                    type="button"
+                    value="ダウンロード"
+                    class="download"
+                    onclick="download('ja');"
+                />
+                <input
+                    type="button"
+                    value="Download"
+                    class="download"
+                    onclick="download('en');"
+                />
+            </div>
+            <div>
+                <p id="result"></p>
+                <p id="pResult">出力内容↓</p>
+                <input
+                    type="checkbox"
+                    id="chkShow"
+                    name="chkShow"
+                    oninput="showPreview();"
+                />
+                <label for="chkShow" id="labelShow" checked
+                    >カレンダープレビューを表示</label
+                >
+                <br />
+                <br />
+                <div id="divTable" class="divTable">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th01">1月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb01"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th02">2月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb02"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th03">3月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb03"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th04">4月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb04"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th05">5月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb05"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th06">6月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb06"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th07">7月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb07"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th08">8月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb08"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th09">9月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb09"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th10">10月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb10"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th11">11月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb11"></tbody>
+                    </table>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th colspan="2" id="th12">12月</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tb12"></tbody>
+                    </table>
+                </div>
+                <br />
+                <textarea
+                    name="output"
+                    id="output"
+                    cols="40"
+                    rows="10"
+                    readonly
+                ></textarea>
+            </div>
+        </div>
+        <p id="pAnotherVersion">
+            <b
+                >English version of this page is available
+                <a href="./index.html?lang=en">here</a></b
+            >
+        </p>
+        <script src="./script.js"></script>
+    </body>
+    <footer>
+        <p class="version" id="version"></p>
+        <p class="copyright">2023 ©Ulong32</p>
+        <p class="repo">
+            <a href="https://github.com/ulong32/LiliesNote/" id="repo"
+                >GitHubリポジトリ</a
+            >
+        </p>
+        <a
+            href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
+            target="_blank"
+            class="cc-img"
+        >
+            <img
+                alt="CC BY-NC-SA"
+                src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
+            />
+        </a>
+        <p class="cc-txt" id="copyrightLuciaDB">
+            本サイトで利用しているデータは<a
+                href="https://github.com/Assault-Lily/LuciaDB"
+                target="_blank"
+                >LuciaDB</a
+            >によって<a
+                href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja"
+                target="_blank"
+                >クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際
+                ライセンス</a
+            >で提供されています。
+        </p>
+        <p class="cc-txt" id="copyrightLiliesNote">
+            LiliesNoteのスクリプト部分は<a
+                href="https://opensource.org/licenses/MIT"
+                target="_blank"
+                >MIT ライセンス</a
+            >で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。
+        </p>
+    </footer>
 </html>
