@@ -100,6 +100,8 @@ let isFirstGetLilyData = true;
 
 let dataLanguage;
 
+let lilyData;
+
 function getLilyData(isForceUpdate = false,lang){
     dataLanguage = lang;
     let iconExport = '<span class="material-symbols-rounded">event_upcoming</span>';
@@ -143,6 +145,7 @@ ORDER BY ?birthdate`;
                 }
                 lilyData = JSON.parse(xhr.responseText)["results"]["bindings"];
                 isFirstGetLilyData = false;
+                buildGardenFilter();
                 return lilyData;
             } else {
                 resultArea.innerText = `${messageQueryError[languageGlobal]}${xhr.statusText})`;
@@ -166,8 +169,12 @@ function buildGardenFilter(){
     let option,label;
     let chkNoGarden,labelNoGarden;
     const divGardenFilter = document.getElementById("divGardenFilter");
+    while(divGardenFilter.firstChild) {
+        divGardenFilter.removeChild(divGardenFilter.firstChild);
+    };
     gardenList = getLilyData(false);
     let garden;
+    numGardens = [];
     for(let i=0;i<gardenList.length;i++){
         garden = gardenList[i];
         if("garden" in garden) {
@@ -235,9 +242,12 @@ window.addEventListener("DOMContentLoaded", () => {
         divGardenFilter.style.display = "none";
     }
     chkGardenFilter.addEventListener("change",function() {
-        
         if(this.checked){
-                buildGardenFilter();
+            if(isFirstGetLilyData){
+                alert(messageDownloadError[languageGlobal]);
+                this.checked = false;
+                return -1;
+            }
             divGardenFilter.style.display = "block";
         } else {
             divGardenFilter.style.display = "none";
@@ -255,7 +265,8 @@ function download() {
 }
 
 
-function build(resData){
+function build(lilyListData){
+    let resData = [];
     lang = dataLanguage;
     console.log("Build start");
     let buildStart = Date.now();
@@ -290,26 +301,26 @@ function build(resData){
         let elem = document.getElementById(`tb${i.toString().padStart(2,"0")}`);
         elem.parentNode.replaceChild(elem.cloneNode(),elem);
     }
-
     //ガーデンフィルタを適用
     if(document.getElementById("chkGardenFilter").checked){
-        let excludedGardens = [];
+        let includeGardens = [];
         const includeNoGarden = document.getElementById("noGarden").checked;
         const gardenFilter = Array.from(document.getElementsByClassName("chkGarden"));
         gardenFilter.forEach(garden => {
-            if(!garden.checked){
-                excludedGardens.push(garden.name);
+            if(garden.checked){
+                includeGardens.push(garden.name);
             }
         });
-        for(let i=0;i<resData.length;i++){
-            if("garden" in resData[i]){
-                if(excludedGardens.includes(resData[i]["garden"]["value"])){
-                    resData.splice(i,1);
-                    i--;
+        console.log(includeGardens)
+        for(let j=0;j<lilyListData.length;j++){
+            if("garden" in lilyListData[j]){
+                if(includeGardens.includes(lilyListData[j]["garden"]["value"]) === true){
+                    console.log("list add");
+                    console.log(resData.push(lilyListData[j]));
                 }
-            } else if(!includeNoGarden){
-                resData.splice(i,1);
-                i--;
+            } else if(includeNoGarden){
+                resData.splice(j,1);
+                j--;
             }
         }
     }
