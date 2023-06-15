@@ -35,7 +35,7 @@
                 text-align: center;
                 display: grid;
                 font-size: 16px;
-                grid-template-columns: repeat(auto-fit, minmax(256px,1fr));
+                grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
                 gap: 8px;
                 justify-content: center;
                 align-items: baseline;
@@ -108,8 +108,7 @@
         </style>
         <link
             rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,400,0,0"
-        />
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,400,0,0" />
     </head>
     <body>
         <h1>LiliesNote</h1>
@@ -120,8 +119,7 @@
                     <button
                         id="btnDownload"
                         class="download"
-                        onclick="getLilyData(true)"
-                    >
+                        onclick="getLilyData(true)">
                         <span class="material-symbols-rounded">download</span>
                         ダウンロード
                     </button>
@@ -130,23 +128,22 @@
                 <input
                     type="checkbox"
                     name="chkGardenFilter"
-                    id="chkGardenFilter"
-                />
-                <label for="chkGardenFilter" id="labelGardenFilter"
-                    >ガーデンでフィルタ</label
-                >
+                    id="chkGardenFilter" />
+                <label for="chkGardenFilter" id="labelGardenFilter">
+                    ガーデンでフィルタ
+                </label>
                 <div id="divGardenFilter"></div>
                 <br />
                 <h3 id="h3ExportPref">3. ダウンロード設定</h3>
                 <input type="checkbox" name="chkPreview" id="chkPreview" />
-                <label for="chkPreview" id="labelPreview"
-                    >プレビューモード（ダウンロードは行いません）</label
-                >
+                <label for="chkPreview" id="labelPreview">
+                    プレビューモード（ダウンロードは行いません）
+                </label>
                 <br />
                 <input type="checkbox" name="chkExact" id="chkExact" />
-                <label for="chkExact" id="labelExact"
-                    >厳格モード（iCalendar規約に厳格に準拠します）</label
-                >
+                <label for="chkExact" id="labelExact">
+                    厳格モード（iCalendar規約に厳格に準拠します）
+                </label>
                 <br />
                 <button class="download" id="btnExport" onclick="download();">
                     <span class="material-symbols-rounded">event_upcoming</span>
@@ -259,10 +256,10 @@
             </div>
         </div>
         <p id="pAnotherVersion">
-            <b
-                >English version of this page is available
-                <a href="./index.html?lang=en">here</a></b
-            >
+            <b>
+                English version of this page is available
+                <a href="./index.html?lang=en">here</a>
+            </b>
         </p>
         <script src="./script.js"></script>
     </body>
@@ -270,38 +267,38 @@
         <p class="version" id="version"></p>
         <p class="copyright">2023 ©Ulong32</p>
         <p class="repo">
-            <a href="https://github.com/ulong32/LiliesNote/" id="repo"
-                >GitHubリポジトリ</a
-            >
+            <a href="https://github.com/ulong32/LiliesNote/" id="repo">
+                GitHubリポジトリ
+            </a>
         </p>
         <a
             href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
             target="_blank"
-            class="cc-img"
-        >
+            class="cc-img">
             <img
                 alt="CC BY-NC-SA"
-                src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
-            />
+                src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
         </a>
         <p class="cc-txt" id="copyrightLuciaDB">
-            本サイトで利用しているデータは<a
-                href="https://github.com/Assault-Lily/LuciaDB"
-                target="_blank"
-                >LuciaDB</a
-            >によって<a
+            本サイトで利用しているデータは
+            <a href="https://github.com/Assault-Lily/LuciaDB" target="_blank">
+                LuciaDB
+            </a>
+            によって
+            <a
                 href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja"
-                target="_blank"
-                >クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際
-                ライセンス</a
-            >で提供されています。
+                target="_blank">
+                クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際
+                ライセンス
+            </a>
+            で提供されています。
         </p>
         <p class="cc-txt" id="copyrightLiliesNote">
-            LiliesNoteのスクリプト部分は<a
-                href="https://opensource.org/licenses/MIT"
-                target="_blank"
-                >MIT ライセンス</a
-            >で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。
+            LiliesNoteのスクリプト部分は
+            <a href="https://opensource.org/licenses/MIT" target="_blank">
+                MIT ライセンス
+            </a>
+            で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。
         </p>
     </footer>
 </html>
