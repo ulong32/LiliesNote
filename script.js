@@ -323,6 +323,8 @@ function build(lilyListData){
                 j--;
             }
         }
+    }else {
+        resData = lilyListData;
     }
     for(i=0;i<resData.length;i++){
 
