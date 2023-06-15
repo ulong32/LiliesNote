@@ -17,7 +17,7 @@ let isFirstOpenGardenFilter = true;
 
 let numGardens = {};
 
-let languageGlobal = "ja";
+let lang = "ja";
 
 const license = {
     "ja": "このデータはLuciaDBから取得しています。ライセンスはCC BY-NC-SA 4.0です。",
@@ -98,18 +98,9 @@ function applyTranslates(lang){
 
 let isFirstGetLilyData = true;
 
-let dataLanguage;
-
 let lilyData;
 
-function getLilyData(isForceUpdate = false,lang){
-    dataLanguage = lang;
-    let iconExport = '<span class="material-symbols-rounded">event_upcoming</span>';
-    if(dataLanguage === "ja"){
-        document.getElementById("btnExport").innerHTML = iconExport + "エクスポート";
-    }else {
-        document.getElementById("btnExport").innerHTML = iconExport + "Export";
-    }
+function getLilyData(isForceUpdate = false){
     if(isFirstGetLilyData === true || isForceUpdate === true){
         const xhr = new XMLHttpRequest();
         let resultArea = document.getElementById("result");
@@ -138,17 +129,17 @@ ORDER BY ?birthdate`;
         if(xhr.readyState === 4){
             if(xhr.status === 200){
                 let endTime = Date.now();
-                resultArea.innerText = `${messageQueryLoaded[languageGlobal]}(${endTime - startTime}ms)`;
+                resultArea.innerText = `${messageQueryLoaded[lang]}(${endTime - startTime}ms)`;
                 console.log(`Download: ${endTime - startTime}ms`);
                 if(!JSON.parse(xhr.responseText)) {
-                    resultArea.innerText = messageQueryEmpty[languageGlobal];
+                    resultArea.innerText = messageQueryEmpty[lang];
                 }
                 lilyData = JSON.parse(xhr.responseText)["results"]["bindings"];
                 isFirstGetLilyData = false;
                 buildGardenFilter();
                 return lilyData;
             } else {
-                resultArea.innerText = `${messageQueryError[languageGlobal]}${xhr.statusText})`;
+                resultArea.innerText = `${messageQueryError[lang]}${xhr.statusText})`;
             }
         }
         
@@ -161,7 +152,7 @@ function buildGardenFilter(){
     //ガーデンフィルタの生成
     if(isFirstGetLilyData === true){
 
-        alert(messageDownloadError[languageGlobal]);
+        alert(messageDownloadError[lang]);
         document.getElementById("chkGardenFilter").checked = false;
         return -1;
     }
@@ -227,12 +218,11 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("version").innerText = `LiliesNote ${version}`;
     //言語設定を取得
     const searchParams = new URLSearchParams(window.location.search);
-    languageGlobal = "ja";
     if(searchParams.has("lang")){
-        languageGlobal = searchParams.get("lang");
+        lang = searchParams.get("lang");
     }
     //多言語対応
-    applyTranslates(languageGlobal);
+    applyTranslates(lang);
     
     const chkGardenFilter = document.getElementById("chkGardenFilter");
     const divGardenFilter = document.getElementById("divGardenFilter");
@@ -244,7 +234,7 @@ window.addEventListener("DOMContentLoaded", () => {
     chkGardenFilter.addEventListener("change",function() {
         if(this.checked){
             if(isFirstGetLilyData){
-                alert(messageDownloadError[languageGlobal]);
+                alert(messageDownloadError[lang]);
                 this.checked = false;
                 return -1;
             }
@@ -258,7 +248,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function download() {
     if(isFirstGetLilyData === true){
-        alert(messageDownloadError[languageGlobal]);
+        alert(messageDownloadError[lang]);
         return -1;
     }
     build(getLilyData());
@@ -267,7 +257,6 @@ function download() {
 
 function build(lilyListData){
     let resData = [];
-    lang = dataLanguage;
     console.log("Build start");
     let buildStart = Date.now();
     let birthName = "";
@@ -351,9 +340,9 @@ function build(lilyListData){
         let tableRow = document.getElementById("tb" + resData[i]["birthdate"]["value"].substring(2,4));
         tableCell = document.createElement("tr");
         let tdDay = document.createElement("td");
-        if(languageGlobal === "ja"){
+        if(lang === "ja"){
             tdDay.innerText = `${Number(resData[i]["birthdate"]["value"].substring(5,7)).toString()}日`;
-        } else if(languageGlobal === "en"){
+        } else if(lang === "en"){
             tdDay.innerText = `${convert2Ordinal(Number(resData[i]["birthdate"]["value"].substring(5,7)))}`;
         }
         
@@ -457,7 +446,7 @@ URL;VALUE=URI:${LemonadeURL}`;
     console.log(`Build iCal Data: ${Date.now() - buildStart}ms`);
     let outArea = document.getElementById("output");
     outArea.value = icsData;
-    if(languageGlobal == "ja"){
+    if(lang == "ja"){
         document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。`;
     }else {
         document.getElementById("result").innerText = `Exported ${i} Lily's Birthday.`;

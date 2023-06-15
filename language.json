@@ -3,6 +3,10 @@
         "ja": "1. データダウンロード",
         "en": "1. Download data"
     },
+    "btnDownload": {
+        "ja": "<span class='material-symbols-rounded'>download</span>ダウンロード",
+        "en": "<span class='material-symbols-rounded'>download</span>Download"
+    },
     "h3Filter": {
         "ja": "2. フィルタ",
         "en": "2. Filter"
@@ -22,6 +26,10 @@
     "labelExact": {
         "ja": "厳格モード<wbr>（iCalendar規約に<wbr>厳格に準拠します）",
         "en": "Strict mode (Strictly follows the iCalendar's rules)"
+    },
+    "btnExport": {
+        "ja": "<span class='material-symbols-rounded'>event_upcoming</span>エクスポート",
+        "en": "<span class='material-symbols-rounded'>event_upcoming</span>Export"
     },
     "pResult": {
         "ja": "出力内容",
