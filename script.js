@@ -315,12 +315,10 @@ function build(lilyListData){
         for(let j=0;j<lilyListData.length;j++){
             if("garden" in lilyListData[j]){
                 if(includeGardens.includes(lilyListData[j]["garden"]["value"]) === true){
-                    console.log("list add");
-                    console.log(resData.push(lilyListData[j]));
+                    resData.push(lilyListData[j]);
                 }
             } else if(includeNoGarden){
-                resData.splice(j,1);
-                j--;
+                resData.push(lilyListData[j]);
             }
         }
     }else {
