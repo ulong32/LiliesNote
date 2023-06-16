@@ -256,6 +256,35 @@ function download() {
 }
 
 
+function filter(lilyListData) {
+    //ガーデンフィルタを適用
+    let resData = [];
+    if(document.getElementById("chkGardenFilter").checked){
+        let includeGardens = [];
+        const includeNoGarden = document.getElementById("noGarden").checked;
+        const gardenFilter = Array.from(document.getElementsByClassName("chkGarden"));
+        gardenFilter.forEach(garden => {
+            if(garden.checked){
+                includeGardens.push(garden.name);
+            }
+        });
+        console.log(includeGardens);
+        for(let j=0;j<lilyListData.length;j++){
+            if("garden" in lilyListData[j]){
+                if(includeGardens.includes(lilyListData[j]["garden"]["value"]) === true){
+                    resData.push(lilyListData[j]);
+                }
+            } else if(includeNoGarden){
+                resData.push(lilyListData[j]);
+            }
+        }
+    }else {
+        resData = lilyListData;
+    }
+    return resData;
+}
+
+
 function build(lilyListData){
     let resData = [];
     console.log("Build start");
@@ -291,29 +320,9 @@ function build(lilyListData){
         let elem = document.getElementById(`tb${i.toString().padStart(2,"0")}`);
         elem.parentNode.replaceChild(elem.cloneNode(),elem);
     }
-    //ガーデンフィルタを適用
-    if(document.getElementById("chkGardenFilter").checked){
-        let includeGardens = [];
-        const includeNoGarden = document.getElementById("noGarden").checked;
-        const gardenFilter = Array.from(document.getElementsByClassName("chkGarden"));
-        gardenFilter.forEach(garden => {
-            if(garden.checked){
-                includeGardens.push(garden.name);
-            }
-        });
-        console.log(includeGardens)
-        for(let j=0;j<lilyListData.length;j++){
-            if("garden" in lilyListData[j]){
-                if(includeGardens.includes(lilyListData[j]["garden"]["value"]) === true){
-                    resData.push(lilyListData[j]);
-                }
-            } else if(includeNoGarden){
-                resData.push(lilyListData[j]);
-            }
-        }
-    }else {
-        resData = lilyListData;
-    }
+
+    resData = filter(lilyListData);
+
     for(i=0;i<resData.length;i++){
 
         birthYear = year;
