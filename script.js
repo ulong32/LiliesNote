@@ -175,9 +175,10 @@ function buildGardenFilter(){
                 option.setAttribute("type","checkbox");
                 option.setAttribute("name",garden["garden"]["value"]);
                 option.setAttribute("class","chkGarden");
+                option.setAttribute("id", garden["garden"]["value"] + "_checkbox");
 
                 label = document.createElement("label");
-                label.setAttribute("for",garden["garden"]["value"]);
+                label.setAttribute("for",garden["garden"]["value"] + "_checkbox");
                 label.setAttribute("id",garden["garden"]["value"]);
 
                 divGardenFilter.appendChild(option);
