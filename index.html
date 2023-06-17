@@ -4,7 +4,15 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>LiliesNote</title>
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/modern-css-reset/dist/reset.min.css" />
         <style>
+            h1 {
+                font-size: 36px;
+                padding: 8px;
+                text-align: center;
+            }
             body {
                 font-family: "Helvetica Neue", Arial,
                     "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo,
@@ -46,6 +54,9 @@
             table {
                 box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.25);
             }
+            th {
+                background-color: rgb(155, 255, 255);
+            }
             tr:nth-of-type(even) {
                 background-color: whitesmoke;
             }
@@ -55,15 +66,15 @@
             td:nth-of-type(odd) {
                 width: 40px;
             }
-            th {
-                background-color: rgb(155, 255, 255);
-            }
             footer {
                 background-color: rgb(155, 255, 255);
                 text-align: center;
                 font-size: 16px;
                 padding-left: 32px;
                 padding-right: 32px;
+            }
+            img {
+                display: inline;
             }
             .version {
                 padding-top: 5px;
@@ -115,6 +126,7 @@
         <h1>LiliesNote</h1>
         <div id="body-container">
             <div id="pref-container">
+                <h2 id="h2Settings">設定</h2>
                 <div>
                     <h3 id="h3DataDownload">1. データダウンロード</h3>
                     <button
@@ -153,7 +165,7 @@
                 <p id="result"></p>
             </div>
             <div id="res-container">
-                <h3 id="pResult">出力内容</h3>
+                <h2 id="pResult">出力内容</h2>
                 <div id="divTable" class="divTable">
                     <table>
                         <thead>
@@ -288,7 +300,8 @@
             によって
             <a
                 href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja"
-                target="_blank">
+                target="_blank"
+                class="img_cc">
                 クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際
                 ライセンス
             </a>

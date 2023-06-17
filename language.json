@@ -1,4 +1,8 @@
 {
+    "h2Settings": {
+        "ja": "設定",
+        "en": "Settings"
+    },
     "h3DataDownload": {
         "ja": "1. データダウンロード",
         "en": "1. Download data"
