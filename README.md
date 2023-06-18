@@ -18,6 +18,6 @@ LiliesNoteは[MIT ライセンス](https://opensource.org/licenses/MIT)です。
 
 ## How to Use
 
-<https://ulong32.github.io/LiliesNote> にアクセスし、日本語もしくは英語の「ダウンロード(Download)」を押すと「liliesbirthday.ics」というファイルがダウンロードされます。
+<https://liliesnote.ulong32.net> にアクセスし、日本語もしくは英語の「ダウンロード(Download)」を押すと「liliesbirthday.ics」というファイルがダウンロードされます。
 
 お使いのカレンダーアプリにインポートしてお使いください。
