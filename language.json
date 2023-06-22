@@ -87,6 +87,10 @@
         "ja": "12月",
         "en": "December"
     },
+    "h3TextOutput": {
+        "ja": "出力テキスト",
+        "en": "Output Texts"
+    },
     "repo": {
         "ja": "GitHubリポジトリ",
         "en": "GitHub repository"
@@ -100,7 +104,7 @@
         "en": "Script part of LiliesNote is available under the <a href='https://opensource.org/licenses/MIT' target='_blank'>MIT License</a> But data generated in this site using LuciaDB is subject to the LuciaDB's license above."
     },
     "pAnotherVersion": {
-        "ja": "<b>English version of this page is available at <a href='./index.html?lang=en'>here</a></b>",
+        "ja": "<b><a href='./index.html?lang=en'>English version</a> of this page is available.</b>",
         "en": "<b>このページには<a href='./index.html?lang=ja'>日本語版</a>があります。</b>"
     }
 }

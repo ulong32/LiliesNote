@@ -3,6 +3,9 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="アサルトリリィのキャラクターの誕生日をエクスポートできるツール。" />
         <title>LiliesNote</title>
         <link
             rel="stylesheet"
@@ -20,6 +23,158 @@
                 color: #333333;
                 word-break: keep-all;
                 overflow-wrap: break-word;
+            }
+            #loading {
+                width: 100vw;
+                height: 100vh;
+                transition: all 500ms;
+                background-color: rgb(155, 255, 255);
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 999;
+                align-content: center;
+            }
+            .load-content {
+                width: 89px;
+                height: 89px;
+                margin: 50vh auto 0;
+                transform: translateY(-50%);
+                text-align: center;
+            }
+            .load-text {
+                position: relative;
+                bottom: 1rem;
+            }
+            .breeding-rhombus-spinner {
+                height: 65px;
+                width: 65px;
+                transform: rotate(45deg);
+            }
+
+            .breeding-rhombus-spinner .rhombus {
+                height: calc(65px / 7.5);
+                width: calc(65px / 7.5);
+                animation-duration: 2000ms;
+                top: calc(65px / 2.3077);
+                left: calc(65px / 2.3077);
+                background-color: white;
+                position: absolute;
+                animation-iteration-count: infinite;
+            }
+
+            .breeding-rhombus-spinner .rhombus:nth-child(2n + 0) {
+                margin-right: 0;
+            }
+
+            .breeding-rhombus-spinner .rhombus.child-1 {
+                animation-name: breeding-rhombus-spinner-animation-child-1;
+                animation-delay: calc(100ms * 1);
+            }
+
+            .breeding-rhombus-spinner .rhombus.child-2 {
+                animation-name: breeding-rhombus-spinner-animation-child-2;
+                animation-delay: calc(100ms * 2);
+            }
+
+            .breeding-rhombus-spinner .rhombus.child-3 {
+                animation-name: breeding-rhombus-spinner-animation-child-3;
+                animation-delay: calc(100ms * 3);
+            }
+
+            .breeding-rhombus-spinner .rhombus.child-4 {
+                animation-name: breeding-rhombus-spinner-animation-child-4;
+                animation-delay: calc(100ms * 4);
+            }
+
+            .breeding-rhombus-spinner .rhombus.child-5 {
+                animation-name: breeding-rhombus-spinner-animation-child-5;
+                animation-delay: calc(100ms * 5);
+            }
+
+            .breeding-rhombus-spinner .rhombus.child-6 {
+                animation-name: breeding-rhombus-spinner-animation-child-6;
+                animation-delay: calc(100ms * 6);
+            }
+
+            .breeding-rhombus-spinner .rhombus.child-7 {
+                animation-name: breeding-rhombus-spinner-animation-child-7;
+                animation-delay: calc(100ms * 7);
+            }
+
+            .breeding-rhombus-spinner .rhombus.child-8 {
+                animation-name: breeding-rhombus-spinner-animation-child-8;
+                animation-delay: calc(100ms * 8);
+            }
+
+            .breeding-rhombus-spinner .rhombus.big {
+                height: calc(65px / 3);
+                width: calc(65px / 3);
+                animation-duration: 2000ms;
+                top: calc(65px / 3);
+                left: calc(65px / 3);
+                background-color: white;
+                animation: breeding-rhombus-spinner-animation-child-big 2s
+                    infinite;
+                animation-delay: 0.5s;
+            }
+
+            @keyframes breeding-rhombus-spinner-animation-child-1 {
+                50% {
+                    transform: translate(-325%, -325%);
+                }
+            }
+
+            @keyframes breeding-rhombus-spinner-animation-child-2 {
+                50% {
+                    transform: translate(0, -325%);
+                }
+            }
+
+            @keyframes breeding-rhombus-spinner-animation-child-3 {
+                50% {
+                    transform: translate(325%, -325%);
+                }
+            }
+
+            @keyframes breeding-rhombus-spinner-animation-child-4 {
+                50% {
+                    transform: translate(325%, 0);
+                }
+            }
+
+            @keyframes breeding-rhombus-spinner-animation-child-5 {
+                50% {
+                    transform: translate(325%, 325%);
+                }
+            }
+
+            @keyframes breeding-rhombus-spinner-animation-child-6 {
+                50% {
+                    transform: translate(0, 325%);
+                }
+            }
+
+            @keyframes breeding-rhombus-spinner-animation-child-7 {
+                50% {
+                    transform: translate(-325%, 325%);
+                }
+            }
+
+            @keyframes breeding-rhombus-spinner-animation-child-8 {
+                50% {
+                    transform: translate(-325%, 0);
+                }
+            }
+
+            @keyframes breeding-rhombus-spinner-animation-child-big {
+                50% {
+                    transform: scale(0.5);
+                }
+            }
+            .loaded {
+                opacity: 0;
+                visibility: hidden;
             }
             #body-container {
                 display: flex;
@@ -103,6 +258,7 @@
                 margin-left: 20px;
             }
             .download {
+                border: 1px solid white;
                 font-size: 20px;
                 width: 170px;
                 height: auto;
@@ -123,6 +279,22 @@
             href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,400,0,0" />
     </head>
     <body>
+        <div id="loading">
+            <div class="load-content">
+                <span class="load-text">Loading...</span>
+                <div class="breeding-rhombus-spinner">
+                    <div class="rhombus child-1"></div>
+                    <div class="rhombus child-2"></div>
+                    <div class="rhombus child-3"></div>
+                    <div class="rhombus child-4"></div>
+                    <div class="rhombus child-5"></div>
+                    <div class="rhombus child-6"></div>
+                    <div class="rhombus child-7"></div>
+                    <div class="rhombus child-8"></div>
+                    <div class="rhombus big"></div>
+                </div>
+            </div>
+        </div>
         <h1>LiliesNote</h1>
         <div id="body-container">
             <div id="pref-container">
@@ -170,7 +342,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th01">1月</th>
+                                <th colspan="2" id="th01" scope="col">1月</th>
                             </tr>
                         </thead>
                         <tbody id="tb01"></tbody>
@@ -178,7 +350,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th02">2月</th>
+                                <th colspan="2" id="th02" scope="col">2月</th>
                             </tr>
                         </thead>
                         <tbody id="tb02"></tbody>
@@ -186,7 +358,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th03">3月</th>
+                                <th colspan="2" id="th03" scope="col">3月</th>
                             </tr>
                         </thead>
                         <tbody id="tb03"></tbody>
@@ -194,7 +366,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th04">4月</th>
+                                <th colspan="2" id="th04" scope="col">4月</th>
                             </tr>
                         </thead>
                         <tbody id="tb04"></tbody>
@@ -202,7 +374,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th05">5月</th>
+                                <th colspan="2" id="th05" scope="col">5月</th>
                             </tr>
                         </thead>
                         <tbody id="tb05"></tbody>
@@ -210,7 +382,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th06">6月</th>
+                                <th colspan="2" id="th06" scope="col">6月</th>
                             </tr>
                         </thead>
                         <tbody id="tb06"></tbody>
@@ -218,7 +390,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th07">7月</th>
+                                <th colspan="2" id="th07" scope="col">7月</th>
                             </tr>
                         </thead>
                         <tbody id="tb07"></tbody>
@@ -226,7 +398,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th08">8月</th>
+                                <th colspan="2" id="th08" scope="col">8月</th>
                             </tr>
                         </thead>
                         <tbody id="tb08"></tbody>
@@ -234,7 +406,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th09">9月</th>
+                                <th colspan="2" id="th09" scope="col">9月</th>
                             </tr>
                         </thead>
                         <tbody id="tb09"></tbody>
@@ -242,7 +414,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th10">10月</th>
+                                <th colspan="2" id="th10" scope="col">10月</th>
                             </tr>
                         </thead>
                         <tbody id="tb10"></tbody>
@@ -250,7 +422,7 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th11">11月</th>
+                                <th colspan="2" id="th11" scope="col">11月</th>
                             </tr>
                         </thead>
                         <tbody id="tb11"></tbody>
@@ -258,13 +430,16 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="2" id="th12">12月</th>
+                                <th colspan="2" id="th12" scope="col">12月</th>
                             </tr>
                         </thead>
                         <tbody id="tb12"></tbody>
                     </table>
                 </div>
                 <br />
+                <label for="output">
+                    <h3 id="h3TextOutput">出力テキスト</h3>
+                </label>
                 <textarea name="output" id="output" readonly></textarea>
             </div>
         </div>
@@ -290,7 +465,9 @@
             class="cc-img">
             <img
                 alt="CC BY-NC-SA"
-                src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
+                src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
+                width="88"
+                height="31" />
         </a>
         <p class="cc-txt" id="copyrightLuciaDB">
             本サイトで利用しているデータは

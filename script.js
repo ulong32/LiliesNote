@@ -82,7 +82,7 @@ function convert2Ordinal(number){
 
 function applyTranslates(lang){
     const xhr = new XMLHttpRequest();
-    xhr.open("GET","./language.json",true);
+    xhr.open("GET","./language.json",false);
     xhr.onload = function() {
         if (xhr.status == 200) {
             const json = JSON.parse(xhr.responseText);
@@ -214,7 +214,7 @@ function buildGardenFilter(){
 
 
 
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("load", () => {
     //バージョンの代入
     document.getElementById("version").innerText = `LiliesNote ${version}`;
     //言語設定を取得
@@ -244,7 +244,7 @@ window.addEventListener("DOMContentLoaded", () => {
             divGardenFilter.style.display = "none";
         }
     })
-
+    document.getElementById("loading").classList.add("loaded");
 })
 
 function download() {
