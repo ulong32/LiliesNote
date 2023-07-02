@@ -215,6 +215,15 @@ function buildGardenFilter(){
 
 
 window.addEventListener("load", () => {
+    divLoadingBar = document.getElementById("loadBar");
+    divLoadingTxt = document.getElementById("loadText");
+    divLoadingBar.animate([
+        {width: "10%"},
+        {width:"80%"}
+    ], {
+        duration: 1000
+    });
+    divLoadingTxt.innerHTML += "<br>Building Page Content..."
     //バージョンの代入
     document.getElementById("version").innerText = `LiliesNote ${version}`;
     //言語設定を取得
@@ -222,9 +231,7 @@ window.addEventListener("load", () => {
     if(searchParams.has("lang")){
         lang = searchParams.get("lang");
     }
-    //多言語対応
-    applyTranslates(lang);
-    
+
     const chkGardenFilter = document.getElementById("chkGardenFilter");
     const divGardenFilter = document.getElementById("divGardenFilter");
     if(chkGardenFilter.checked){
@@ -244,6 +251,17 @@ window.addEventListener("load", () => {
             divGardenFilter.style.display = "none";
         }
     })
+    //多言語対応
+    divLoadingTxt.innerHTML += "<br>Applying Page Strings..."
+    applyTranslates(lang);
+    
+    divLoadingBar.animate([
+        {width: "80%"},
+        {width: "100%"}
+    ], {
+        duration: 200
+    })
+    divLoadingTxt.innerHTML += "<br>Done."
     document.getElementById("loading").classList.add("loaded");
 })
 
