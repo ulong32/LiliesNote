@@ -75,6 +75,9 @@
                 border-radius: 20px;
                 flex-grow: 2;
             }
+            #pref-container > * {
+                margin: 12px;
+            }
             #res-container {
                 flex-grow: 2;
                 flex-basis: auto;
@@ -84,9 +87,7 @@
             }
             .divTable {
                 text-align: center;
-                display: grid;
                 font-size: 16px;
-                grid-template-columns: repeat(auto-fit, minmax(256px, 1fr));
                 gap: 8px;
                 justify-content: center;
                 align-items: baseline;
@@ -95,6 +96,8 @@
             }
             table {
                 box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.25);
+                width: 100%;
+                margin: 12px;
             }
             th {
                 background-color: rgb(155, 255, 255);
@@ -107,10 +110,6 @@
             }
             td:nth-of-type(odd) {
                 width: 40px;
-            }
-            td:nth-of-type(even) {
-                width: calc(100% - 40px);
-                overflow-wrap: break-all;
             }
             footer {
                 background-color: rgb(155, 255, 255);
@@ -188,33 +187,35 @@
                         id="btnDownload"
                         class="download"
                         onclick="getLilyData(true)">
-                        <span class="material-symbols-rounded">download</span>
+                        <span class="material-symbols-rounded"></span>
                         ダウンロード
                     </button>
                 </div>
-                <h3 id="h3Filter">2. フィルタ</h3>
-                <input
-                    type="checkbox"
-                    name="chkGardenFilter"
-                    id="chkGardenFilter" />
-                <label for="chkGardenFilter" id="labelGardenFilter">
-                    ガーデンでフィルタ
-                </label>
-                <div id="divGardenFilter"></div>
-                <br />
-                <h3 id="h3ExportPref">3. ダウンロード設定</h3>
-                <input type="checkbox" name="chkPreview" id="chkPreview" />
-                <label for="chkPreview" id="labelPreview">
-                    プレビューモード（ダウンロードは行いません）
-                </label>
-                <br />
-                <input type="checkbox" name="chkExact" id="chkExact" />
-                <label for="chkExact" id="labelExact">
-                    厳格モード（iCalendar規約に厳格に準拠します）
-                </label>
-                <br />
+                <div>
+                    <h3 id="h3Filter">2. フィルタ</h3>
+                    <input
+                        type="checkbox"
+                        name="chkGardenFilter"
+                        id="chkGardenFilter" />
+                    <label for="chkGardenFilter" id="labelGardenFilter">
+                        ガーデンでフィルタ
+                    </label>
+                    <div id="divGardenFilter"></div>
+                </div>
+                <div>
+                    <h3 id="h3ExportPref">3. ダウンロード設定</h3>
+                    <input type="checkbox" name="chkPreview" id="chkPreview" />
+                    <label for="chkPreview" id="labelPreview">
+                        プレビューモード（ダウンロードは行いません）
+                    </label>
+                    <br />
+                    <input type="checkbox" name="chkExact" id="chkExact" />
+                    <label for="chkExact" id="labelExact">
+                        厳格モード（iCalendar規約に厳格に準拠します）
+                    </label>
+                </div>
                 <button class="download" id="btnExport" onclick="download();">
-                    <span class="material-symbols-rounded">event_upcoming</span>
+                    <span class="material-symbols-rounded"></span>
                     エクスポート
                 </button>
                 <p id="result"></p>
