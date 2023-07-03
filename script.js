@@ -275,6 +275,29 @@ document.getElementById("btnExport").addEventListener("click", function () {
     this.disabled = false;
 })
 
+document.getElementById("btnCopy").addEventListener("click", function () {
+    //Webkit対応のため仕方なくこうする
+    setTimeout(async () =>
+        await navigator.clipboard.writeText(document.getElementById("textOutput").innerText)
+    );
+    spanDone = document.getElementById("spanDone");
+    spanDone.animate({
+        "opacity": [0,1],
+        "rotate": ["-90deg","0deg"]
+    },{
+        duration: 50,
+        fill: "both"
+    })
+    setTimeout(() => {
+        spanDone.animate({
+            "opacity": [1,0]
+        },{
+            duration: 200,
+            fill: "forwards"
+        })
+    }, 1500);
+})
+
 function filter(lilyListData) {
     //ガーデンフィルタを適用
     let resData = [];
@@ -476,8 +499,8 @@ URL;VALUE=URI:${LemonadeURL}`;
     }
 
     console.log(`Build iCal Data: ${Date.now() - buildStart}ms`);
-    let outArea = document.getElementById("output");
-    outArea.value = icsData;
+    let outArea = document.getElementById("textOutput");
+    outArea.innerText = icsData;
     if(lang == "ja"){
         document.getElementById("result").innerHTML = `${i}人のリリィの誕生日を<wbr>エクスポートしました。`;
     }else {

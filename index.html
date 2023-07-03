@@ -88,6 +88,11 @@
                 padding: 32px;
                 border-radius: 20px;
             }
+            #raw-container {
+                margin: 16px;
+                background-color: #f9f9f9;
+                padding: 16px;
+            }
             .divTable {
                 text-align: center;
                 font-size: 16px;
@@ -151,10 +156,13 @@
             .noGarden {
                 margin-left: 20px;
             }
-            .download {
+            button {
+                color: #333333;
+                margin: 4px;
                 border: 1px solid white;
                 font-size: 20px;
-                width: 170px;
+                width: fit-content;
+                padding: 0 12px 0 12px;
                 height: auto;
                 line-height: 2;
                 display: inline-flex;
@@ -163,13 +171,25 @@
                 box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
                 border-radius: 4px;
             }
-            .download:active {
-                transform: translate(2px,2px);
+            button:active {
+                transform: translate(2px, 2px);
                 box-shadow: none;
             }
             #output {
                 width: 100%;
-                height: 6rem;
+                height: 20rem;
+                position: relative;
+                background-color: #444;
+                border-radius: 6px;
+                overflow-y: scroll;
+                word-break: break-all;
+                color: #f6f6f6;
+                padding: 12px 24px 12px;
+                font-family: monospace;
+            }
+            .span-done {
+                color: green;
+                opacity: 0;
             }
         </style>
         <link
@@ -326,10 +346,19 @@
                     </table>
                 </div>
                 <br />
-                <label for="output">
-                    <h3 id="h3TextOutput">出力テキスト</h3>
-                </label>
-                <textarea name="output" id="output" readonly></textarea>
+            </div>
+        </div>
+        <div id="raw-container">
+            <label for="output">
+                <h3 id="h3TextOutput">生データ</h3>
+            </label>
+            <button id="btnCopy">
+                <span class="material-symbols-rounded">content_copy</span>コピー
+            </button>
+            <span id="spanDone" class="material-symbols-rounded span-done">done</span>
+            <div name="output" id="output">
+                
+                <div id="textOutput"></div>
             </div>
         </div>
         <p id="pAnotherVersion">

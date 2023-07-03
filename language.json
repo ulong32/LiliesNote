@@ -88,8 +88,12 @@
         "en": "December"
     },
     "h3TextOutput": {
-        "ja": "出力テキスト",
-        "en": "Output Texts"
+        "ja": "生データ",
+        "en": "Raw Data"
+    },
+    "btnCopy": {
+        "ja": "<span class='material-symbols-rounded'>content_copy</span>コピー",
+        "en": "<span class='material-symbols-rounded'>content_copy</span>Copy"
     },
     "repo": {
         "ja": "GitHubリポジトリ",
