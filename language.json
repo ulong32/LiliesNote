@@ -24,12 +24,12 @@
         "en": "Filter by affiliated garden"
     },
     "labelPreview": {
-        "ja": "プレビューモード<wbr>（ダウンロードを行いません）",
-        "en": "Preview mode (Don't perform download)"
+        "ja": "プレビューモード<span>ダウンロード処理を行いません。</span>",
+        "en": "Preview mode <span>Do not perform download process.</span>"
     },
     "labelExact": {
-        "ja": "厳格モード<wbr>（iCalendar規約に<wbr>厳格に準拠します）",
-        "en": "Strict mode (Strictly follows the iCalendar's rules)"
+        "ja": "厳格モード<span>iCalendar規約に厳格に準拠します。<ul><li>古いカレンダーアプリを使用している場合</li><li>通常の出力ファイルが機能しなかった場合</li></ul>にこちらのモードを適用してください。</span>",
+        "en": "Strict mode <span>Strictly follows the iCalendar's rules. <ul><li>Using old calendar app</li> <li>Failed to import the file</li></ul>If you fit these, apply this mode.</span>"
     },
     "btnExport": {
         "ja": "<span class='material-symbols-rounded'>event_upcoming</span>エクスポート",

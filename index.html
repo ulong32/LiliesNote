@@ -10,6 +10,11 @@
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/modern-css-reset/dist/reset.min.css" />
+            <link
+            rel="stylesheet"
+            media="print"
+            onload="this.media='all'"
+            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,400,0,0" />
         <style>
             h1 {
                 font-size: 36px;
@@ -195,10 +200,38 @@
                 margin-top: 16px;
                 margin-bottom: 16px;
             }
+            .help {
+                position: relative;
+            }
+            .help span{
+                display: flex;
+                color: #333333;
+                position: absolute;
+                display: block;
+                padding: 12px;
+                width: 200px;
+                top: 12px;
+                left: 12px;
+                font-size: 14px;
+                line-height: 1.2rem;
+                border: 1px solid #333333;
+                border-radius: 12px;
+                background-color: rgba(200, 255, 255,.95);
+                visibility: hidden;
+                z-index: 1;
+                overflow: clip;
+            }
+            .help:hover {
+                cursor: help;
+            }
+            .help:hover span{
+                visibility: visible;
+                z-index: 20;
+            }
+            ul{
+                margin-left: -20px;
+            }
         </style>
-        <link
-            rel="stylesheet"
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,400,0,0" />
     </head>
     <body ontouchstart>
         <div id="loading">
@@ -234,13 +267,13 @@
                 <div>
                     <h3 id="h3ExportPref">3. ダウンロード設定</h3>
                     <input type="checkbox" name="chkPreview" id="chkPreview" />
-                    <label for="chkPreview" id="labelPreview">
-                        プレビューモード（ダウンロードは行いません）
+                    <label for="chkPreview" id="labelPreview" class="help">
+                        プレビューモード<span>ダウンロード処理を行いません。</span>
                     </label>
                     <br />
                     <input type="checkbox" name="chkExact" id="chkExact" />
-                    <label for="chkExact" id="labelExact">
-                        厳格モード（iCalendar規約に厳格に準拠します）
+                    <label for="chkExact" id="labelExact" class="help">
+                        厳格モード<span>iCalendar規約に厳格に準拠します</span>
                     </label>
                 </div>
                 <button class="download" id="btnExport">
