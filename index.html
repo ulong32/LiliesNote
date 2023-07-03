@@ -47,7 +47,7 @@
                 font-size: large;
                 font-weight: bold;
             }
-            .load-bar_bg{
+            .load-bar_bg {
                 width: 100%;
                 margin-left: auto;
                 margin-right: auto;
@@ -56,7 +56,7 @@
                 background-color: white;
                 padding: 2px;
             }
-            .load-bar_line{
+            .load-bar_line {
                 width: 1px;
                 height: 20px;
                 border-radius: 20px;
@@ -179,7 +179,7 @@
                 <div class="load-bar_bg">
                     <p class="load-bar_line" id="loadBar"></p>
                 </div>
-                </div>
+            </div>
         </div>
         <h1>LiliesNote</h1>
         <div id="body-container">
@@ -187,10 +187,7 @@
                 <h2 id="h2Settings">設定</h2>
                 <div>
                     <h3 id="h3DataDownload">1. データダウンロード</h3>
-                    <button
-                        id="btnDownload"
-                        class="download"
-                        onclick="getLilyData(true)">
+                    <button id="btnDownload" class="download">
                         <span class="material-symbols-rounded"></span>
                         ダウンロード
                     </button>
@@ -218,7 +215,7 @@
                         厳格モード（iCalendar規約に厳格に準拠します）
                     </label>
                 </div>
-                <button class="download" id="btnExport" onclick="download();">
+                <button class="download" id="btnExport">
                     <span class="material-symbols-rounded"></span>
                     エクスポート
                 </button>
@@ -342,12 +339,12 @@
             loadingIntv = setInterval(() => {
                 loadTitle.innerText = "Loading.";
                 setTimeout(() => {
-                    loadTitle.innerText = "Loading.."
+                    loadTitle.innerText = "Loading..";
                 }, 300);
                 setTimeout(() => {
-                    loadTitle.innerText = "Loading..."
+                    loadTitle.innerText = "Loading...";
                 }, 600);
-            },900);
+            }, 900);
         </script>
         <script src="./script.js"></script>
     </body>

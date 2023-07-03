@@ -263,14 +263,17 @@ window.addEventListener("load", () => {
     document.getElementById("loading").classList.add("loaded");
 })
 
-function download() {
-    if(isFirstGetLilyData === true){
-        alert(messageDownloadError[lang]);
-        return -1;
-    }
-    build(getLilyData());
-}
+document.getElementById("btnDownload").addEventListener("click", function() {
+    this.disabled = true;
+    getLilyData(true);
+    this.disabled = false;
+})
 
+document.getElementById("btnExport").addEventListener("click", function () {
+    this.disabled = true;
+    build();
+    this.disabled = false;
+})
 
 function filter(lilyListData) {
     //ガーデンフィルタを適用
@@ -301,8 +304,11 @@ function filter(lilyListData) {
 }
 
 
-function build(lilyListData){
-    let resData = [];
+function build(){
+    if(isFirstGetLilyData === true){
+        alert(messageDownloadError[lang]);
+        return -1;
+    }
     console.log("Build start");
     let buildStart = Date.now();
     let birthName = "";
@@ -337,7 +343,7 @@ function build(lilyListData){
         elem.parentNode.replaceChild(elem.cloneNode(),elem);
     }
 
-    resData = filter(lilyListData);
+    let resData = filter(getLilyData());
 
     for(i=0;i<resData.length;i++){
 
