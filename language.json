@@ -108,7 +108,7 @@
         "en": "Script part of LiliesNote is available under the <a href='https://opensource.org/licenses/MIT' target='_blank'>MIT License</a> But data generated in this site using LuciaDB is subject to the LuciaDB's license above."
     },
     "pAnotherVersion": {
-        "ja": "<b><a href='./index.html?lang=en'>English version</a> of this page is available.</b>",
-        "en": "<b>このページには<a href='./index.html?lang=ja'>日本語版</a>があります。</b>"
+        "ja": "<span><a href='./index.html?lang=en'>English version</a> of this page is available.</span>",
+        "en": "<span>このページには<a href='./index.html?lang=ja'>日本語版</a>があります。</span>"
     }
 }

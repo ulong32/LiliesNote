@@ -70,9 +70,9 @@
                 display: flex;
                 flex-wrap: wrap;
                 align-content: flex-start;
-                gap: 16px 16px;
             }
             #pref-container {
+                margin: 16px;
                 background-color: #f9f9f9;
                 padding: 32px;
                 border-radius: 20px;
@@ -82,6 +82,7 @@
                 margin: 12px;
             }
             #res-container {
+                margin: 16px;
                 flex-grow: 2;
                 flex-basis: auto;
                 background-color: #f9f9f9;
@@ -92,6 +93,7 @@
                 margin: 16px;
                 background-color: #f9f9f9;
                 padding: 16px;
+                border-radius: 20px;
             }
             .divTable {
                 text-align: center;
@@ -120,36 +122,32 @@
             td:nth-of-type(odd) {
                 width: 40px;
             }
+            .another-version {
+                margin: 4px;
+                font-weight: bold;
+            }
             footer {
                 background-color: rgb(155, 255, 255);
                 text-align: center;
                 font-size: 16px;
-                padding-left: 32px;
-                padding-right: 32px;
+                padding-left: 16px;
+                padding-right: 16px;
             }
             img {
                 display: inline;
             }
             .version {
                 padding-top: 5px;
-                margin-bottom: 5px;
             }
             .copyright {
                 font-size: 14px;
-                margin-top: 5px;
-                margin-bottom: 5px;
-            }
-            .cc-img {
-                margin-bottom: 5px;
             }
             .cc-txt {
-                margin-top: 5px;
+                margin-top: 4px;
                 margin-bottom: 0;
-                padding-bottom: 5px;
+                padding-bottom: 4px;
             }
             .repo {
-                margin-top: 0;
-                padding-bottom: 5px;
                 margin-bottom: 8px;
             }
             .chkGarden,
@@ -190,6 +188,12 @@
             .span-done {
                 color: green;
                 opacity: 0;
+            }
+            hr {
+                border: none;
+                border-bottom: 1px solid #333333;
+                margin-top: 16px;
+                margin-bottom: 16px;
             }
         </style>
         <link
@@ -345,7 +349,6 @@
                         <tbody id="tb12"></tbody>
                     </table>
                 </div>
-                <br />
             </div>
         </div>
         <div id="raw-container">
@@ -353,20 +356,22 @@
                 <h3 id="h3TextOutput">生データ</h3>
             </label>
             <button id="btnCopy">
-                <span class="material-symbols-rounded">content_copy</span>コピー
+                <span class="material-symbols-rounded">content_copy</span>
+                コピー
             </button>
-            <span id="spanDone" class="material-symbols-rounded span-done">done</span>
+            <span id="spanDone" class="material-symbols-rounded span-done">
+                done
+            </span>
             <div name="output" id="output">
-                
                 <div id="textOutput"></div>
             </div>
         </div>
-        <p id="pAnotherVersion">
-            <b>
+        <div id="pAnotherVersion" class="another-version">
+            <span>
                 English version of this page is available
                 <a href="./index.html?lang=en">here</a>
-            </b>
-        </p>
+            </span>
+        </div>
         <script>
             loadTitle = document.getElementById("loadTitle");
             loadingIntv = setInterval(() => {
@@ -382,13 +387,16 @@
         <script src="./script.js"></script>
     </body>
     <footer>
-        <p class="version" id="version"></p>
-        <p class="copyright">2023 ©Ulong32</p>
-        <p class="repo">
-            <a href="https://github.com/ulong32/LiliesNote/" id="repo">
-                GitHubリポジトリ
-            </a>
-        </p>
+        <div>
+            <div class="version" id="version"></div>
+            <div class="copyright">2023 ©Ulong32</div>
+            <div class="repo">
+                <a href="https://github.com/ulong32/LiliesNote/" id="repo">
+                    GitHubリポジトリ
+                </a>
+            </div>
+        </div>
+        <hr />
         <a
             href="http://creativecommons.org/licenses/by-nc-sa/4.0/"
             target="_blank"
@@ -399,7 +407,7 @@
                 width="88"
                 height="31" />
         </a>
-        <p class="cc-txt" id="copyrightLuciaDB">
+        <div class="cc-txt" id="copyrightLuciaDB">
             本サイトで利用しているデータは
             <a href="https://github.com/Assault-Lily/LuciaDB" target="_blank">
                 LuciaDB
@@ -407,19 +415,18 @@
             によって
             <a
                 href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja"
-                target="_blank"
-                class="img_cc">
+                target="_blank">
                 クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際
                 ライセンス
             </a>
             で提供されています。
-        </p>
-        <p class="cc-txt" id="copyrightLiliesNote">
+        </div>
+        <div class="cc-txt" id="copyrightLiliesNote">
             LiliesNoteのスクリプト部分は
             <a href="https://opensource.org/licenses/MIT" target="_blank">
                 MIT ライセンス
             </a>
             で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。
-        </p>
+        </div>
     </footer>
 </html>
