@@ -473,9 +473,9 @@ URL;VALUE=URI:${LemonadeURL}`;
     let outArea = document.getElementById("output");
     outArea.value = icsData;
     if(lang == "ja"){
-        document.getElementById("result").innerText = `${i}人のリリィの誕生日をエクスポートしました。`;
+        document.getElementById("result").innerHTML = `${i}人のリリィの誕生日を<wbr>エクスポートしました。`;
     }else {
-        document.getElementById("result").innerText = `Exported ${i} Lily's Birthday.`;
+        document.getElementById("result").innerHTML = `Exported ${i} Lily's Birthday.`;
     }
     //ダウンロード処理
     if(document.getElementById("chkPreview").checked === false){
