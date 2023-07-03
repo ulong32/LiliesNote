@@ -40,9 +40,11 @@
                 transform: translateY(-50%);
                 text-align: center;
             }
-            .load-text {
+            .load-title {
                 position: relative;
                 bottom: 1rem;
+                font-size: large;
+                font-weight: bold;
             }
             .load-bar_bg{
                 width: 100%;
@@ -171,7 +173,7 @@
     <body>
         <div id="loading">
             <div class="load-content">
-                <span class="load-text" id="loadText">Loading...</span>
+                <span class="load-title" id="loadTitle">Loading...</span>
                 <div class="load-bar_bg">
                     <p class="load-bar_line" id="loadBar"></p>
                 </div>
@@ -333,6 +335,18 @@
                 <a href="./index.html?lang=en">here</a>
             </b>
         </p>
+        <script>
+            loadTitle = document.getElementById("loadTitle");
+            loadingIntv = setInterval(() => {
+                loadTitle.innerText = "Loading.";
+                setTimeout(() => {
+                    loadTitle.innerText = "Loading.."
+                }, 300);
+                setTimeout(() => {
+                    loadTitle.innerText = "Loading..."
+                }, 600);
+            },900);
+        </script>
         <script src="./script.js"></script>
     </body>
     <footer>

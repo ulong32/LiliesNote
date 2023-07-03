@@ -217,13 +217,13 @@ function buildGardenFilter(){
 window.addEventListener("load", () => {
     divLoadingBar = document.getElementById("loadBar");
     divLoadingTxt = document.getElementById("loadText");
-    divLoadingBar.animate([
-        {width: "10%"},
-        {width:"80%"}
-    ], {
-        duration: 1000
+    divLoadingBar.animate({
+        width: ["10%","90%"]
+    }, {
+        duration: 200,
+        fill: "both"
     });
-    divLoadingTxt.innerHTML += "<br>Building Page Content..."
+
     //バージョンの代入
     document.getElementById("version").innerText = `LiliesNote ${version}`;
     //言語設定を取得
@@ -252,16 +252,14 @@ window.addEventListener("load", () => {
         }
     })
     //多言語対応
-    divLoadingTxt.innerHTML += "<br>Applying Page Strings..."
     applyTranslates(lang);
     
-    divLoadingBar.animate([
-        {width: "80%"},
-        {width: "100%"}
-    ], {
-        duration: 200
-    })
-    divLoadingTxt.innerHTML += "<br>Done."
+    divLoadingBar.animate({
+        width: ["90%","100%"]
+    }, {
+        duration: 200,
+        fill: "both"
+    });
     document.getElementById("loading").classList.add("loaded");
 })
 
