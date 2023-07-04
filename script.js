@@ -148,6 +148,9 @@ function buildGardenFilter() {
     let option, label;
     let chkNoGarden, labelNoGarden;
     const divGardenFilter = document.getElementById("divGardenFilter");
+    while (divGardenFilter.firstChild) {
+        divGardenFilter.removeChild(divGardenFilter.firstChild);
+    }
     gardenList = getLilyData(false);
     let garden;
     numGardens = [];
