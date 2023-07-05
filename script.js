@@ -69,7 +69,7 @@ function convert2Ordinal(number) {
 
 function applyTranslates(lang) {
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", "./language.json", false);
+    xhr.open("GET", "./language.json");
     xhr.onload = function () {
         if (xhr.status == 200) {
             const json = JSON.parse(xhr.responseText);
@@ -78,7 +78,6 @@ function applyTranslates(lang) {
                 document.getElementById(key).innerHTML = json[key][lang];
             });
         }
-
     };
     xhr.send();
 }
@@ -88,11 +87,13 @@ let isFirstGetLilyData = true;
 let lilyData;
 
 function getLilyData(isForceUpdate = false) {
-    if (isFirstGetLilyData === true || isForceUpdate === true) {
-        const xhr = new XMLHttpRequest();
-        let resultArea = document.getElementById("result");
-        let startTime;
-        const query = `
+    //初回ダウンロード/強制同期時以外はキャッシュしたデータを返す
+    if (isFirstGetLilyData === false && isForceUpdate === false) return lilyData;
+
+    const xhr = new XMLHttpRequest();
+    let resultArea = document.getElementById("result");
+    let startTime;
+    const query = `
 SELECT ?name ?birthdate ?lgname ?lily ?type ?garden
 WHERE {
     VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
@@ -108,11 +109,12 @@ WHERE {
     OPTIONAL{?lily lily:garden ?garden.}
 }
 ORDER BY ?birthdate`;
-        xhr.open("POST", sparqlEndpoint, false);
-        xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
-        xhr.setRequestHeader("Accept", "application/json");
-        startTime = Date.now();
-        xhr.send(queryHeader + query);
+    xhr.open("POST", sparqlEndpoint);
+    xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
+    xhr.setRequestHeader("Accept", "application/json");
+    startTime = Date.now();
+
+    xhr.onload = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 let endTime = Date.now();
@@ -129,10 +131,8 @@ ORDER BY ?birthdate`;
                 resultArea.innerText = `${messageQueryError[lang]}${xhr.statusText})`;
             }
         }
-
-    } else {
-        return lilyData;
     }
+    xhr.send(queryHeader + query);
 }
 
 function buildGardenFilter() {

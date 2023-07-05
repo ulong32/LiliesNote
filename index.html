@@ -21,6 +21,9 @@
                 padding: 8px;
                 text-align: center;
             }
+            h2 {
+                width: fit-content;
+            }
             body {
                 font-family: "Helvetica Neue", Arial,
                     "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo,
@@ -89,6 +92,7 @@
             #res-container {
                 margin: 8px;
                 flex-grow: 2;
+                min-width: 260px;
                 flex-basis: auto;
                 background-color: #f9f9f9;
                 padding: 8px;
@@ -99,6 +103,9 @@
                 background-color: #f9f9f9;
                 padding: 16px;
                 border-radius: 20px;
+            }
+            .div-fit {
+                width: fit-content;
             }
             .divTable {
                 text-align: center;
@@ -245,14 +252,14 @@
         <div id="body-container">
             <div id="pref-container">
                 <h2 id="h2Settings">設定</h2>
-                <div>
+                <div class="div-fit">
                     <h3 id="h3DataDownload">1. データダウンロード</h3>
                     <button id="btnDownload" class="download">
                         <span class="material-symbols-rounded"></span>
                         ダウンロード
                     </button>
                 </div>
-                <div>
+                <div class="div-fit">
                     <h3 id="h3Filter">2. フィルタ</h3>
                     <input
                         type="checkbox"
@@ -263,7 +270,7 @@
                     </label>
                     <div id="divGardenFilter"></div>
                 </div>
-                <div>
+                <div class="div-fit">
                     <h3 id="h3ExportPref">3. ダウンロード設定</h3>
                     <input type="checkbox" name="chkPreview" id="chkPreview" />
                     <label for="chkPreview" id="labelPreview" class="help">
