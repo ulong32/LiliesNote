@@ -344,7 +344,7 @@ function build() {
     let monthEnd = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let i = 0;
     let tableCell;
-
+    const dateToday = `--${formatDate(month)}-${formatDate(day)}`;
     //プレビューの中身をリセット
     for (let i = 1; i < 13; i++) {
         let elem = document.getElementById(`tb${i.toString().padStart(2, "0")}`);
@@ -385,7 +385,9 @@ function build() {
         } else if (lang === "en") {
             tdDay.innerText = `${convert2Ordinal(Number(resData[i]["birthdate"]["value"].substring(5, 7)))}`;
         }
-
+        if(resData[i]["birthdate"]["value"] === dateToday) {
+            tableCell.classList.add("bdtoday");
+        }
         let tdName = document.createElement("td");
         tdName.innerText = resData[i]["name"]["value"];
         tableCell.appendChild(tdDay);
