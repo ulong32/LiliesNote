@@ -1,11 +1,5 @@
 const version = "v4.3.0 Suzume";
 
-const queryHeader = `PREFIX schema: <http://schema.org/>
-PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>`;
-
-
-
 const sparqlEndpoint = "https://luciadb.assaultlily.com/sparql/query";
 
 const icsHeader = `BEGIN:VCALENDAR
@@ -93,7 +87,9 @@ function getLilyData(isForceUpdate = false) {
     const xhr = new XMLHttpRequest();
     let resultArea = document.getElementById("result");
     let startTime;
-    const query = `
+    const query = `PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>
 SELECT ?name ?birthdate ?lgname ?lily ?type ?garden
 WHERE {
     VALUES ?class { lily:Lily lily:Teacher lily:Madec lily:Character }
@@ -132,7 +128,7 @@ ORDER BY ?birthdate`;
             }
         }
     }
-    xhr.send(queryHeader + query);
+    xhr.send(query);
 }
 
 function buildGardenFilter() {
