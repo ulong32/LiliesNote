@@ -110,5 +110,9 @@
     "pAnotherVersion": {
         "ja": "<span><a href='./index.html?lang=en'>English version</a> of this page is available.</span>",
         "en": "<span>このページには<a href='./index.html?lang=ja'>日本語版</a>があります。</span>"
+    },
+    "divOSS": {
+        "ja": "このサイトは以下のオープンソースソフトウェアを利用して構築されています。<div><a href='https://github.com/Andy-set-studio/modern-css-reset'>A modern CSS reset</a> - <a href='https://github.com/Andy-set-studio/modern-css-reset/blob/master/LICENSE'>MIT ライセンス</a></div>",
+        "en": "This site is built by using these open-source software.<div><a href='https://github.com/Andy-set-studio/modern-css-reset'>A modern CSS reset</a> - <a href='https://github.com/Andy-set-studio/modern-css-reset/blob/master/LICENSE'>MIT license</a></div>"
     }
 }

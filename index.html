@@ -7,10 +7,10 @@
             name="description"
             content="アサルトリリィのキャラクターの誕生日をエクスポートできるツール。" />
         <title>LiliesNote</title>
+        <style>
+            *,*::before,*::after{box-sizing:border-box;}body,h1,h2,h3,h4,p,figure,blockquote,dl,dd{margin: 0;}ul[role="list"],ol[role="list"]{list-style:none;}html:focus-within{scroll-behavior:smooth;}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5;}a:not([class]){text-decoration-skip-ink:auto;}img,picture{max-width:100%;display:block;}input,button,textarea,select{font:inherit;}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto;}*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}
+        </style>
         <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/modern-css-reset/dist/reset.min.css" />
-            <link
             rel="stylesheet"
             media="print"
             onload="this.media='all'"
@@ -153,6 +153,7 @@
                 font-size: 14px;
                 padding-left: 8px;
                 padding-right: 8px;
+                padding-bottom: 20px;
             }
             img {
                 display: inline;
@@ -430,7 +431,6 @@
             }, 900);
         </script>
         <script src="./script.js"></script>
-    </body>
     <footer>
         <div>
             <div class="version" id="version"></div>
@@ -450,6 +450,7 @@
                 alt="CC BY-NC-SA"
                 src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png"
                 width="88"
+                loading="lazy"
                 height="31" />
         </a>
         <div class="cc-txt" id="copyrightLuciaDB">
@@ -473,5 +474,13 @@
             </a>
             で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。
         </div>
+        <hr>
+        <div id="divOSS">
+            このサイトは以下のオープンソースソフトウェアを利用して構築されています。
+            <div>
+                <a href="https://github.com/Andy-set-studio/modern-css-reset">A modern CSS reset</a> - <a href="https://github.com/Andy-set-studio/modern-css-reset/blob/master/LICENSE">MIT ライセンス</a>
+            </div>
+        </div>
     </footer>
+</body>
 </html>
