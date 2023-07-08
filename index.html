@@ -7,16 +7,13 @@
             name="description"
             content="アサルトリリィのキャラクターの誕生日をエクスポートできるツール。" />
         <title>LiliesNote</title>
-        <link rel="preconnect" href="https://luciadb.assaultlily.com">
+        <link rel="dns-prefetch" href="//luciadb.assaultlily.com/sparql/query">
+        <link rel="preload" href="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" as="image">
+        <link rel="preload" href="./language.json" as="fetch" crossorigin>
         <script src="./script.js" defer></script>
         <style>
             *,*::before,*::after{box-sizing:border-box;}body,h1,h2,h3,p{margin: 0;}ul[role="list"]{list-style:none;}html:focus-within{scroll-behavior:smooth;}body{min-height:100vh;text-rendering:optimizeSpeed;line-height:1.5;}a:not([class]){text-decoration-skip-ink:auto;}input,button,select{font:inherit;}@media(prefers-reduced-motion:reduce){html:focus-within{scroll-behavior:auto;}*,*::before,*::after{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important;scroll-behavior:auto!important;}}
         </style>
-        <link
-            rel="stylesheet"
-            media="print"
-            onload="this.media='all'"
-            href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@40,400,0,0" />
         <style>
             h1 {
                 font-size: 36px;
@@ -206,7 +203,7 @@
                 font-family: monospace;
             }
             .span-done {
-                color: green;
+                fill: green;
                 opacity: 0;
             }
             hr {
@@ -264,8 +261,8 @@
                 <div class="div-fit">
                     <h3 id="h3DataDownload">1. データダウンロード</h3>
                     <button id="btnDownload" class="download">
-                        <span class="material-symbols-rounded"></span>
-                        ダウンロード
+                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 -960 960 960"><path d="M480-337q-8 0-15-2t-13-9L308-492q-11-11-11-28t11-28q11-11 29-11t28 10l75 75v-286q0-17 12-28t28-12q17 0 29 12t11 28v286l75-75q11-11 29-10t28 11q11 11 11 28t-11 28L508-348q-6 6-13 9t-15 2ZM240-160q-33 0-56-23t-24-57v-80q0-17 12-28t28-12q17 0 29 12t11 28v80h480v-80q0-17 12-28t28-12q17 0 29 12t11 28v80q0 33-23 57t-57 23H240Z"/></svg>
+                        <span id="labelDownload">ダウンロード</span>
                     </button>
                 </div>
                 <div class="div-fit">
@@ -292,8 +289,8 @@
                     </label>
                 </div>
                 <button class="download" id="btnExport">
-                    <span class="material-symbols-rounded"></span>
-                    エクスポート
+                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 -960 960 960"><path d="M744-96H612q-15 0-26-10-10-11-10-26t10-25q11-11 26-11h132v-360H216v180q0 15-10 26-11 10-26 10t-25-10q-11-11-11-26v-348q0-29 21-50t51-22h72v-60q0-15 10-26 11-10 26-10t26 10q10 11 10 26v60h240v-60q0-15 10-26 11-10 26-10t26 10q10 11 10 26v60h72q29 0 51 22t21 50v528q0 29-21 51t-51 21Zm-376-60H132q-15 0-26-10-10-11-10-26t10-25q11-11 26-11h236l-31-32q-11-11-11-25t11-25q11-11 26-11t25 11l91 93q11 11 11 25t-11 25l-91 93q-11 11-25 11t-26-11q-11-11-11-25t11-25l31-32ZM216-600h528v-96H216v96Zm0 0v-96 96Z"/></svg>
+                    <span id="labelExport">エクスポート</span>
                 </button>
                 <p id="result"></p>
             </div>
@@ -404,21 +401,15 @@
                 <h3 id="h3TextOutput">生データ</h3>
             </label>
             <button id="btnCopy">
-                <span class="material-symbols-rounded">content_copy</span>
-                コピー
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 -960 960 960"><path d="M216-96q-30 0-51-21t-21-51v-516q0-15 10-26 11-10 26-10t26 10q10 11 10 26v516h420q15 0 26 10 10 11 10 26t-10 26q-11 10-26 10H216Zm144-144q-30 0-51-21t-21-51v-480q0-30 21-51t51-21h384q30 0 51 21t21 51v480q0 30-21 51t-51 21H360Zm0-72h384v-480H360v480Zm0 0v-480 480Z"/></svg>
+                <span id="labelCopy"></span>
             </button>
-            <span id="spanDone" class="material-symbols-rounded span-done">
-                done
-            </span>
+            <svg id="spanDone" class="span-done" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 -960 960 960"><path d="M383-257q-8 0-15-3t-15-10L184-439q-12-12-11-30t12-31q12-12 30-12t30 12l140 140 331-331q12-12 30-12t29 12q12 12 12 30t-12 29L413-270q-7 7-14 10t-16 3Z"/></svg>
             <div name="output" id="output">
                 <div id="textOutput"></div>
             </div>
         </div>
         <div id="pAnotherVersion" class="another-version">
-            <span>
-                English version of this page is available
-                <a href="./index.html?lang=en">here</a>
-            </span>
         </div>
         <script>
             loadTitle = document.getElementById("loadTitle");
@@ -451,36 +442,36 @@
                 alt="CC BY-NC-SA"
                 src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png"
                 width="88"
-                loading="lazy"
                 height="31" />
         </a>
-        <div class="cc-txt" id="copyrightLuciaDB">
-            本サイトで利用しているデータは
-            <a href="https://github.com/Assault-Lily/LuciaDB" target="_blank">
-                LuciaDB
-            </a>
-            によって
+        <div class="cc-txt">
+            <span id="ccLuciaDB1">本サイトで利用しているデータは</span>
+            <a href="https://github.com/Assault-Lily/LuciaDB" target="_blank">LuciaDB</a>
+            <span id="ccLuciaDB2">によって</span>
             <a
+                id="linkCC"
                 href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja"
                 target="_blank">
-                クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際
-                ライセンス
+                クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス
             </a>
-            で提供されています。
+            <span id="ccLuciaDB3">で提供されています。</span>
         </div>
-        <div class="cc-txt" id="copyrightLiliesNote">
-            LiliesNoteのスクリプト部分は
-            <a href="https://opensource.org/licenses/MIT" target="_blank">
+        <div class="cc-txt">
+            <span id="ccLiliesNote1">LiliesNoteのスクリプト部分は</span>
+            <a id="linkMIT" href="https://opensource.org/licenses/MIT" target="_blank">
                 MIT ライセンス
             </a>
-            で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。
+            <span id="ccLiliesNote2">で利用できますが、本サイトを使用してLuciaDBのデータを用いて生成されたデータには、上記LuciaDBのライセンスが適用されます。</span>
         </div>
         <hr>
-        <div id="divOSS">
-            このサイトは以下のオープンソースソフトウェアを利用して構築されています。
+        <div>
+            <span id="spanOSS">このサイトは以下のオープンソースソフトウェアを利用して構築されています。</span>
             <div>
-                <a href="https://github.com/Andy-set-studio/modern-css-reset">A modern CSS reset</a> - <a href="https://github.com/Andy-set-studio/modern-css-reset/blob/master/LICENSE">MIT ライセンス</a>
+                <a href="https://github.com/Andy-set-studio/modern-css-reset">A modern CSS reset</a> - <a href="https://github.com/Andy-set-studio/modern-css-reset/blob/master/LICENSE">MIT License</a>
             </div>
+            <span id="spanFont1">また、アイコンとして</span>
+            <span><a href="https://fonts.google.com/icons">Material Symbols</a> - ©Google</span>
+            <span id="spanFont2">を使用しています。</span>
         </div>
     </footer>
 </body>

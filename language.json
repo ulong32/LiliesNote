@@ -7,9 +7,9 @@
         "ja": "1. データダウンロード",
         "en": "1. Download data"
     },
-    "btnDownload": {
-        "ja": "<span class='material-symbols-rounded'>download</span>ダウンロード",
-        "en": "<span class='material-symbols-rounded'>download</span>Download"
+    "labelDownload": {
+        "ja": "ダウンロード",
+        "en": "Download"
     },
     "h3Filter": {
         "ja": "2. フィルタ",
@@ -31,9 +31,9 @@
         "ja": "厳格モード<span>iCalendar規約に厳格に準拠します。<ul><li>古いカレンダーアプリを使用している場合</li><li>通常の出力ファイルが機能しなかった場合</li></ul>にこちらのモードを適用してください。</span>",
         "en": "Strict mode <span>Strictly follows the iCalendar's rules. <ul><li>Using old calendar app</li> <li>Failed to import the file</li></ul>If you fit these, apply this mode.</span>"
     },
-    "btnExport": {
-        "ja": "<span class='material-symbols-rounded'>event_upcoming</span>エクスポート",
-        "en": "<span class='material-symbols-rounded'>event_upcoming</span>Export"
+    "labelExport": {
+        "ja": "エクスポート",
+        "en": "Export"
     },
     "pResult": {
         "ja": "出力内容",
@@ -91,28 +91,56 @@
         "ja": "生データ",
         "en": "Raw Data"
     },
-    "btnCopy": {
-        "ja": "<span class='material-symbols-rounded'>content_copy</span>コピー",
-        "en": "<span class='material-symbols-rounded'>content_copy</span>Copy"
+    "labelCopy": {
+        "ja": "コピー",
+        "en": "Copy"
     },
     "repo": {
         "ja": "GitHubリポジトリ",
         "en": "GitHub repository"
     },
-    "copyrightLuciaDB": {
-        "ja": "本サイトで利用しているデータは<wbr><a href='https://github.com/Assault-Lily/LuciaDB' target='_blank'>LuciaDB</a>によって<a href='https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja' target='_blank'>クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス</a><wbr>で提供されています。",
-        "en": "the data used in this website is from <a href='https://github.com/Assault-Lily/LuciaDB' target='_blank'>LuciaDB</a>, licensed under <a href='https://creativecommons.org/licenses/by-nc-sa/4.0/deed.en' target='_blank'>Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license</a>."
+    "ccLuciaDB1": {
+        "ja": "本サイトで利用しているデータは <wbr>",
+        "en": "Data used in this website is from"
     },
-    "copyrightLiliesNote": {
-        "ja": "LiliesNoteのスクリプト部分は<wbr><a href='https://opensource.org/licenses/MIT' target='_blank'>MIT ライセンス</a><wbr>で利用できますが、<wbr>本サイトを使用して<br>LuciaDBのデータを用いて<wbr>生成されたデータには、<wbr>上記LuciaDBのライセンスが<wbr>適用されます。",
-        "en": "Script part of LiliesNote is available under the <a href='https://opensource.org/licenses/MIT' target='_blank'>MIT License</a> But data generated in this site using LuciaDB is subject to the LuciaDB's license above."
+    "ccLuciaDB2": {
+        "ja": "によって",
+        "en": ","
+    },
+    "linkCC": {
+        "ja": "クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス",
+        "en": "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International license"
+    },
+    "ccLuciaDB3": {
+        "ja": "で提供されています。",
+        "en": "."
+    },
+    "ccLiliesNote1": {
+        "ja": "LiliesNoteのスクリプト部分は",
+        "en": "Script part of LiliesNote is available under the "
+    },
+    "linkMIT": {
+        "ja": "MIT ライセンス",
+        "en": "MIT license"
+    },
+    "ccLiliesNote2": {
+        "ja": "で利用できますが、<wbr>LuciaDBのデータを用いて<wbr>生成されたカレンダーデータには、<wbr>上記LuciaDBのライセンスが<wbr>適用されます。",
+        "en": ", But data generated in this site using LuciaDB is subject to the LuciaDB's license above."
     },
     "pAnotherVersion": {
-        "ja": "<span><a href='./index.html?lang=en'>English version</a> of this page is available.</span>",
-        "en": "<span>このページには<a href='./index.html?lang=ja'>日本語版</a>があります。</span>"
+        "ja": "<a href='./index.html?lang=en'>English version</a> of this page is available.",
+        "en": "このページには<a href='./index.html?lang=ja'>日本語版</a>があります。"
     },
-    "divOSS": {
-        "ja": "このサイトは以下のオープンソースソフトウェアを利用して構築されています。<div><a href='https://github.com/Andy-set-studio/modern-css-reset'>A modern CSS reset</a> - <a href='https://github.com/Andy-set-studio/modern-css-reset/blob/master/LICENSE'>MIT ライセンス</a></div>",
-        "en": "This site is built by using these open-source software.<div><a href='https://github.com/Andy-set-studio/modern-css-reset'>A modern CSS reset</a> - <a href='https://github.com/Andy-set-studio/modern-css-reset/blob/master/LICENSE'>MIT license</a></div>"
+    "spanOSS": {
+        "ja": "このサイトは以下のオープンソースソフトウェアを利用して構築されています。",
+        "en": "This site is built by using these open-source software."
+    },
+    "spanFont1": {
+        "ja": "また、アイコンとして",
+        "en": "And using "
+    },
+    "spanFont2": {
+        "ja": "を使用しています。",
+        "en": "as icons."
     }
 }
