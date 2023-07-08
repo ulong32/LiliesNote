@@ -1,7 +1,5 @@
 const version = "v4.3.0 Suzume";
 
-const sparqlEndpoint = "https://luciadb.assaultlily.com/sparql/query";
-
 const icsHeader = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//LuciaDB/ulong32//NONSGML LiliesNote ${version}//JA
@@ -105,26 +103,27 @@ WHERE {
     OPTIONAL{?lily lily:garden ?garden.}
 }
 ORDER BY ?birthdate`;
-    xhr.open("POST", sparqlEndpoint);
+    xhr.open("POST", "https://luciadb.assaultlily.com/sparql/query");
     xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
     xhr.setRequestHeader("Accept", "application/json");
-    startTime = Date.now();
+    startTime = performance.now();
 
     xhr.onload = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                let endTime = Date.now();
-                resultArea.innerText = `${messageQueryLoaded[lang]}(${endTime - startTime}ms)`;
-                console.log(`Download: ${endTime - startTime}ms`);
+                resultArea.innerText = `${messageQueryLoaded[lang]}(${performance.now() - startTime}ms)`;
+                console.log(`Download: ${performance.now() - startTime}ms`);
                 if (!JSON.parse(xhr.responseText)) {
                     resultArea.innerText = messageQueryEmpty[lang];
                 }
                 lilyData = JSON.parse(xhr.responseText)["results"]["bindings"];
                 isFirstGetLilyData = false;
                 buildGardenFilter();
+                xhr.abort();
                 return lilyData;
             } else {
                 resultArea.innerText = `${messageQueryError[lang]}${xhr.statusText})`;
+                xhr.abort();
             }
         }
     }
@@ -198,7 +197,7 @@ function buildGardenFilter() {
 
 
 
-window.addEventListener("load", () => {
+window.addEventListener("DOMContentLoaded", () => {
     divLoadingBar = document.getElementById("loadBar");
     divLoadingTxt = document.getElementById("loadText");
     divLoadingBar.animate({
@@ -291,7 +290,6 @@ function filter(lilyListData) {
                 includeGardens.push(garden.name);
             }
         });
-        console.log(includeGardens);
         for (let j = 0; j < lilyListData.length; j++) {
             if ("garden" in lilyListData[j]) {
                 if (includeGardens.includes(lilyListData[j]["garden"]["value"]) === true) {
@@ -313,8 +311,7 @@ function build() {
         alert(messageDownloadError[lang]);
         return -1;
     }
-    console.log("Build start");
-    let buildStart = Date.now();
+    let buildStart = performance.now();
     let birthName = "";
     let birthYear = 0;
     let birthMonth = 0;
@@ -332,11 +329,7 @@ function build() {
     const year = date.getFullYear();
     let hour = date.getHours();
     let minute = date.getMinutes();
-
-    let LemonadeURL = "";
-
     let nextDate = [0, 0, 0];
-    //月末データ、視認性向上のため先頭は意味ないデータ
     let monthEnd = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let i = 0;
     let tableCell;
@@ -349,43 +342,42 @@ function build() {
 
     let resData = filter(getLilyData());
 
+    let dataRow;
     for (i = 0; i < resData.length; i++) {
-
+        dataRow = resData[i];
         birthYear = year;
         // 名前、誕生月、誕生日
-        birthName = resData[i]["name"]["value"];
-        birthMonth = Number(resData[i]["birthdate"]["value"].substring(2, 4));
-        birthDay = Number(resData[i]["birthdate"]["value"].substring(5));
-        charaType = resData[i]["type"]["value"].replace("https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#", "");
+        birthName = dataRow["name"]["value"];
+        birthMonth = Number(dataRow["birthdate"]["value"].substring(2, 4));
+        birthDay = Number(dataRow["birthdate"]["value"].substring(5));
+        charaType = dataRow["type"]["value"].replace("https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#", "");
         //ガーデン名
-        if ("garden" in resData[i]) {
-            garden = resData[i]["garden"]["value"];
+        if ("garden" in dataRow) {
+            garden = dataRow["garden"]["value"];
         } else {
             garden = "";
         }
         //所属レギオン
-        if ("lgname" in resData[i]) {
-            legion = resData[i]["lgname"]["value"];
+        if ("lgname" in dataRow) {
+            legion = dataRow["lgname"]["value"];
         } else {
             legion = "";
         }
 
-
-
         //プレビューの中身を入れる
-        let tableRow = document.getElementById("tb" + resData[i]["birthdate"]["value"].substring(2, 4));
+        let tableRow = document.getElementById("tb" + dataRow["birthdate"]["value"].substring(2, 4));
         tableCell = document.createElement("tr");
         let tdDay = document.createElement("td");
         if (lang === "ja") {
-            tdDay.innerText = `${Number(resData[i]["birthdate"]["value"].substring(5, 7)).toString()}日`;
+            tdDay.innerText = `${Number(dataRow["birthdate"]["value"].substring(5, 7)).toString()}日`;
         } else if (lang === "en") {
-            tdDay.innerText = `${convert2Ordinal(Number(resData[i]["birthdate"]["value"].substring(5, 7)))}`;
+            tdDay.innerText = `${convert2Ordinal(Number(dataRow["birthdate"]["value"].substring(5, 7)))}`;
         }
         if(resData[i]["birthdate"]["value"] === dateToday) {
             tableCell.classList.add("bdtoday");
         }
         let tdName = document.createElement("td");
-        tdName.innerText = resData[i]["name"]["value"];
+        tdName.innerText = dataRow["name"]["value"];
         tableCell.appendChild(tdDay);
         tableCell.appendChild(tdName);
         tableRow.appendChild(tableCell);
@@ -394,7 +386,6 @@ function build() {
         if (birthMonth < month || (birthMonth == month && birthDay <= day)) {
             birthYear += 1;
         }
-
         //翌日の日付が月をまたぐ場合
         if (birthDay == monthEnd[birthMonth]) {
             //年越し
@@ -419,7 +410,6 @@ function build() {
             } else {
                 description = `${birthName}の誕生日です。`;
             }
-
         } else {
             summary = birthName + "'s birthday";
             if (charaType == "Teacher" && garden) {
@@ -431,23 +421,22 @@ function build() {
             }
         }
 
-        LemonadeURL = resData[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "https://lemonade.assaultlily.com/lily/");
         icsData += `
 BEGIN:VEVENT
-DTSTART;VALUE=DATE:${birthYear.toString()}${formatDate(birthMonth, birthDay)}
-DTEND;VALUE=DATE:${nextDate[0].toString()}${formatDate(nextDate[1], nextDate[2])}
-DTSTAMP:${birthYear.toString()}${formatDate(month, day)}T${formatDate(hour, minute)}00
+DTSTART;VALUE=DATE:${birthYear}${formatDate(birthMonth, birthDay)}
+DTEND;VALUE=DATE:${nextDate[0]}${formatDate(nextDate[1], nextDate[2])}
+DTSTAMP:${birthYear}${formatDate(month, day)}T${formatDate(hour, minute)}00
 RRULE:FREQ=YEARLY
 TRANSP:TRANSPARENT
 SUMMARY:${summary}
 DESCRIPTION:${description}
-URL;VALUE=URI:${LemonadeURL}`;
+URL;VALUE=URI:${dataRow["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "https://lemonade.assaultlily.com/lily/")}`;
+
         if (document.getElementById("chkExact").checked) {
-            icsData += `\nUID:${resData[i]["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "")}@LiliesNote.ulong32.github.io`;
+            icsData += `\nUID:${dataRow["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "")}@LiliesNote.ulong32.github.io`;
         }
         icsData += "\nEND:VEVENT";
     }
-
     icsData += "\nEND:VCALENDAR";
 
     //厳格モード
@@ -470,8 +459,6 @@ URL;VALUE=URI:${LemonadeURL}`;
             if ((icsRow[j].startsWith("URL") || icsRow[j].startsWith("UID")) && icsRow[j].length > 74) {
                 icsRow[j] = icsRow[j].match(/.{1,73}/g).join("\n ");
             }
-
-
             // 概要、説明、ライセンスコメントの規約遵守処理
             if ((icsRow[j].startsWith("SUMMARY") || icsRow[j].startsWith("DESCRIPTION") || icsRow[j].startsWith("X-LICENSE-COMMENT")) && icsRow[j].length > wordLimit) {
                 console.log(icsRow[j]);
@@ -481,9 +468,8 @@ URL;VALUE=URI:${LemonadeURL}`;
         icsData = icsRow.join("\n");
     }
 
-    console.log(`Build iCal Data: ${Date.now() - buildStart}ms`);
-    let outArea = document.getElementById("textOutput");
-    outArea.innerText = icsData;
+    console.log(`Build iCal Data: ${performance.now() - buildStart}ms`);
+    document.getElementById("textOutput").innerText = icsData;
     if (lang == "ja") {
         document.getElementById("result").innerHTML = `${i}人のリリィの誕生日を<wbr>エクスポートしました。`;
     } else {
@@ -493,7 +479,6 @@ URL;VALUE=URI:${LemonadeURL}`;
     if (document.getElementById("chkPreview").checked === false) {
         const blob = new Blob([icsData], { "type": "text/calendar" });
         const url = URL.createObjectURL(blob);
-
         const anchor = document.createElement("a");
         anchor.setAttribute("href", url);
         anchor.setAttribute("download", 'LiliesBirthday.ics');
@@ -504,5 +489,4 @@ URL;VALUE=URI:${LemonadeURL}`;
         });
         anchor.dispatchEvent(mouseEvent);
     }
-
 }
