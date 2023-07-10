@@ -1,4 +1,4 @@
-const version = "v4.3.0 Suzume";
+const version = "v5.0.0 Matsuri";
 
 const icsHeader = `BEGIN:VCALENDAR
 VERSION:2.0
