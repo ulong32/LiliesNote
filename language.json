@@ -3,21 +3,13 @@
         "ja": "設定",
         "en": "Settings"
     },
-    "h3DataDownload": {
-        "ja": "1. データダウンロード",
-        "en": "1. Download data"
-    },
-    "labelDownload": {
-        "ja": "ダウンロード",
-        "en": "Download"
-    },
     "h3Filter": {
-        "ja": "2. フィルタ",
-        "en": "2. Filter"
+        "ja": "1. フィルタ",
+        "en": "1. Filter"
     },
     "h3ExportPref": {
-        "ja": "3. エクスポート設定",
-        "en": "3. Export Preferences"
+        "ja": "2. エクスポート設定",
+        "en": "2. Export Preferences"
     },
     "labelGardenFilter": {
         "ja": "所属ガーデンでフィルタ",

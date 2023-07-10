@@ -17,8 +17,8 @@ const license = {
 };
 
 const messageQueryLoaded = {
-    "ja": "問い合わせ完了。",
-    "en": "Query loaded."
+    "ja": "データロード完了。",
+    "en": "Data loaded."
 };
 
 const messageQueryEmpty = {
@@ -30,12 +30,6 @@ const messageQueryError = {
     "ja": "問い合わせ失敗。(エラー:",
     "en": "Query failed. (Error:"
 };
-
-const messageDownloadError = {
-    "ja": "先にデータをダウンロードしてください。",
-    "en": "Please download data first."
-};
-
 
 function formatDate(...args) {
     let str = "";
@@ -69,6 +63,7 @@ function applyTranslates(lang) {
             keys.forEach(key => {
                 document.getElementById(key).innerHTML = json[key][lang];
             });
+            xhr.abort();
         }
     };
     xhr.send();
@@ -78,10 +73,9 @@ let isFirstGetLilyData = true;
 
 let lilyData;
 
-function getLilyData(isForceUpdate = false) {
-    //初回ダウンロード/強制同期時以外はキャッシュしたデータを返す
-    if (isFirstGetLilyData === false && isForceUpdate === false) return lilyData;
+function getLilyData() {
 
+    if(isFirstGetLilyData === false) return lilyData;
     const xhr = new XMLHttpRequest();
     let resultArea = document.getElementById("result");
     let startTime;
@@ -120,6 +114,13 @@ ORDER BY ?birthdate`;
                 isFirstGetLilyData = false;
                 buildGardenFilter();
                 xhr.abort();
+                document.getElementById("loadBar").animate({
+                    width: ["90%", "100%"]
+                }, {
+                    duration: 200,
+                    fill: "both"
+                });
+                document.getElementById("loading").classList.add("loaded");
                 return lilyData;
             } else {
                 resultArea.innerText = `${messageQueryError[lang]}${xhr.statusText})`;
@@ -132,13 +133,6 @@ ORDER BY ?birthdate`;
 
 function buildGardenFilter() {
     //ガーデンフィルタの生成
-
-    //データダウンロード済みでない場合
-    if (isFirstGetLilyData === true) {
-        alert(messageDownloadError[lang]);
-        document.getElementById("chkGardenFilter").checked = false;
-        return -1;
-    }
     let gardenList = [];
     let option, label;
     let chkNoGarden, labelNoGarden;
@@ -146,7 +140,7 @@ function buildGardenFilter() {
     while (divGardenFilter.firstChild) {
         divGardenFilter.removeChild(divGardenFilter.firstChild);
     }
-    gardenList = getLilyData(false);
+    gardenList = getLilyData();
     let garden;
     numGardens = [];
     for (let i = 0; i < gardenList.length; i++) {
@@ -198,14 +192,16 @@ function buildGardenFilter() {
 
 
 window.addEventListener("DOMContentLoaded", () => {
-    divLoadingBar = document.getElementById("loadBar");
-    divLoadingTxt = document.getElementById("loadText");
+    const divLoadingBar = document.getElementById("loadBar");
     divLoadingBar.animate({
         width: ["10%", "90%"]
     }, {
         duration: 200,
         fill: "both"
     });
+    getLilyData();
+    //多言語対応
+    applyTranslates(lang);
     document.getElementById("version").innerText = `LiliesNote ${version}`;
     //言語設定を取得
     const searchParams = new URLSearchParams(window.location.search);
@@ -221,33 +217,15 @@ window.addEventListener("DOMContentLoaded", () => {
     }
     chkGardenFilter.addEventListener("change", function () {
         if (this.checked) {
-            if (isFirstGetLilyData) {
-                alert(messageDownloadError[lang]);
-                this.checked = false;
-                return -1;
-            }
             divGardenFilter.style.display = "block";
         } else {
             divGardenFilter.style.display = "none";
         }
     })
-    //多言語対応
-    applyTranslates(lang);
 
-    divLoadingBar.animate({
-        width: ["90%", "100%"]
-    }, {
-        duration: 200,
-        fill: "both"
-    });
-    document.getElementById("loading").classList.add("loaded");
+    
 })
 
-document.getElementById("btnDownload").addEventListener("click", function () {
-    this.disabled = true;
-    getLilyData(true);
-    this.disabled = false;
-})
 
 document.getElementById("btnExport").addEventListener("click", function () {
     this.disabled = true;
@@ -307,10 +285,6 @@ function filter(lilyListData) {
 
 
 function build() {
-    if (isFirstGetLilyData === true) {
-        alert(messageDownloadError[lang]);
-        return -1;
-    }
     let buildStart = performance.now();
     let birthName = "";
     let birthYear = 0;
