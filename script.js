@@ -11,6 +11,9 @@ let numGardens = {};
 
 let lang = "ja";
 
+const chkGardenFilter = document.getElementById("chkGardenFilter");
+const divGardenFilter = document.getElementById("divGardenFilter");
+
 const license = {
     "ja": "このデータはLuciaDBから取得しています。ライセンスはCC BY-NC-SA 4.0です。",
     "en": "This data is sourced from LuciaDB, licensed under CC BY-NC-SA 4.0.",
@@ -58,7 +61,6 @@ function applyTranslates(lang) {
     xhr.open("GET", "./language.json");
     xhr.onload = function () {
         if (xhr.status == 200) {
-            console.log("com")
             const json = JSON.parse(xhr.responseText);
             const keys = Object.keys(json);
             keys.forEach(key => {
@@ -75,7 +77,6 @@ let isFirstGetLilyData = true;
 let lilyData;
 
 function getLilyData() {
-
     if(isFirstGetLilyData === false) return lilyData;
     const xhr = new XMLHttpRequest();
     let resultArea = document.getElementById("result");
@@ -97,10 +98,8 @@ WHERE {
     }
     OPTIONAL{?lily lily:garden ?garden.}
 }
-ORDER BY ?birthdate`.replace(/ +/g," ");
+ORDER BY ?birthdate`.replace(/\n +/g,"");
     xhr.open("GET", "https://luciadb.assaultlily.com/sparql/query?format=json&query=" + encodeURIComponent(query));
-    startTime = performance.now();
-
     xhr.onload = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
@@ -127,6 +126,7 @@ ORDER BY ?birthdate`.replace(/ +/g," ");
             }
         }
     }
+    startTime = performance.now();
     xhr.send(query);
 }
 
@@ -135,7 +135,6 @@ function buildGardenFilter() {
     let gardenList = [];
     let option, label;
     let chkNoGarden, labelNoGarden;
-    const divGardenFilter = document.getElementById("divGardenFilter");
     while (divGardenFilter.firstChild) {
         divGardenFilter.removeChild(divGardenFilter.firstChild);
     }
@@ -198,19 +197,15 @@ window.addEventListener("DOMContentLoaded", () => {
         duration: 200,
         fill: "both"
     });
-    getLilyData();
-    //多言語対応
-    applyTranslates(lang);
-    document.getElementById("version").innerText = `LiliesNote ${version}`;
-    //言語設定を取得
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has("lang")) {
         lang = searchParams.get("lang");
     }
+    document.getElementById("version").innerText = `LiliesNote ${version}`;
+
+    getLilyData();
     //多言語対応
     applyTranslates(lang);
-    const chkGardenFilter = document.getElementById("chkGardenFilter");
-    const divGardenFilter = document.getElementById("divGardenFilter");
     if (chkGardenFilter.checked) {
         divGardenFilter.style.display = "block";
     } else {
@@ -223,10 +218,15 @@ window.addEventListener("DOMContentLoaded", () => {
             divGardenFilter.style.display = "none";
         }
     })
-
-    
 })
 
+chkGardenFilter.addEventListener("change", function () {
+    if (this.checked) {
+        divGardenFilter.style.display = "block";
+    } else {
+        divGardenFilter.style.display = "none";
+    }
+})
 
 document.getElementById("btnExport").addEventListener("click", function () {
     this.disabled = true;
@@ -239,7 +239,7 @@ document.getElementById("btnCopy").addEventListener("click", function () {
     setTimeout(async () =>
         await navigator.clipboard.writeText(document.getElementById("textOutput").innerText)
     );
-    spanDone = document.getElementById("spanDone");
+    const spanDone = document.getElementById("spanDone");
     spanDone.animate({
         "opacity": [0, 1],
         "rotate": ["-90deg", "0deg"]
@@ -260,26 +260,23 @@ document.getElementById("btnCopy").addEventListener("click", function () {
 function filter(lilyListData) {
     //ガーデンフィルタを適用
     let resData = [];
-    if (document.getElementById("chkGardenFilter").checked) {
-        let includeGardens = [];
-        const includeNoGarden = document.getElementById("noGarden").checked;
-        const gardenFilter = Array.from(document.getElementsByClassName("chkGarden"));
-        gardenFilter.forEach(garden => {
-            if (garden.checked) {
-                includeGardens.push(garden.name);
-            }
-        });
-        for (let j = 0; j < lilyListData.length; j++) {
-            if ("garden" in lilyListData[j]) {
-                if (includeGardens.includes(lilyListData[j]["garden"]["value"]) === true) {
-                    resData.push(lilyListData[j]);
-                }
-            } else if (includeNoGarden) {
+    if (document.getElementById("chkGardenFilter").checked === false) return lilyListData;
+    let includeGardens = [];
+    const includeNoGarden = document.getElementById("noGarden").checked;
+    const gardenFilter = Array.from(document.getElementsByClassName("chkGarden"));
+    gardenFilter.forEach(garden => {
+        if (garden.checked) {
+            includeGardens.push(garden.name);
+        }
+    });
+    for (let j = 0; j < lilyListData.length; j++) {
+        if ("garden" in lilyListData[j]) {
+            if (includeGardens.includes(lilyListData[j]["garden"]["value"]) === true) {
                 resData.push(lilyListData[j]);
             }
+        } else if (includeNoGarden) {
+            resData.push(lilyListData[j]);
         }
-    } else {
-        resData = lilyListData;
     }
     return resData;
 }
@@ -305,7 +302,7 @@ function build() {
     let hour = date.getHours();
     let minute = date.getMinutes();
     let nextDate = [0, 0, 0];
-    let monthEnd = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const monthEnd = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let i = 0;
     let tableCell;
     const dateToday = `--${formatDate(month)}-${formatDate(day)}`;
@@ -408,7 +405,7 @@ DESCRIPTION:${description}
 URL;VALUE=URI:${dataRow["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "https://lemonade.assaultlily.com/lily/")}`;
 
         if (document.getElementById("chkExact").checked) {
-            icsData += `\nUID:${dataRow["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "")}@LiliesNote.ulong32.github.io`;
+            icsData += `\nUID:${dataRow["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "")}@LiliesNote.ulong32.net`;
         }
         icsData += "\nEND:VEVENT";
     }
@@ -435,9 +432,8 @@ URL;VALUE=URI:${dataRow["lily"]["value"].replace("https://luciadb.assaultlily.co
                 icsRow[j] = icsRow[j].match(/.{1,73}/g).join("\n ");
             }
             // 概要、説明、ライセンスコメントの規約遵守処理
-            if ((icsRow[j].startsWith("SUMMARY") || icsRow[j].startsWith("DESCRIPTION") || icsRow[j].startsWith("X-LICENSE-COMMENT")) && icsRow[j].length > wordLimit) {
-                console.log(icsRow[j]);
-                icsRow[j] = icsRow[j].match(regEx).join("\n ");
+            if (icsRow[j].startsWith("SUMMARY") || icsRow[j].startsWith("DESCRIPTION") || icsRow[j].startsWith("X-LICENSE-COMMENT")) {
+                if(icsRow[j].length <=  wordLimit) icsRow[j] = icsRow[j].match(regEx).join("\n ");
             }
         }
         icsData = icsRow.join("\n");
