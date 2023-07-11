@@ -58,6 +58,7 @@ function applyTranslates(lang) {
     xhr.open("GET", "./language.json");
     xhr.onload = function () {
         if (xhr.status == 200) {
+            console.log("com")
             const json = JSON.parse(xhr.responseText);
             const keys = Object.keys(json);
             keys.forEach(key => {
@@ -206,6 +207,8 @@ window.addEventListener("DOMContentLoaded", () => {
     if (searchParams.has("lang")) {
         lang = searchParams.get("lang");
     }
+    //多言語対応
+    applyTranslates(lang);
     const chkGardenFilter = document.getElementById("chkGardenFilter");
     const divGardenFilter = document.getElementById("divGardenFilter");
     if (chkGardenFilter.checked) {
