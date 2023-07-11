@@ -96,16 +96,14 @@ WHERE {
     }
     OPTIONAL{?lily lily:garden ?garden.}
 }
-ORDER BY ?birthdate`;
-    xhr.open("POST", "https://luciadb.assaultlily.com/sparql/query");
-    xhr.setRequestHeader("Content-Type", "application/sparql-query;charset=UTF-8");
-    xhr.setRequestHeader("Accept", "application/json");
+ORDER BY ?birthdate`.replace(/ +/g," ");
+    xhr.open("GET", "https://luciadb.assaultlily.com/sparql/query?format=json&query=" + encodeURIComponent(query));
     startTime = performance.now();
 
     xhr.onload = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                resultArea.innerText = `${messageQueryLoaded[lang]}(${performance.now() - startTime}ms)`;
+                resultArea.innerText = `${messageQueryLoaded[lang]}(${Math.round(performance.now() - startTime)}ms)`;
                 console.log(`Download: ${performance.now() - startTime}ms`);
                 if (!JSON.parse(xhr.responseText)) {
                     resultArea.innerText = messageQueryEmpty[lang];
