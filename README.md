@@ -16,7 +16,10 @@ LiliesNoteは[MIT ライセンス](https://opensource.org/licenses/MIT)です。
 
 ただし、このライセンスの適用範囲はこのリポジトリの内容に限られ、このツールを使用してダウンロードしたファイルには [クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja)が適用されます。
 
-また、`<link>`や`<script>`タグを通して読み込まれる外部コンテンツに関しては、それぞれの配布元ライセンスが適用されます。
+また、以下のオープンソースソフトウェアを使用しています。
+- [A modern CSS reset](https://github.com/Andy-set-studio/modern-css-reset) - [MIT ライセンス](https://github.com/Andy-set-studio/modern-css-reset/blob/master/LICENSE)
+
+また、アイコンとして[Material Icons](https://fonts.google.com/icons) - ©Google を一部改変して使用しています。
 
 ## How to Use
 
