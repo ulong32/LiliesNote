@@ -11,6 +11,9 @@ let numGardens = {};
 
 let lang = "ja";
 
+const chkGardenFilter = document.getElementById("chkGardenFilter");
+const divGardenFilter = document.getElementById("divGardenFilter");
+
 const license = {
     "ja": "このデータはLuciaDBから取得しています。ライセンスはCC BY-NC-SA 4.0です。",
     "en": "This data is sourced from LuciaDB, licensed under CC BY-NC-SA 4.0.",
@@ -74,7 +77,6 @@ let isFirstGetLilyData = true;
 let lilyData;
 
 function getLilyData() {
-
     if(isFirstGetLilyData === false) return lilyData;
     const xhr = new XMLHttpRequest();
     let resultArea = document.getElementById("result");
@@ -96,10 +98,8 @@ WHERE {
     }
     OPTIONAL{?lily lily:garden ?garden.}
 }
-ORDER BY ?birthdate`.replace(/ +/g," ");
+ORDER BY ?birthdate`.replace(/\n +/g,"");
     xhr.open("GET", "https://luciadb.assaultlily.com/sparql/query?format=json&query=" + encodeURIComponent(query));
-    startTime = performance.now();
-
     xhr.onload = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
@@ -126,6 +126,7 @@ ORDER BY ?birthdate`.replace(/ +/g," ");
             }
         }
     }
+    startTime = performance.now();
     xhr.send(query);
 }
 
@@ -134,7 +135,6 @@ function buildGardenFilter() {
     let gardenList = [];
     let option, label;
     let chkNoGarden, labelNoGarden;
-    const divGardenFilter = document.getElementById("divGardenFilter");
     while (divGardenFilter.firstChild) {
         divGardenFilter.removeChild(divGardenFilter.firstChild);
     }
@@ -142,27 +142,27 @@ function buildGardenFilter() {
     let garden;
     numGardens = [];
     for (let i = 0; i < gardenList.length; i++) {
-        garden = gardenList[i];
-        if ("garden" in garden) {
-            if (garden["garden"]["value"] in numGardens === false) {
+        if ("garden" in gardenList[i]) {
+            garden = gardenList[i].garden.value;
+            if (garden in numGardens === false) {
                 option = document.createElement("input");
 
                 option.setAttribute("type", "checkbox");
-                option.setAttribute("name", garden["garden"]["value"]);
+                option.setAttribute("name", garden);
                 option.setAttribute("class", "chkGarden");
-                option.setAttribute("id", garden["garden"]["value"] + "_checkbox");
+                option.setAttribute("id", garden + "_checkbox");
 
                 label = document.createElement("label");
-                label.setAttribute("for", garden["garden"]["value"] + "_checkbox");
-                label.setAttribute("id", garden["garden"]["value"]);
+                label.setAttribute("for", garden + "_checkbox");
+                label.setAttribute("id", garden);
 
                 divGardenFilter.appendChild(option);
                 divGardenFilter.appendChild(label);
                 divGardenFilter.appendChild(document.createElement("br"));
 
-                numGardens[garden["garden"]["value"]] = 1;
-            } else if ("garden" in garden) {
-                numGardens[garden["garden"]["value"]] += 1;
+                numGardens[garden] = 1;
+            } else {
+                numGardens[garden] += 1;
             }
         }
         let keysExistingGardens = Object.keys(numGardens);
@@ -187,8 +187,6 @@ function buildGardenFilter() {
 }
 
 
-
-
 window.addEventListener("DOMContentLoaded", () => {
     const divLoadingBar = document.getElementById("loadBar");
     divLoadingBar.animate({
@@ -197,17 +195,15 @@ window.addEventListener("DOMContentLoaded", () => {
         duration: 200,
         fill: "both"
     });
-    getLilyData();
-    //多言語対応
-    applyTranslates(lang);
-    document.getElementById("version").innerText = `LiliesNote ${version}`;
-    //言語設定を取得
     const searchParams = new URLSearchParams(window.location.search);
     if (searchParams.has("lang")) {
         lang = searchParams.get("lang");
     }
-    const chkGardenFilter = document.getElementById("chkGardenFilter");
-    const divGardenFilter = document.getElementById("divGardenFilter");
+    document.getElementById("version").innerText = `LiliesNote ${version}`;
+
+    getLilyData();
+    //多言語対応
+    applyTranslates(lang);
     if (chkGardenFilter.checked) {
         divGardenFilter.style.display = "block";
     } else {
@@ -220,10 +216,15 @@ window.addEventListener("DOMContentLoaded", () => {
             divGardenFilter.style.display = "none";
         }
     })
-
-    
 })
 
+chkGardenFilter.addEventListener("change", function () {
+    if (this.checked) {
+        divGardenFilter.style.display = "block";
+    } else {
+        divGardenFilter.style.display = "none";
+    }
+})
 
 document.getElementById("btnExport").addEventListener("click", function () {
     this.disabled = true;
@@ -236,7 +237,7 @@ document.getElementById("btnCopy").addEventListener("click", function () {
     setTimeout(async () =>
         await navigator.clipboard.writeText(document.getElementById("textOutput").innerText)
     );
-    spanDone = document.getElementById("spanDone");
+    const spanDone = document.getElementById("spanDone");
     spanDone.animate({
         "opacity": [0, 1],
         "rotate": ["-90deg", "0deg"]
@@ -257,26 +258,23 @@ document.getElementById("btnCopy").addEventListener("click", function () {
 function filter(lilyListData) {
     //ガーデンフィルタを適用
     let resData = [];
-    if (document.getElementById("chkGardenFilter").checked) {
-        let includeGardens = [];
-        const includeNoGarden = document.getElementById("noGarden").checked;
-        const gardenFilter = Array.from(document.getElementsByClassName("chkGarden"));
-        gardenFilter.forEach(garden => {
-            if (garden.checked) {
-                includeGardens.push(garden.name);
-            }
-        });
-        for (let j = 0; j < lilyListData.length; j++) {
-            if ("garden" in lilyListData[j]) {
-                if (includeGardens.includes(lilyListData[j]["garden"]["value"]) === true) {
-                    resData.push(lilyListData[j]);
-                }
-            } else if (includeNoGarden) {
+    if (document.getElementById("chkGardenFilter").checked === false) return lilyListData;
+    let includeGardens = [];
+    const includeNoGarden = document.getElementById("noGarden").checked;
+    const gardenFilter = Array.from(document.getElementsByClassName("chkGarden"));
+    gardenFilter.forEach(garden => {
+        if (garden.checked) {
+            includeGardens.push(garden.name);
+        }
+    });
+    for (let j = 0; j < lilyListData.length; j++) {
+        if ("garden" in lilyListData[j]) {
+            if (includeGardens.includes(lilyListData[j].garden.value) === true) {
                 resData.push(lilyListData[j]);
             }
+        } else if (includeNoGarden) {
+            resData.push(lilyListData[j]);
         }
-    } else {
-        resData = lilyListData;
     }
     return resData;
 }
@@ -294,6 +292,7 @@ function build() {
     let legion = "";
     let charaType = "";
     let wordLimit = 0;
+    let lilyID = "";
 
     let date = new Date();
     const day = date.getDate();
@@ -302,7 +301,7 @@ function build() {
     let hour = date.getHours();
     let minute = date.getMinutes();
     let nextDate = [0, 0, 0];
-    let monthEnd = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    const monthEnd = [0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     let i = 0;
     let tableCell;
     const dateToday = `--${formatDate(month)}-${formatDate(day)}`;
@@ -319,37 +318,37 @@ function build() {
         dataRow = resData[i];
         birthYear = year;
         // 名前、誕生月、誕生日
-        birthName = dataRow["name"]["value"];
-        birthMonth = Number(dataRow["birthdate"]["value"].substring(2, 4));
-        birthDay = Number(dataRow["birthdate"]["value"].substring(5));
-        charaType = dataRow["type"]["value"].replace("https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#", "");
+        birthName = dataRow.name.value;
+        birthMonth = Number(dataRow.birthdate.value.substring(2, 4));
+        birthDay = Number(dataRow.birthdate.value.substring(5));
+        charaType = dataRow.type.value.replace("https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#", "");
         //ガーデン名
         if ("garden" in dataRow) {
-            garden = dataRow["garden"]["value"];
+            garden = dataRow.garden.value;
         } else {
             garden = "";
         }
         //所属レギオン
         if ("lgname" in dataRow) {
-            legion = dataRow["lgname"]["value"];
+            legion = dataRow.lgname.value;
         } else {
             legion = "";
         }
 
         //プレビューの中身を入れる
-        let tableRow = document.getElementById("tb" + dataRow["birthdate"]["value"].substring(2, 4));
+        let tableRow = document.getElementById("tb" + formatDate(birthMonth));
         tableCell = document.createElement("tr");
         let tdDay = document.createElement("td");
         if (lang === "ja") {
-            tdDay.innerText = `${Number(dataRow["birthdate"]["value"].substring(5, 7)).toString()}日`;
+            tdDay.innerText = `${Number(birthDay).toString()}日`;
         } else if (lang === "en") {
-            tdDay.innerText = `${convert2Ordinal(Number(dataRow["birthdate"]["value"].substring(5, 7)))}`;
+            tdDay.innerText = `${convert2Ordinal(Number(birthDay))}`;
         }
-        if(resData[i]["birthdate"]["value"] === dateToday) {
+        if(resData[i].birthdate.value === dateToday) {
             tableCell.classList.add("bdtoday");
         }
         let tdName = document.createElement("td");
-        tdName.innerText = dataRow["name"]["value"];
+        tdName.innerText = birthName;
         tableCell.appendChild(tdDay);
         tableCell.appendChild(tdName);
         tableRow.appendChild(tableCell);
@@ -393,6 +392,8 @@ function build() {
             }
         }
 
+        lilyID = dataRow.lily.value.replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "");
+
         icsData += `
 BEGIN:VEVENT
 DTSTART;VALUE=DATE:${birthYear}${formatDate(birthMonth, birthDay)}
@@ -402,10 +403,10 @@ RRULE:FREQ=YEARLY
 TRANSP:TRANSPARENT
 SUMMARY:${summary}
 DESCRIPTION:${description}
-URL;VALUE=URI:${dataRow["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "https://lemonade.assaultlily.com/lily/")}`;
+URL;VALUE=URI:${"https://lemonade.assaultlily.com/lily/" + lilyID}`;
 
         if (document.getElementById("chkExact").checked) {
-            icsData += `\nUID:${dataRow["lily"]["value"].replace("https://luciadb.assaultlily.com/rdf/RDFs/detail/", "")}@LiliesNote.ulong32.github.io`;
+            icsData += `\nUID:${lilyID}@LiliesNote.ulong32.net`;
         }
         icsData += "\nEND:VEVENT";
     }
@@ -432,9 +433,8 @@ URL;VALUE=URI:${dataRow["lily"]["value"].replace("https://luciadb.assaultlily.co
                 icsRow[j] = icsRow[j].match(/.{1,73}/g).join("\n ");
             }
             // 概要、説明、ライセンスコメントの規約遵守処理
-            if ((icsRow[j].startsWith("SUMMARY") || icsRow[j].startsWith("DESCRIPTION") || icsRow[j].startsWith("X-LICENSE-COMMENT")) && icsRow[j].length > wordLimit) {
-                console.log(icsRow[j]);
-                icsRow[j] = icsRow[j].match(regEx).join("\n ");
+            if (icsRow[j].startsWith("SUMMARY") || icsRow[j].startsWith("DESCRIPTION") || icsRow[j].startsWith("X-LICENSE-COMMENT")) {
+                if(icsRow[j].length <=  wordLimit) icsRow[j] = icsRow[j].match(regEx).join("\n ");
             }
         }
         icsData = icsRow.join("\n");
