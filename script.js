@@ -34,6 +34,8 @@ const messageQueryError = {
     "en": "Query failed. (Error:"
 };
 
+
+//数値の配列を2桁で0埋めして返す
 function formatDate(...args) {
     let str = "";
     for (let i = 0; i < args.length; i++) {
@@ -42,6 +44,8 @@ function formatDate(...args) {
     return str;
 }
 
+
+//数値を序数に変換
 function convert2Ordinal(number) {
     if (number / 10 === 1) return number.toString() + "th";
     switch (number % 10) {
@@ -56,6 +60,8 @@ function convert2Ordinal(number) {
     }
 }
 
+
+//翻訳文字列を当てはめる
 function applyTranslates(lang) {
     const xhr = new XMLHttpRequest();
     xhr.open("GET", "./language.json");
@@ -76,11 +82,15 @@ let isFirstGetLilyData = true;
 
 let lilyData;
 
+
+//誕生日データを引っ張ってくる
 function getLilyData() {
     if(isFirstGetLilyData === false) return lilyData;
     const xhr = new XMLHttpRequest();
     let resultArea = document.getElementById("result");
     let startTime;
+
+    //クエリ本体
     const query = `PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX lily: <https://luciadb.assaultlily.com/rdf/IRIs/lily_schema.ttl#>
@@ -99,7 +109,10 @@ WHERE {
     OPTIONAL{?lily lily:garden ?garden.}
 }
 ORDER BY ?birthdate`.replace(/\n +/g,"");
+
     xhr.open("GET", "https://luciadb.assaultlily.com/sparql/query?format=json&query=" + encodeURIComponent(query));
+
+
     xhr.onload = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
@@ -130,8 +143,9 @@ ORDER BY ?birthdate`.replace(/\n +/g,"");
     xhr.send(query);
 }
 
+
+//ガーデンフィルタの生成
 function buildGardenFilter() {
-    //ガーデンフィルタの生成
     let gardenList = [];
     let option, label;
     let chkNoGarden, labelNoGarden;
