@@ -1,6 +1,6 @@
 # LiliesNote
 [![CodeQL](https://github.com/ulong32/LiliesNote/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/ulong32/LiliesNote/actions/workflows/github-code-scanning/codeql)
-[![Deploy static content to Pages](https://github.com/ulong32/LiliesNote/actions/workflows/static.yml/badge.svg)](https://github.com/ulong32/LiliesNote/actions/workflows/static.yml)
+[![Deploy static content to Pages](https://github.com/ulong32/LiliesNote/actions/workflows/static.yml/badge.svg)](https://github.com/ulong32/LiliesNote/actions/workflows/deploy.yml)
 
 A tool for celebrate Lily's birthday
 
