@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -16,17 +18,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: setup node.js
+      - name: Setup node.js
         uses: actions/setup-node@v4
 
-      - name: setup app environment
-        run: npm i
+      - name: Setup app environment
+        run: npm install
 
-      - name: build static resources
+      - name: Build static resources
         run: npm run build
 
-      - name: deploy
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifacts
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./build
+          path: "build/"
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+  
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps/deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
