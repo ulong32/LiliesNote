@@ -4,7 +4,7 @@
     <div class="flex-grow">
         <div>
             <div class="text-lg">
-                LiliesNote Ver.{APP_VERSION} Matsuri
+                LiliesNote Ver.{APP_VERSION} Moe
             </div>
             <div>
                 © 2023 Ulong32
