@@ -32,7 +32,8 @@ export function buildCalendar( lilyBirthdayObjects :lilyBirthdayObject[]) {
     let icsString :string = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//LuciaDB/ulong32/NONSGML LiliesNote ${APP_VERSION}//JA
-CALSCALE:GREGORIAN`;
+CALSCALE:GREGORIAN
+X-LICENSE-COMMENT:このデータはLuciaDBから取得しています。ライセンスはCC BY-NC-SA 4.0です。`;
     lilyBirthdayObjects.forEach((entry) => {
         icsString += `
 BEGIN:VEVENT
