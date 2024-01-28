@@ -1,21 +1,8 @@
 <script lang="ts">
     import "../app.postcss";
-
-    // Floating UI for Popups
-    import {
-        computePosition,
-        autoUpdate,
-        flip,
-        shift,
-        offset,
-        arrow,
-    } from "@floating-ui/dom";
-    import { AppShell, storePopup } from "@skeletonlabs/skeleton";
-    storePopup.set({ computePosition, autoUpdate, flip, shift, offset, arrow });
+    import { AppShell, } from "@skeletonlabs/skeleton";
     import Header from "$lib/components/Header.svelte";
 	import Footer from "$lib/components/Footer.svelte";
-
-
     import { initializeStores } from '@skeletonlabs/skeleton';
     initializeStores();
     import { Toast } from '@skeletonlabs/skeleton';

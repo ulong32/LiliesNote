@@ -9,12 +9,12 @@
     import { filterByGarden } from "$lib/filters";
     import { Table, tableMapperValues } from "@skeletonlabs/skeleton";
     import type { TableSource } from "@skeletonlabs/skeleton";
-	import { ProgressRadial } from '@skeletonlabs/skeleton';
+    import { ProgressRadial } from "@skeletonlabs/skeleton";
 
     import { buildCalendar } from "$lib/buildCalendar";
 
-	import { Toast, getToastStore } from '@skeletonlabs/skeleton';
-	import type { ToastSettings, ToastStore } from '@skeletonlabs/skeleton';
+    import { getToastStore } from "@skeletonlabs/skeleton";
+    import type { ToastSettings } from "@skeletonlabs/skeleton";
 
     let isLoaded = false;
     //クエリ本体
@@ -65,7 +65,6 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
                 );
                 isLoaded = true;
             });
-
     });
 
     let selectedGardenList: string[] = [];
@@ -91,29 +90,32 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
             ]),
         };
     }
-	const toastStore = getToastStore();
-	function invokeToast() {
-		const t :ToastSettings = {
-			message: "エクスポートするデータを生成しています...",
-			hideDismiss: true,
-			timeout: 2000
-		};
-		toastStore.trigger(t);
-		buildCalendar(selectedLilyList);
-		return undefined;
-	}
 
+    let labelExport = "エクスポート";
+    const toastStore = getToastStore();
+    function invokeToast() {
+        labelExport = "生成中...";
+        const t: ToastSettings = {
+            message: "エクスポートするデータを生成しています...",
+            hideDismiss: true,
+            timeout: 2000,
+        };
+        toastStore.trigger(t);
+        buildCalendar(selectedLilyList);
+        labelExport = "エクスポート";
+        return undefined;
+    }
 </script>
 
 <div class="container mx-auto flex justify-center items-center">
     <div class="card p-4 m-4 w-full">
         {#if !isLoaded}
-			<ProgressRadial class="mx-auto my-4" />
-		{:else}
+            <ProgressRadial class="mx-auto my-4" />
+        {:else}
             <Stepper
                 buttonBackLabel="← 戻る"
                 buttonNextLabel="進む →"
-                buttonCompleteLabel="エクスポート"
+                buttonCompleteLabel={labelExport}
                 on:complete={invokeToast}
             >
                 <Step>
@@ -153,7 +155,7 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
                 </Step>
                 <Step>
                     <svelte:fragment slot="header">
-                        ダウンロード
+                        エクスポート
                     </svelte:fragment>
                     <span>
                         カレンダーデータのエクスポートを行います。下の「エクスポート」ボタンを押してください。
