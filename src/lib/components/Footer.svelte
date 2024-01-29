@@ -6,14 +6,14 @@
             <div class="text-lg">
                 LiliesNote Ver.{APP_VERSION} Moe
             </div>
-            <div>
+            <div class="text-sm">
                 <a href="https://github.com/ulong32/LiliesNote">GitHub</a>
                 <span> | </span>
                 <a href="https://github.com/Assault-Lily/LuciaDB">LuciaDB</a>
                 <span> | </span>
                 <a href="https://luciadb.assaultlily.com/sparql/query">SPARQL Endpoint</a>
             </div>
-            <div>
+            <div class="m-1">
                 © 2023 Ulong32
             </div>
         </div>
@@ -24,13 +24,12 @@
             <img
                 src="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png"
                 alt="CC BY-NC-SA"
-                loading="lazy"
                 width="88"
                 height="31"
-                class="self-center inline m-2"
+                class="self-center inline m-1"
             />
         </a>
-        <div>
+        <div class="test-xs">
             <span>このサイトで利用しているデータは</span>
             <a
                 href="https://github.com/Assault-Lily/LuciaDB"
