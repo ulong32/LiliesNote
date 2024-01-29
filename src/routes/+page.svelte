@@ -6,7 +6,7 @@
     import { ListBox, ListBoxItem } from "@skeletonlabs/skeleton";
 
     import { type lilyBirthdayObject } from "$lib/types";
-    import { filterByGarden } from "$lib/filters";
+    import { filterByGarden, filterByCharaType } from "$lib/filters";
     import { Table, tableMapperValues } from "@skeletonlabs/skeleton";
     import type { TableSource } from "@skeletonlabs/skeleton";
     import { ProgressRadial } from "@skeletonlabs/skeleton";
@@ -15,6 +15,7 @@
 
     import { getToastStore } from "@skeletonlabs/skeleton";
     import type { ToastSettings } from "@skeletonlabs/skeleton";
+    import { getCharaTypeList, getGardenList } from "$lib/buildLists";
 
     let isLoaded = false;
     //クエリ本体
@@ -39,7 +40,8 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
 
     let selectedLilyList: lilyBirthdayObject[] = [];
     let lilyBirthdayObjects: lilyBirthdayObject[] = [];
-    let gardenList: Set<string> = new Set();
+    let gardenList: string[];
+    let charaTypeList: string[];
     onMount(() => {
         fetch(
             `https://luciadb.assaultlily.com/sparql/query?format=json&query=${encodeURIComponent(
@@ -50,27 +52,21 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
             .then((returnedObject) => {
                 lilyBirthdayObjects = returnedObject.results.bindings;
                 //console.table(lilyBirthdayObjects)
-                gardenList = new Set(
-                    lilyBirthdayObjects.map((obj) => {
-                        if ("garden" in obj) {
-                            return obj.garden!.value;
-                        } else {
-                            return "所属ガーデンなし";
-                        }
-                    })
-                );
-                selectedLilyList = filterByGarden(
-                    lilyBirthdayObjects,
-                    selectedGardenList
+                gardenList = getGardenList(lilyBirthdayObjects);
+                charaTypeList = getCharaTypeList(lilyBirthdayObjects);
+                selectedLilyList = filterByCharaType(
+                    filterByGarden(lilyBirthdayObjects, selectedGardenList),
+                    selectedCharaTypeList
                 );
                 isLoaded = true;
             });
     });
 
     let selectedGardenList: string[] = [];
-    $: selectedLilyList = filterByGarden(
-        lilyBirthdayObjects,
-        selectedGardenList
+    let selectedCharaTypeList: string[] = [];
+    $: selectedLilyList = filterByCharaType(
+        filterByGarden(lilyBirthdayObjects, selectedGardenList),
+        selectedCharaTypeList
     );
     $: selectedLilyValueList = selectedLilyList.map(({ name, birthdate }) => ({
         name: name.value,
@@ -133,7 +129,32 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
                                             value={item}
                                         >
                                             {item} - {filterByGarden(
-                                                lilyBirthdayObjects,
+                                                filterByCharaType(
+                                                    lilyBirthdayObjects,
+                                                    selectedCharaTypeList
+                                                ),
+                                                [item]
+                                            ).length}人
+                                        </ListBoxItem>
+                                    {/each}
+                                </ListBox>
+                            </svelte:fragment>
+                        </TreeViewItem>
+                        <TreeViewItem>
+                            キャラクタータイプでフィルタ
+                            <svelte:fragment slot="children">
+                                <ListBox multiple>
+                                    {#each charaTypeList as item}
+                                        <ListBoxItem
+                                            bind:group={selectedCharaTypeList}
+                                            name="medium"
+                                            value={item}
+                                        >
+                                            {item} - {filterByCharaType(
+                                                filterByGarden(
+                                                    lilyBirthdayObjects,
+                                                    selectedGardenList
+                                                ),
                                                 [item]
                                             ).length}人
                                         </ListBoxItem>
@@ -143,7 +164,7 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
                         </TreeViewItem>
                     </TreeView>
                     <div class="p-2">
-                        現在 {selectedLilyList.length} 人のリリィが選択されています。
+                        現在 {selectedLilyList.length} 人のキャラクターが選択されています。
                     </div>
                 </Step>
                 <Step>
