@@ -7,6 +7,13 @@
                 LiliesNote Ver.{APP_VERSION} Moe
             </div>
             <div>
+                <a href="https://github.com/ulong32/LiliesNote">GitHub</a>
+                <span> | </span>
+                <a href="https://github.com/Assault-Lily/LuciaDB">LuciaDB</a>
+                <span> | </span>
+                <a href="https://luciadb.assaultlily.com/sparql/query">SPARQL Endpoint</a>
+            </div>
+            <div>
                 © 2023 Ulong32
             </div>
         </div>
@@ -27,14 +34,12 @@
             <span>このサイトで利用しているデータは</span>
             <a
                 href="https://github.com/Assault-Lily/LuciaDB"
-                class="text-blue-400 underline"
             >
                 LuciaDB
             </a>
             <span>によって</span>
             <a
                 href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ja"
-                class="text-blue-400 underline"
             >
                 クリエイティブ・コモンズ 表示 - 非営利 - 継承 4.0 国際
                 ライセンス
@@ -43,7 +48,6 @@
             <span>LiliesNoteは</span>
             <a
                 href="https://github.com/ulong32/LiliesNote/blob/main/LICENSE"
-                class="text-blue-400 underline"
             >
                 MIT ライセンス
             </a>
