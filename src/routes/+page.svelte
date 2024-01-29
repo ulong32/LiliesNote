@@ -54,10 +54,7 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
                 //console.table(lilyBirthdayObjects)
                 gardenList = getGardenList(lilyBirthdayObjects);
                 charaTypeList = getCharaTypeList(lilyBirthdayObjects);
-                selectedLilyList = filterByCharaType(
-                    filterByGarden(lilyBirthdayObjects, selectedGardenList),
-                    selectedCharaTypeList
-                );
+                selectedLilyList = lilyBirthdayObjects;
                 isLoaded = true;
             });
     });
