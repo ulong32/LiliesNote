@@ -6,3 +6,9 @@
 a {
     @apply text-blue-400 underline;
 }
+
+@supports (word-break: auto-phrase) {
+    div {
+        word-break: auto-phrase;
+    }
+}
