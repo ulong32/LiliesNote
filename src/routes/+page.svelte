@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
 
     import { Stepper, Step } from "@skeletonlabs/skeleton";
-    import { TreeView, TreeViewItem } from "@skeletonlabs/skeleton";
+    import { Accordion, AccordionItem } from '@skeletonlabs/skeleton';
     import { ListBox, ListBoxItem } from "@skeletonlabs/skeleton";
 
     import { type lilyBirthdayObject } from "$lib/types";
@@ -16,6 +16,7 @@
     import { getToastStore } from "@skeletonlabs/skeleton";
     import type { ToastSettings } from "@skeletonlabs/skeleton";
     import { getCharaTypeList, getGardenList } from "$lib/buildLists";
+    import { slide } from "svelte/transition";
 
     let isLoaded = false;
     //クエリ本体
@@ -114,10 +115,10 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
                 <Step>
                     <svelte:fragment slot="header">フィルター</svelte:fragment>
                     <span>フィルターを行います。</span>
-                    <TreeView>
-                        <TreeViewItem>
-                            ガーデンでフィルタ
-                            <svelte:fragment slot="children">
+                    <Accordion>
+                        <AccordionItem>
+                            <svelte:fragment slot="summary">ガーデンでフィルタ</svelte:fragment>
+                            <svelte:fragment slot="content">
                                 <ListBox multiple>
                                     {#each Array.from(gardenList) as item}
                                         <ListBoxItem
@@ -136,10 +137,10 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
                                     {/each}
                                 </ListBox>
                             </svelte:fragment>
-                        </TreeViewItem>
-                        <TreeViewItem>
-                            キャラクタータイプでフィルタ
-                            <svelte:fragment slot="children">
+                        </AccordionItem>
+                        <AccordionItem>
+                            <svelte:fragment slot="summary">キャラクタータイプでフィルタ</svelte:fragment>
+                            <svelte:fragment slot="content">
                                 <ListBox multiple>
                                     {#each charaTypeList as item}
                                         <ListBoxItem
@@ -158,8 +159,8 @@ ORDER BY ?birthdate`.replace(/\n +/g, "");
                                     {/each}
                                 </ListBox>
                             </svelte:fragment>
-                        </TreeViewItem>
-                    </TreeView>
+                        </AccordionItem>
+                    </Accordion>
                     <div class="p-2">
                         現在 {selectedLilyList.length} 人のキャラクターが選択されています。
                     </div>
