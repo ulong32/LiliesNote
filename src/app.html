@@ -9,6 +9,21 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width" />
 		<meta http-equiv="Cache-Control" content="no-cache" />
+		<!-- ここからService Worker設定 -->
+		<link rel="manifest" href="./manifest.json">
+		<script>
+			"use strict";
+			if("serviceWorker" in navigator) {
+				addEventListener("load", function() {
+					navigator.serviceWorker.register("%sveltekit.assets%/worker.js", { scope: "./" })
+						.then(scope => {
+							console.log("Successfully registered ServiceWorker.")
+						}).catch(err=> {
+							console.error("Failed to register ServiceWorker.");
+						});
+				})
+			}
+		</script>
 		<link rel="preconnect" href="https://luciadb.assaultlily.com" />
 		<link rel="preload" href="https://licensebuttons.net/l/by-nc-sa/4.0/88x31.png" as="image" />
 		%sveltekit.head%
